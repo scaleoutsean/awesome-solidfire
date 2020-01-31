@@ -7,7 +7,7 @@
   - [Resources](#resources)
     - [Virtualization - VMware vSphere](#virtualization---vmware-vsphere)
     - [Virtualization - Microsoft Hyper-V](#virtualization---microsoft-hyper-v)
-    - [Virtualization - OpenStack and KVM](#virtualization---openstack-and-kvm)
+    - [Virtualization - Linux Hypervisors (OpenStack, KVM, XenServer, Oracle VM)](#virtualization---linux-hypervisors-openstack-kvm-xenserver-oracle-vm)
     - [Containers - Storage Provisioning (CSI and Docker)](#containers---storage-provisioning-csi-and-docker)
     - [CLI](#cli)
     - [SolidFire/Element Software Development Kits (SDKs)](#solidfireelement-software-development-kits-sdks)
@@ -76,13 +76,13 @@
 - PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/Microsoft) for automated storage deployment with Microsoft Hyper-V (for Windows 2012 R2; requires minor updates for Microsoft Windows 2016 and 2019)
 - [Solidfire VSS Provider](https://mysupport.netapp.com/products/p/elementvss.html) for MS Windows (login required)
 
-### Virtualization - OpenStack and KVM
+### Virtualization - Linux Hypervisors (OpenStack, KVM, XenServer, Oracle VM)
 
 - Cinder driver for OpenStack (in-tree, does not need to be installed, it only needs to be configured)
 - [Juju charm](https://github.com/solidfire/charm-cinder-solidfire) for Cinder to use Element cluster back end
 - NetApp's [OpenStack resources and docs](https://netapp.io/openstack/)
-- Redhat Openshift with NetApp HCI - [NetApp Validated Design 1133](https://www.netapp.com/us/media/nva-1133-design.pdf)
-- Recommended Deployment method for Redhat OpenStack on NetApp HCI is via Ansible
+- Redhat OpenShift with NetApp HCI - [NetApp Validated Design 1133](https://www.netapp.com/us/media/nva-1133-design.pdf)
+- Recommended Deployment method for Redhat OpenStack on NetApp HCI is Ansible, but you may use PowerShell, Terraform or other approach to create SolidFire storage cluster.
 
 ### Containers - Storage Provisioning (CSI and Docker)
 
@@ -204,6 +204,7 @@ A: You can find the official NetApp info with the [NetApp Interoperability Matri
 - Redhat OpenStack (KVM) - refer to the IMT
 - MicroSoft Windows (Hyper-V) - search the WSC site (example for the [H615C](https://www.windowsservercatalog.com/item.aspx?idItem=4109a235-2b2e-3200-d3ef-065c8ea7c0c6&bCatID=1282))
 - XenServer (Xen) - refer to the HCLs for [storage](http://hcl.xenserver.org/storage/?vendor=56) and [servers](http://hcl.xenserver.org/servers/?vendor=56)
+- Oracle VM - go [here](https://linux.oracle.com/pls/apex/f?p=117:3::::::). Click on Storage Systems and in filter rop-down list select NetApp. Look for SolidFire models from the NetApp HCI Datasheet or Web site (for example, H610S)
 - Other Linux distributions validated (Cinder iSCSI) for SolidFire Element OS - Ubuntu, SuSE, etc. (the details can be found in the IMT)
 
 As always, contact your NetApp representative with any questions.
@@ -252,7 +253,7 @@ A: There are situations where certain operations may be done faster or more effi
 
 Q: How can I use a feature that is availble but not exposed in a SolidFire SDK or API or CLI?
 
-A: PowerShell Tools for SolidFire and all SDKs have a wrapper method (Invoke SF API) that simplifies the use of the API methods for which there is no cmdlet or direct method in an SDK. You can also use generic JSON RPC calls which may be a good choice for simple scripts in which you don't intend to use a SolidFire SDK because you don't want to install additional dependencies for simple projects. 
+A: PowerShell Tools for SolidFire and all SDKs have a wrapper method (Invoke SF API) that simplifies the use of the API methods for which there is no cmdlet or direct method in an SDK. You can also use generic JSON RPC calls which may be a good choice for simple scripts in which you don't intend to use a SolidFire SDK because you don't want to install additional dependencies for simple projects.
 
 ### Networking
 
