@@ -5,6 +5,7 @@
   - [Why SolidFire](#why-solidfire)
     - [Why NetApp HCI](#why-netapp-hci)
   - [Resources](#resources)
+    - [Cloud](#cloud)
     - [Virtualization - VMware vSphere](#virtualization---vmware-vsphere)
     - [Virtualization - Microsoft Hyper-V](#virtualization---microsoft-hyper-v)
     - [Virtualization - Linux Hypervisors (OpenStack, KVM, XenServer, Oracle VM)](#virtualization---linux-hypervisors-openstack-kvm-xenserver-oracle-vm)
@@ -32,7 +33,7 @@
     - [Element Demo VM](#element-demo-vm)
     - [Hypervisors and Containers](#hypervisors-and-containers)
     - [Workloads](#workloads)
-    - [Services](#services)
+    - [Storage Services](#storage-services)
     - [DevOps](#devops)
     - [Networking](#networking)
   - [License and Trademarks](#license-and-trademarks)
@@ -64,6 +65,10 @@
 
 ## Resources
 
+### Cloud
+
+- Synchronization to/from public cloud: Element OS supports SnapMirror (async) to/from [Cloud Volumes ONTAP](https://cloud.netapp.com/ontap-cloud) available in all major public clouds. See this [NetApp TR](https://www.netapp.com/us/media/tr-4641.pdf) for additional details
+
 ### Virtualization - VMware vSphere
 
 - Check out VMware related material on the NetApp web site (Private cloud, VDI/EUC, GPU computing and more)
@@ -89,14 +94,14 @@
 
 - [NetApp Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Redhat OpenShift and others)
 - Redhat OpenShift Container Platform. You can run it two ways: VM-based OCP VMs on vSphere clusters, or bare metal-based OCP on OpenStack clusters
-- NetApp Kubernetes Service: NetApp's Kubernetes-as-a-service offering for cloud, hybrid-cloud and on-premises NetApp HCI (currently in preview)
 - Docker and all [container orchestrators supported](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) by NetApp Trident
+- [NetApp Kubernetes Service](https://cloud.netapp.com/kubernetes-service): NetApp's Kubernetes-as-a-service is currently in preview on NetApp HCI (not yet stand-alone SolidFire)
 
 ### CLI
 
 - SolidFire has two fully functional CLI's - PowerShell & Python
-- SolidFire [PowerShell Tools (Win/Lin)](https://github.com/solidfire/PowerShell)
-- Solidfire [Python CLI (Win/Lin)](https://github.com/solidfire/solidfire-cli)
+  - SolidFire [PowerShell Tools (Win/Lin)](https://github.com/solidfire/PowerShell)
+  - Solidfire [Python CLI (Win/Lin/OS X)](https://github.com/solidfire/solidfire-cli)
 
 ### SolidFire/Element Software Development Kits (SDKs)
 
@@ -190,10 +195,12 @@ Do not use old performance-tuning scripts from these examples on VMware ESXi 6.5
 ### Meta
 
 Q: Is information on this page correct, up-to-date and endorsed by NetApp?
+
 A: Absolutely not. For official information please visit the NetApp Web sites (such as www.netapp.com and www.netapp.io)
 
 Q: I have a quick question about ...
-A: Please join [the NetApp community Slack](https://netapppub.slack.com/join/shared_invite/enQtNzc0MDAwNzQ5MDc2LTE4ZDQxODgwZmY3NGUwNWM2OGVkMDlkNjZjNTEzZDYwMDMwYWM1M2E4ZmNiNzYyMWE5NmVkYTMyODdlMzhhOTI) and ask your question in the `#netapp-hci` channel.
+
+A: Please join [the NetApp community Slack](https://netapppub.slack.com/join/shared_invite/enQtNzc0MDAwNzQ5MDc2LTE4ZDQxODgwZmY3NGUwNWM2OGVkMDlkNjZjNTEzZDYwMDMwYWM1M2E4ZmNiNzYyMWE5NmVkYTMyODdlMzhhOTI) and ask your question in the `#netapp-hci` channel. If you need more eyes on the question or already have an account at the  [NetApp Community Forum](https://community.netapp.com/t5/AFF-NVMe-EF-Series-and-SolidFire-Discussions/bd-p/flash-storage-systems-discussions) please ask there and tag your question with 'solidfire'.
 
 ### Element Demo VM
 
@@ -207,7 +214,7 @@ A: It does compress and deduplicate, but I haven't compared how it fares against
 
 Q: Can I throw a couple of VMs on an Element Demo VM datastore to estimate how much I could save?
 
-A: I believe it should be fairly accurate. Get a representative sample of 5-10 VMs (up to 400GB combined) and clone them to an Element Demo VM-based test datastore. Give it a couple of hours to churn through that data and take a look.
+A: I believe it should be fairly accurate, but I haven't tested it. Get a representative sample of 5-10 VMs (up to 400GB combined) and clone them to an Element Demo VM-based test datastore. Give it a couple of hours to churn through that data and take a look.
 
 ### Hypervisors and Containers
 
@@ -222,7 +229,7 @@ A: To be clear, this is about iSCSI clients supported by SolidFire storage (whic
 - Oracle VM - go [here](https://linux.oracle.com/pls/apex/f?p=117:3::::::). Click on Storage Systems and in filter rop-down list select NetApp. Look for SolidFire models from the NetApp HCI Datasheet or Web site (for example, H610S)
 - Other Linux distributions validated (Cinder iSCSI) for SolidFire Element OS - Ubuntu, SuSE, etc. (the details can be found in the IMT)
 
-If unsure, contact NetApp with any questions!
+If unsure, contact NetApp with any questions or ask in the [NetApp Community Forum](https://community.netapp.com/t5/AFF-NVMe-EF-Series-and-SolidFire-Discussions/bd-p/flash-storage-systems-discussions) (free membership account required)
 
 Q: Does SolidFire work with my Kubernetes?
 
@@ -238,7 +245,7 @@ Q: Is NetApp HCI suitable for AI, Hadoop, Splunk and similar "heavy" workloads?
 
 A: For some applications from that stack (such as databases) it is, but for HDFS you may consider connecting compute nodes ONTAP hardware (see [NIPAM](https://pypi.org/project/netapp-ontap/)) or E-Series (Raw Device Mapping to iSCSI, formatted with HDFS or [BeeGFS](https://blog.netapp.com/solution-support-for-beegfs-and-e-series/), for example)
 
-### Services
+### Storage Services
 
 Q: What protocols are supported?
 
