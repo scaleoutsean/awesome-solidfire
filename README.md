@@ -157,13 +157,13 @@
 - Users with existing notification solution: use Syslog forwarding or SNMP. You may also [integrate](https://www.youtube.com/watch?v=el2FBI0v27E) NetApp ActiveIQ with your existing system
 - Users without an existing solution may consider one of these:
   - NetApp ActiveIQ: mobile app notifications (faster), email notifications (slower; enable them in the ActiveIQ Web UI)
-  - Grafana: ([HCICollector]([https://](https://github.com/scaleoutsean/hcicollector) can send email notifications. Other Grafana methods may be used as well
-  - Icinga and Nagios (email) - see [nagfire](https://github.com/scaleoutsean/nagfire)
+  - Grafana: ([HCICollector](https://github.com/scaleoutsean/hcicollector) can send email notifications. Other Grafana methods may be used as well
+  - Icinga and Nagios (email) 
 
 ## Demo VM, Tools and Utilities
 
 - Element Demo VM: partners and customers may [download](https://mysupport.netapp.com/tools/info/ECMLP2848232I.html?pcfContentID=ECMLP2848232&productID=62139&pcfContentID=ECMLP2848232) (NetApp partner or support login required) and use it at no cost. Data and configuration persist after a reboot. It works with Kubernetes, VMware and more
-- NetApp OneCollect: this awesome and gratis multi-purpose utility that runs on Windows, Linux and [containers](https://hub.docker.com/r/netapp/onecollect/) is generally used for log data gathering but it can be used for configuration change tracking (watch [this video](https://www.youtube.com/watch?v=ksSs9wUi4sM) to get an idea - just don't run it in Element Management Node because that is not supported)
+- NetApp OneCollect: this awesome and gratis multi-purpose utility that runs on Windows, Linux and in [Docker](https://hub.docker.com/r/netapp/onecollect/) is generally used for log data gathering but it can be used for configuration change tracking when set to run on schedule (watch [this video](https://www.youtube.com/watch?v=ksSs9wUi4sM) to get an idea - just don't run it in Element Management Node because that is not supported)
 
 ## Demos
 
