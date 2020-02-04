@@ -6,28 +6,31 @@
     - [Why NetApp HCI](#why-netapp-hci)
   - [Resources](#resources)
     - [Cloud](#cloud)
-    - [Virtualization - VMware vSphere](#virtualization---vmware-vsphere)
-    - [Virtualization - Microsoft Hyper-V](#virtualization---microsoft-hyper-v)
-    - [Virtualization - Linux Hypervisors (OpenStack, KVM, XenServer, Oracle VM)](#virtualization---linux-hypervisors-openstack-kvm-xenserver-oracle-vm)
-    - [Containers - Storage Provisioning (CSI and Docker)](#containers---storage-provisioning-csi-and-docker)
-    - [CLI](#cli)
-    - [SolidFire/Element Software Development Kits (SDKs)](#solidfireelement-software-development-kits-sdks)
-    - [API Testing and Validation](#api-testing-and-validation)
-    - [Automation, Configuration Tools and Frameworks](#automation-configuration-tools-and-frameworks)
-  - [Alerting, Monitoring, Telemetry](#alerting-monitoring-telemetry)
-    - [ActiveIQ](#activeiq)
-    - [NetApp Cloud Insights](#netapp-cloud-insights)
-    - [Grafana - HCICollector](#grafana---hcicollector)
-    - [Icinga and Nagios](#icinga-and-nagios)
-    - [SNMP MIBs](#snmp-mibs)
-    - [Syslog Forwarding](#syslog-forwarding)
-    - [Event Notifications](#event-notifications)
+    - [Virtualization](#virtualization)
+      - [VMware vSphere](#vmware-vsphere)
+      - [Microsoft Hyper-V](#microsoft-hyper-v)
+      - [Linux-related (OpenStack, KVM, XenServer, Oracle VM)](#linux-related-openstack-kvm-xenserver-oracle-vm)
+      - [Storage Provisioning for Containers (CSI and Docker)](#storage-provisioning-for-containers-csi-and-docker)
+    - [CLI, API, SDK Resources](#cli-api-sdk-resources)
+      - [CLI](#cli)
+      - [SolidFire/Element Software Development Kits (SDKs)](#solidfireelement-software-development-kits-sdks)
+    - [Automation](#automation)
+      - [Automation and Configuration Tools and Frameworks](#automation-and-configuration-tools-and-frameworks)
+    - [Alerting, Monitoring, Telemetry](#alerting-monitoring-telemetry)
+      - [ActiveIQ](#activeiq)
+      - [NetApp Cloud Insights](#netapp-cloud-insights)
+      - [Grafana - HCICollector](#grafana---hcicollector)
+      - [Icinga and Nagios](#icinga-and-nagios)
+      - [SNMP MIBs](#snmp-mibs)
+      - [Syslog Forwarding](#syslog-forwarding)
+      - [Event Notifications](#event-notifications)
+    - [Backup, Restore, DR](#backup-restore-dr)
   - [Demo VM, Tools and Utilities](#demo-vm-tools-and-utilities)
-  - [Demos](#demos)
-    - [Videos](#videos)
-    - [Scripts and How-To Articles](#scripts-and-how-to-articles)
-      - [VMware](#vmware)
-      - [Windows](#windows)
+    - [SolidFire/Element Demo VM](#solidfireelement-demo-vm)
+    - [Recorded Demos](#recorded-demos)
+  - [Scripts and How-To Articles](#scripts-and-how-to-articles)
+    - [VMware](#vmware)
+    - [Windows](#windows)
   - [Questions and Answers](#questions-and-answers)
     - [Meta](#meta)
     - [Element Demo VM](#element-demo-vm)
@@ -69,7 +72,9 @@
 
 - Synchronization to/from public cloud: Element OS supports SnapMirror (async) to/from [Cloud Volumes ONTAP](https://cloud.netapp.com/ontap-cloud) available in all major public clouds. See this [NetApp TR](https://www.netapp.com/us/media/tr-4641.pdf) for additional details
 
-### Virtualization - VMware vSphere
+### Virtualization
+
+#### VMware vSphere
 
 - Check out VMware related material on the NetApp web site (Private cloud, VDI/EUC, GPU computing and more)
 - vCenter Plugin for Element Software (used to be called "VCP") is built into NetApp HCI and may be installed in other vCenter servers you want to connect to separate NetApp HCI volumes. SolidFire users may get it from NetApp downloads for Element Software
@@ -77,12 +82,12 @@
 - [vRealize Automation for NetApp HCI and SolidFire](https://bluemedora.com/resource/vmware-vrealize-operations-management-pack-for-netapp-hci-solidfire/)
 - [pyNSXdeploy](https://github.com/solidfire/pyNSXdeploy) -  automate deployment of NSX on vSphere 6 on NetApp HCI
 
-### Virtualization - Microsoft Hyper-V
+#### Microsoft Hyper-V
 
 - PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/Microsoft) for automated storage deployment with Microsoft Hyper-V (for Windows 2012 R2; requires minor updates for Microsoft Windows 2016 and 2019)
 - [Solidfire VSS Provider](https://mysupport.netapp.com/products/p/elementvss.html) for MS Windows (login required)
 
-### Virtualization - Linux Hypervisors (OpenStack, KVM, XenServer, Oracle VM)
+#### Linux-related (OpenStack, KVM, XenServer, Oracle VM)
 
 - Cinder driver for OpenStack (in-tree, does not need to be installed, it only needs to be configured)
 - [Juju charm](https://github.com/solidfire/charm-cinder-solidfire) for Cinder to use Element cluster back end
@@ -90,20 +95,22 @@
 - Redhat OpenShift with NetApp HCI - [NetApp Validated Design 1133](https://www.netapp.com/us/media/nva-1133-design.pdf)
 - Recommended Deployment method for Redhat OpenStack on NetApp HCI is Ansible, but you may use PowerShell, Terraform or other approach to create SolidFire storage cluster
 
-### Containers - Storage Provisioning (CSI and Docker)
+#### Storage Provisioning for Containers (CSI and Docker)
 
 - [NetApp Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Redhat OpenShift and others)
 - Redhat OpenShift Container Platform. You can run it two ways: VM-based OCP VMs on vSphere clusters, or bare metal-based OCP on OpenStack clusters
 - Docker and all [container orchestrators supported](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) by NetApp Trident
 - [NetApp Kubernetes Service](https://cloud.netapp.com/kubernetes-service): NetApp's Kubernetes-as-a-service is currently in preview on NetApp HCI (not yet stand-alone SolidFire)
 
-### CLI
+### CLI, API, SDK Resources
+
+#### CLI
 
 - SolidFire has two fully functional CLI's - PowerShell & Python
   - SolidFire [PowerShell Tools (Win/Lin)](https://github.com/solidfire/PowerShell)
   - Solidfire [Python CLI (Win/Lin/OS X)](https://github.com/solidfire/solidfire-cli)
 
-### SolidFire/Element Software Development Kits (SDKs)
+#### SolidFire/Element Software Development Kits (SDKs)
 
 - [SolidFire Python SDK](https://github.com/solidfire/solidfire-sdk-python)
 - [SolidFire Microsoft .NET SDK](https://github.com/solidfire/sdk-dotnet)
@@ -111,82 +118,94 @@
 - [SolidFire Ruby SDK](https://github.com/solidfire/solidfire-sdk-ruby)
 - [(Unofficial) SolidFire Go SDK](https://github.com/solidfire/solidfire-sdk-golang)
 
-### API Testing and Validation
+### Automation
 
 - Postman JSON [collection](https://github.com/solidfire/postman) for Element software
 
-### Automation, Configuration Tools and Frameworks
+#### Automation and Configuration Tools and Frameworks
 
 - [Ansible modules](https://docs.ansible.com/ansible/latest/search.html?q=NetApp+Element+Software) for Element Software (look for `na_elementsw_* modules`)
 - [SolidFire Puppet plugin](https://github.com/solidfire/solidfire-puppet)
 - [Terraform Plugin for SolidFire (unofficial)](https://github.com/solidfire/terraform-provider-solidfire) - works with Terraform v0.12
 - [Terraform for NetApp Kubernetes Service on HCI](https://docs.netapp.com/us-en/kubernetes-service/intro-to-terraform-on-nks.html)
 
-## Alerting, Monitoring, Telemetry
+### Alerting, Monitoring, Telemetry
 
-### ActiveIQ
+#### ActiveIQ
 
 - Use ActiveIQ API to monitor your NetApp HCI or SolidFire cluster (requires valid support account)
 - API docs - access Swagger upon login to ActiveIQ
 - [NetApp ActiveIQ Documentation](https://docs.netapp.com/us-en/active-iq/)
 - [ActiveIQ user portal](https://activeiq.solidfire.com) (login required)
 
-### NetApp Cloud Insights
+#### NetApp Cloud Insights
 
 - Enterprise-grade, professional infrastructure monitoring
 - Cloud-hosted service, requires on-prem VM to acquire data and send it to your NeApp Cloud account
 - A free version has basic functionality and supports all NetApp products including SolidFire and NetApp HCI
 
-### Grafana - HCICollector
+#### Grafana - HCICollector
 
 - [HCICollector](https://github.com/scaleoutsean/hcicollector/) is a permissively-licensed monitoring and alerting for SolidFire and NetApp HCI systems. It gathers SolidFire and vSphere 6 metrics, stores them in Grpahite and lets you visualize them in Grafana
 
-### Icinga and Nagios
+#### Icinga and Nagios
 
 - [elementOS-monitoring](https://github.com/aleex42/elementOS-monitoring) - more [here](https://blog.krogloth.de/nagios-icinga-monitoring-for-netapp-solidfire/)
 - [nagfire](https://github.com/scaleoutsean/nagfire/) - supports both SolidFire cluster and individual nodes
 
-### SNMP MIBs
+#### SNMP MIBs
 
 - SolidFire MIBs may be downloaded from the SolidFire/Element Web UI
 - SNMP is disabled by default. If you enable it, you may choose v2 or v3
 - Hardware MIBs may be available as well (check the NetApp KB for details relevant to your own hardware model(s))
 
-### Syslog Forwarding
+#### Syslog Forwarding
 
 - Forwarding to external syslog-ng target may be configured through a CLI or the API (see `SetRemoteLoggingHosts` method in Solidfire documentation)
 - VMware-based NetApp HCI surfaces Element cluster events and alerts to vCenter; if ActiveIQ is enabled, these alerts are also sent to ActiveIQ
 
-### Event Notifications
+#### Event Notifications
 
 - Users with existing notification solution: use Syslog forwarding or SNMP. You may also [integrate](https://www.youtube.com/watch?v=el2FBI0v27E) NetApp ActiveIQ with your existing system
 - Users without an existing solution may consider one of these:
   - NetApp ActiveIQ: mobile app notifications (faster), email notifications (slower; enable them in the ActiveIQ Web UI)
   - Grafana: ([HCICollector](https://github.com/scaleoutsean/hcicollector) can send email notifications. Other Grafana methods may be used as well
-  - Icinga and Nagios (email) 
+  - Icinga and Nagios (email)
+
+### Backup, Restore, Site Failover
+
+- While you backup SolidFire by backing up front-end VMs or application data, the following vendors (ordered alphabetically) can integrate with SolidFire API to make backups better
+  - Cleondris
+  - Commvault
+  - Veeam
+- You can also replicate to, and then backup from ONTAP, which becomes attractive with large backup jobs: set up SolidFire SnapMirror to ONTAP with NL-SAS disks and backup the volume on ONTAP. When you have to backup a 20TB database on HCI, you'll be better off with NetApp HCI and ONTAP than with any other HCI
+- DR
+  - Native Synchronous and Asynchronous Replication - see NetApp TR-4741 or newer
+  - Site failover
+    - SolidFire SRA for VMware vSphere (SRM)
 
 ## Demo VM, Tools and Utilities
+
+### SolidFire/Element Demo VM
 
 - Element Demo VM: partners and customers may [download](https://mysupport.netapp.com/tools/info/ECMLP2848232I.html?pcfContentID=ECMLP2848232&productID=62139&pcfContentID=ECMLP2848232) (NetApp partner or support login required) and use it at no cost. Data and configuration persist after a reboot. It works with Kubernetes, VMware and more
 - NetApp OneCollect: this awesome and gratis multi-purpose utility that runs on Windows, Linux and in [Docker](https://hub.docker.com/r/netapp/onecollect/) is generally used for log data gathering but it can be used for configuration change tracking when set to run on schedule (watch [this video](https://www.youtube.com/watch?v=ksSs9wUi4sM) to get an idea - just don't run it in Element Management Node because that is not supported)
 
-## Demos
-
-### Videos
+### Recorded Demos
 
 - [Search YouTube for SolidFire](https://www.youtube.com/results?search_query=solidfire&sp=CAI%253D) and sort by most recent. Also check out [NetApp HCI](https://www.youtube.com/results?search_query=netapp+hci&sp=CAI%253D) video demos since NetApp HCI uses SolidFire storage
 
-### Scripts and How-To Articles
+## Scripts and How-To Articles
 
-#### VMware
+### VMware
 
-- [Script](https://github.com/kpapreck/test-plan/blob/master/kp-clone-snap-to-datastore.ps1) to clone a VMFS6 volume from a SolidFire snapshot and import it to vCenter
+- PowerShell [Script](https://github.com/kpapreck/test-plan/blob/master/kp-clone-snap-to-datastore.ps1) to clone a VMFS6 volume from a SolidFire snapshot and import it to vCenter
 - PowerShell [examples](https://github.com/solidfire/PowerShell/tree/release/1.5.1/VMware) for VMware
 - PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/SPBM) for integration with Storage Policy Based Management
 
 Do not use old performance-tuning scripts from these examples on VMware ESXi 6.5 and above because they were written for ESXi 5.5 and 6.0. ESXi 6.5 and later have appropriate SolidFire MPIO settings built-in and require no special modification or tuning
 
-#### Windows
+### Windows
 
 - PowerShell [scripts for Hyper-V 2012 R2](https://github.com/solidfire/PowerShell/tree/master/Microsoft) (need a refresh for Windows Server 2016 and 2019)
 
