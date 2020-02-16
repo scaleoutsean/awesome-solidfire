@@ -69,11 +69,11 @@
 
 ## Resources and Solutions
 
-- You may want to check out the official [catalog of NetApp HCI solutions](https://docs.netapp.com/us-en/hci/solutions/index.html). Even though some of the solution may require NetApp HCI, a lot of that content also applies to SolidFire
+- You may want to check out the official [catalog of NetApp HCI solutions](https://docs.netapp.com/us-en/hci/solutions/index.html). Even though some of the solutios may require NetApp HCI, a lot of that content also applies to SolidFire
 
 ### Cloud
 
-- Synchronization to/from public cloud: Element OS supports SnapMirror (async) to/from [Cloud Volumes ONTAP](https://cloud.netapp.com/ontap-cloud) available in all major public clouds. See this [NetApp TR](https://www.netapp.com/us/media/tr-4641.pdf) for additional details
+- Synchronization to/from public cloud: Element OS supports SnapMirror (async) to/from [Cloud Volumes ONTAP](https://cloud.netapp.com/ontap-cloud) available in all major public clouds. See [NetApp TR-4641](https://www.netapp.com/us/media/tr-4641.pdf) for additional details
 
 ### Virtualization
 
@@ -83,11 +83,11 @@
 - vCenter Plugin for Element Software (used to be called "VCP") is built into NetApp HCI and may be installed in other vCenter servers you want to connect to separate NetApp HCI volumes. SolidFire users may get it from NetApp downloads for Element Software
 - [vRealize Orchestrator Plugin for Element Software](https://github.com/solidfire/vrealize-orchestrator-plugin)
 - [vRealize Automation for NetApp HCI and SolidFire](https://bluemedora.com/resource/vmware-vrealize-operations-management-pack-for-netapp-hci-solidfire/)
-- [pyNSXdeploy](https://github.com/solidfire/pyNSXdeploy) -  automate deployment of NSX on vSphere 6 on NetApp HCI
+- [pyNSXdeploy](https://github.com/solidfire/pyNSXdeploy) -  automate deployment of NSX on vSphere 6.x on NetApp HCI
 
 #### Microsoft Hyper-V
 
-- PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/Microsoft) for automated storage deployment with Microsoft Hyper-V (for Windows 2012 R2; requires minor updates for Microsoft Windows Server 2016 and 2019)
+- PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/Microsoft) for automated storage deployment with Microsoft Hyper-V (for Windows Server 2012 R2; requires minor updates for Microsoft Windows Server 2016 and 2019)
 - [Solidfire VSS Provider](https://mysupport.netapp.com/products/p/elementvss.html) for MS Windows (login required)
 
 #### Linux-related (OpenStack, KVM, XenServer, Oracle VM)
@@ -101,7 +101,7 @@
 #### Storage Provisioning for Containers (CSI and Docker)
 
 - [NetApp Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Redhat OpenShift and others)
-- Redhat OpenShift Container Platform. You can run it two ways: VM-based OCP VMs on vSphere clusters, or bare metal-based OCP on OpenStack clusters
+- Redhat OpenShift Container Platform. You can run it two ways: VM-based OCP VMs on vSphere or OpenStack clusters, or bare metal-based OCP on OpenStack clusters
 - Docker and all [container orchestrators supported](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) by NetApp Trident
 - [NetApp Kubernetes Service](https://cloud.netapp.com/kubernetes-service): NetApp's Kubernetes-as-a-service is currently in preview on NetApp HCI (not yet stand-alone SolidFire)
 
@@ -189,14 +189,14 @@
 - DR
   - Native Synchronous and Asynchronous Replication - see NetApp TR-4741 or newer
   - Site failover
-    - SolidFire SRA for VMware vSphere (SRM)
+    - SolidFire SRA for VMware SRM
 
 ## Demo VM, Tools and Utilities
 
 ### SolidFire/Element Demo VM
 
-- Element Demo VM: partners and customers may [download](https://mysupport.netapp.com/tools/info/ECMLP2848232I.html?pcfContentID=ECMLP2848232&productID=62139&pcfContentID=ECMLP2848232) (NetApp partner or support login required) and use it at no cost. Data and configuration persist after a reboot. It works with Kubernetes, VMware and more
-- NetApp OneCollect: this awesome and gratis multi-purpose utility that runs on Windows, Linux and in [Docker](https://hub.docker.com/r/netapp/onecollect/) is generally used for log data gathering but it can be used for configuration change tracking when set to run on schedule (watch [this video](https://www.youtube.com/watch?v=ksSs9wUi4sM) to get an idea - just don't run it in Element Management Node because that is not supported)
+- Element Demo VM: partners and customers may [download](https://mysupport.netapp.com/tools/info/ECMLP2848232I.html?pcfContentID=ECMLP2848232&productID=62139&pcfContentID=ECMLP2848232) (NetApp partner or support login required) and use it at no cost. Data and configuration persist after a reboot. It works with Kubernetes (Trident), VMware ESXi and other iSCSI clients supported by SolidFire
+- NetApp OneCollect: this awesome and gratis multi-purpose utility that runs on Windows, Linux and in [Docker](https://hub.docker.com/r/netapp/onecollect/) containers is generally used for log data gathering but it can be used for configuration change tracking when set to run on schedule (watch [this video](https://www.youtube.com/watch?v=ksSs9wUi4sM) to get an idea - just don't run it in Element Management Node because that is not supported)
 
 ### Recorded Demos
 
