@@ -4,7 +4,7 @@
   - [NetApp SolidFire-based Offerings](#netapp-solidfire-based-offerings)
   - [Why SolidFire](#why-solidfire)
     - [Why NetApp HCI](#why-netapp-hci)
-  - [Resources](#resources)
+  - [Resources and Solutions](#resources-and-solutions)
     - [Cloud](#cloud)
     - [Virtualization](#virtualization)
       - [VMware vSphere](#vmware-vsphere)
@@ -19,12 +19,13 @@
     - [Alerting, Monitoring, Telemetry](#alerting-monitoring-telemetry)
       - [ActiveIQ](#activeiq)
       - [NetApp Cloud Insights](#netapp-cloud-insights)
-      - [Grafana - HCICollector](#grafana---hcicollector)
+      - [Grafana/Graphite - HCICollector](#grafanagraphite---hcicollector)
+      - [Prometheus - solidfire-exporter](#prometheus---solidfire-exporter)
       - [Icinga and Nagios](#icinga-and-nagios)
       - [SNMP MIBs](#snmp-mibs)
       - [Syslog Forwarding](#syslog-forwarding)
       - [Event Notifications](#event-notifications)
-    - [Backup, Restore, DR](#backup-restore-dr)
+    - [Backup, Restore, Site Failover](#backup-restore-site-failover)
   - [Demo VM, Tools and Utilities](#demo-vm-tools-and-utilities)
     - [SolidFire/Element Demo VM](#solidfireelement-demo-vm)
     - [Recorded Demos](#recorded-demos)
@@ -44,7 +45,7 @@
 ## NetApp SolidFire-based Offerings
 
 - SolidFire iSCSI storage clusters (available as storage-only clusters composed of storage nodes from NetApp HCI product line)
-- NetApp HCI (NetApp HCI compute nodes connected via iSCSI to NetApp HCI storage nodes)
+- NetApp HCI (NetApp HCI compute nodes connected via iSCSI to NetApp HCI storage nodes - some call it "disaggregated HCI" or dHCI)
 
 ## Why SolidFire
 
@@ -66,7 +67,9 @@
 - Probably the best HCI platform for migration of old vSphere 5.x clusters to a modern vSphere and container infrastructure
 - Netapp HCI lets you repurpose your HCI compute nodes. VMware to OpenStack or the other way around, for example
 
-## Resources
+## Resources and Solutions
+
+- You may want to check out the official [catalog of NetApp HCI solutions](https://docs.netapp.com/us-en/hci/solutions/index.html). Even though some of the solution may require NetApp HCI, a lot of that content also applies to SolidFire
 
 ### Cloud
 
@@ -84,7 +87,7 @@
 
 #### Microsoft Hyper-V
 
-- PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/Microsoft) for automated storage deployment with Microsoft Hyper-V (for Windows 2012 R2; requires minor updates for Microsoft Windows 2016 and 2019)
+- PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/Microsoft) for automated storage deployment with Microsoft Hyper-V (for Windows 2012 R2; requires minor updates for Microsoft Windows Server 2016 and 2019)
 - [Solidfire VSS Provider](https://mysupport.netapp.com/products/p/elementvss.html) for MS Windows (login required)
 
 #### Linux-related (OpenStack, KVM, XenServer, Oracle VM)
@@ -116,7 +119,7 @@
 - [SolidFire Microsoft .NET SDK](https://github.com/solidfire/sdk-dotnet)
 - [SolidFire Java SDK](https://github.com/solidfire/solidfire-sdk-java)
 - [SolidFire Ruby SDK](https://github.com/solidfire/solidfire-sdk-ruby)
-- [(Unofficial) SolidFire Go SDK](https://github.com/solidfire/solidfire-sdk-golang)
+- [(Unofficial) SolidFire Go SDK](https://github.com/solidfire/solidfire-sdk-golang) and its cousin [solidfire-go](https://github.com/j-griffith/solidfire-go) with a convenient wrapper for common volume operations
 
 ### Automation
 
@@ -144,9 +147,13 @@
 - Cloud-hosted service, requires on-prem VM to acquire data and send it to your NeApp Cloud account
 - A free version has basic functionality and supports all NetApp products including SolidFire and NetApp HCI
 
-#### Grafana - HCICollector
+#### Grafana/Graphite - HCICollector
 
-- [HCICollector](https://github.com/scaleoutsean/hcicollector/) is a permissively-licensed monitoring and alerting for SolidFire and NetApp HCI systems. It gathers SolidFire and vSphere 6 metrics, stores them in Grpahite and lets you visualize them in Grafana
+- [HCICollector](https://github.com/scaleoutsean/hcicollector/) is a permissively-licensed monitoring and alerting for SolidFire and NetApp HCI systems. It gathers SolidFire and vSphere 6.x metrics, stores them in Graphite and lets you visualize them in Grafana
+
+#### Prometheus - solidfire-exporter
+
+- [solidFire-exporter](https://github.com/mjavier2k/solidfire-exporter/) fetches and serves SolidFire metrics in the Prometheus format
 
 #### Icinga and Nagios
 
