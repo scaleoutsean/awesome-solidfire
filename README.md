@@ -26,12 +26,14 @@
       - [Syslog Forwarding](#syslog-forwarding)
       - [Event Notifications](#event-notifications)
     - [Backup, Restore, Site Failover](#backup-restore-site-failover)
+    - [Security](#security)
   - [Demo VM, Tools and Utilities](#demo-vm-tools-and-utilities)
     - [SolidFire/Element Demo VM](#solidfireelement-demo-vm)
     - [Recorded Demos](#recorded-demos)
   - [Scripts and How-To Articles](#scripts-and-how-to-articles)
     - [VMware](#vmware)
     - [Windows](#windows)
+    - [SolidFire Objects](#solidfire-objects)
   - [Questions and Answers](#questions-and-answers)
     - [Meta](#meta)
     - [Element Demo VM](#element-demo-vm)
@@ -111,7 +113,7 @@
 #### CLI
 
 - SolidFire has two fully functional CLI's - PowerShell & Python
-  - SolidFire [PowerShell Tools (Win/Lin)](https://github.com/solidfire/PowerShell)
+  - SolidFire [PowerShell Tools (Win/Lin)](https://github.com/solidfire/PowerShell)b - not (yet) officially supported, but module `SolidFire.core` has been field-tested and found to work on ARM64 (PowerShell 6) and with PowerShell 7 (Ubuntu 18.04)
   - SolidFire [Python CLI (Win/Lin/OS X)](https://github.com/solidfire/solidfire-cli)
 
 #### SolidFire/Element Software Development Kits (SDKs)
@@ -226,6 +228,46 @@ Do not use old performance-tuning scripts from these examples on VMware ESXi 6.5
 
 - PowerShell [scripts for Hyper-V 2012 R2](https://github.com/solidfire/PowerShell/tree/master/Microsoft) (need a refresh for Windows Server 2016 and 2019)
 
+### SolidFire Objects
+
+- Most SolidFire objects - such as Volumes and Snapshots - can have custom attributes in the form of KV pairs
+- We can employ attributes to tag a new volume like this:
+
+```json
+{
+        "method": "CreateVolume",
+        "params": {
+                "name": "cvs_portal",
+                "accountID": 2,
+                "totalSize": 10240000000,
+                "enable512e": "False",
+                "attributes": {
+                        "owner": "scaleoutSean",
+                        "team": "operations"
+                },
+                "qosPolicyID": 1
+        },
+        "id": 1
+}
+```
+
+- Not all environments assign ownership (tags) to teams or have the need to set attributes on SolidFire objects (for example, vSphere users can tag vSphere objects - they don't need to talk to SolidFire), but if they do, they can easily create reports and automate operations with only several lines of PowerShell
+- Efficiency report for one owner's volumes (1x for empty volumes):
+
+```pwsh
+PS > foreach ($vol in $(Get-SFVolume)){ if ($vol.Attributes.owner -eq "scaleoutSean"){Write-Host "Efficiency of Sean's Volumes:"`n "Volume ID:" $vol.VolumeID ; Get-SFVolumeEfficiency -VolumeID $vol.volumeID}}
+Efficiency of Sean's Volumes:
+ Volume ID: 57
+
+Compression      : 1
+Deduplication    : 1
+MissingVolumes   : {}
+ThinProvisioning : 1
+Timestamp        : 1970-01-01T00:00:00Z
+```
+- Please do not confuse AccountID with custom "owner" attribute; large Kubernetes or Hyper-V cluster can use one AccountID for all Management OS, but volume "owners" can be many (or none, if the key is named differently or not at all used) and the latter is just a custom tag
+- In Kubernetes or Docker environments, pay attention to avoid the user of the same volume attribute keys used by NetApp Trident
+
 ## Questions and Answers
 
 ### Meta
@@ -264,6 +306,7 @@ A: To be clear, this is about iSCSI clients supported by SolidFire storage (whic
 - XenServer (Xen) - refer to the HCLs for [storage](http://hcl.xenserver.org/storage/?vendor=56) and [servers](http://hcl.xenserver.org/servers/?vendor=56)
 - Oracle VM - go [here](https://linux.oracle.com/pls/apex/f?p=117:3::::::). Click on Storage Systems and in filter rop-down list select NetApp. Look for SolidFire models from the NetApp HCI Datasheet or Web site (for example, H610S)
 - Other Linux distributions validated (Cinder iSCSI) for SolidFire Element OS - Ubuntu, SuSE, etc. (the details can be found in the IMT)
+- Oracle Virtualbox - not suported (as it uses its own client) but you may want to use it in lab environment
 
 If unsure, contact NetApp with any questions or ask in the [NetApp Community Forum](https://community.netapp.com/t5/AFF-NVMe-EF-Series-and-SolidFire-Discussions/bd-p/flash-storage-systems-discussions) (free membership account required)
 
