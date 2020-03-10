@@ -44,14 +44,14 @@
 
 ## NetApp SolidFire-based Offerings
 
-- SolidFire iSCSI storage clusters (available as storage-only clusters composed of storage nodes from NetApp HCI product line)
+- SolidFire iSCSI storage clusters (available as storage-only clusters composed of storage nodes from NetApp HCI product line; you may view all currently available models in 3D [here](https://apps.kaonadn.net/4817930843848704/index.html) (click on NetApp HCI))
 - NetApp HCI (NetApp HCI compute nodes connected via iSCSI to NetApp HCI storage nodes - some call it "disaggregated HCI" or dHCI)
 
 ## Why SolidFire
 
 - Fully programmable storage - from the initial node configuration to automated storage provisioning for containers
-- Cloud-like, set-and-forget iSCSI storage for clients ranging from bare metal x86_64 servers to hypervisors, VMs and containers
-- Always-on effciency with zero-performance impact. Compression and deduplication cannot be disabled
+- Public cloud-like, set-and-forget iSCSI storage for clients ranging from bare metal x86-64 servers to hypervisors, VMs and containers
+- Always-on storage effciency with zero-performance impact. Compression and deduplication cannot be disabled
 - Granular storage capacity and performance management - Minimum, Maximum and Burst storage policies may be assigned on a per-volume basis
 - General purpose scale-out storage clusters that are easy to provision, manage, refresh, and scale
 - Can be merged into or serve as a base for NetApp HCI - add two or more NetApp HCI compute nodes and convert your SolidFire cluster into NetApp HCI
@@ -69,11 +69,11 @@
 
 ## Resources and Solutions
 
-- You may want to check out the official [catalog of NetApp HCI solutions](https://docs.netapp.com/us-en/hci/solutions/index.html). Even though some of the solutios may require NetApp HCI, a lot of that content also applies to SolidFire
+- You may want to check out the official [catalog of NetApp HCI solutions](https://docs.netapp.com/us-en/hci/solutions/index.html). Even though some of the solutions may require NetApp HCI, a lot of that content also applies to SolidFire
 
 ### Cloud
 
-- Synchronization to/from public cloud: Element OS supports SnapMirror (async) to/from [Cloud Volumes ONTAP](https://cloud.netapp.com/ontap-cloud) available in all major public clouds. See [NetApp TR-4641](https://www.netapp.com/us/media/tr-4641.pdf) for additional details
+- Data synchronization to/from public cloud: Element OS supports NetApp SnapMirror (async) replication to/from [Cloud Volumes ONTAP](https://cloud.netapp.com/ontap-cloud) which is available on all major public clouds. See [NetApp TR-4641](https://www.netapp.com/us/media/tr-4641.pdf) for additional details
 
 ### Virtualization
 
@@ -87,16 +87,17 @@
 
 #### Microsoft Hyper-V
 
+- [solidfire-windows](https://github.com/scaleoutsean/solidfire-windows) - general notes on Windows Server 2019 Hyper-V with NetApp SolidFire
 - PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/Microsoft) for automated storage deployment with Microsoft Hyper-V (for Windows Server 2012 R2; requires minor updates for Microsoft Windows Server 2016 and 2019)
-- [Solidfire VSS Provider](https://mysupport.netapp.com/products/p/elementvss.html) for MS Windows (login required)
+- [SolidFire VSS Provider](https://mysupport.netapp.com/products/p/elementvss.html) for MS Windows (login required)
 
 #### Linux-related (OpenStack, KVM, XenServer, Oracle VM)
 
 - Cinder driver for OpenStack (in-tree, does not need to be installed, it only needs to be configured)
-- [Juju charm](https://github.com/solidfire/charm-cinder-solidfire) for Cinder to use Element cluster back end
+- [Juju charm](https://github.com/solidfire/charm-cinder-solidfire) for Cinder to use Element cluster back-end
 - NetApp's [OpenStack resources and docs](https://netapp.io/openstack/)
 - Redhat OpenShift with NetApp HCI - [NetApp Validated Design 1133](https://www.netapp.com/us/media/nva-1133-design.pdf)
-- Recommended Deployment method for Redhat OpenStack on NetApp HCI is Ansible, but you may use PowerShell, Terraform or other approach to create SolidFire storage cluster
+- Recommended deployment method for Redhat OpenStack on NetApp HCI is Ansible playbooks, but you may use PowerShell, Terraform or other approach to deploy SolidFire storage cluster
 
 #### Storage Provisioning for Containers (CSI and Docker)
 
@@ -111,7 +112,7 @@
 
 - SolidFire has two fully functional CLI's - PowerShell & Python
   - SolidFire [PowerShell Tools (Win/Lin)](https://github.com/solidfire/PowerShell)
-  - Solidfire [Python CLI (Win/Lin/OS X)](https://github.com/solidfire/solidfire-cli)
+  - SolidFire [Python CLI (Win/Lin/OS X)](https://github.com/solidfire/solidfire-cli)
 
 #### SolidFire/Element Software Development Kits (SDKs)
 
@@ -137,7 +138,7 @@
 #### ActiveIQ
 
 - Use ActiveIQ API to monitor your NetApp HCI or SolidFire cluster (requires valid support account)
-- API docs - access Swagger upon login to ActiveIQ
+- API documentation - access it via Swagger upon login to ActiveIQ
 - [NetApp ActiveIQ Documentation](https://docs.netapp.com/us-en/active-iq/)
 - [ActiveIQ user portal](https://activeiq.solidfire.com) (login required)
 
@@ -145,7 +146,8 @@
 
 - Enterprise-grade, professional infrastructure monitoring
 - Cloud-hosted service, requires on-prem VM to acquire data and send it to your NeApp Cloud account
-- A free version has basic functionality and supports all NetApp products including SolidFire and NetApp HCI
+- The free version has basic functionality and supports all NetApp products including SolidFire and NetApp HCI
+- Monitor performance and OPEX of all on-prem assets (NetApp- and non-NetApp-made) as well as in public clouds (see examples in NetApp [WP-7319](https://www.netapp.com/us/media/wp-7319.pdf)
 
 #### Grafana/Graphite - HCICollector
 
@@ -153,22 +155,22 @@
 
 #### Prometheus - solidfire-exporter
 
-- [solidFire-exporter](https://github.com/mjavier2k/solidfire-exporter/) fetches and serves SolidFire metrics in the Prometheus format
+- [Solidfire Exporter](https://github.com/mjavier2k/solidfire-exporter/) fetches and serves SolidFire metrics in the Prometheus format
 
 #### Icinga and Nagios
 
-- [elementOS-monitoring](https://github.com/aleex42/elementOS-monitoring) - more [here](https://blog.krogloth.de/nagios-icinga-monitoring-for-netapp-solidfire/)
-- [nagfire](https://github.com/scaleoutsean/nagfire/) - supports both SolidFire cluster and individual nodes
+- [ElementOS-Monitoring](https://github.com/aleex42/elementOS-monitoring) - more [here](https://blog.krogloth.de/nagios-icinga-monitoring-for-netapp-solidfire/)
+- [nagfire](https://github.com/scaleoutsean/nagfire/) - supports status both SolidFire clusters and individual nodes (Python 3)
 
 #### SNMP MIBs
 
 - SolidFire MIBs may be downloaded from the SolidFire/Element Web UI
 - SNMP is disabled by default. If you enable it, you may choose v2 or v3
-- Hardware MIBs may be available as well (check the NetApp KB for details relevant to your own hardware model(s))
+- Element API also lets you access essential hardware status information via API methods `GetIpmiInfo` and `GetIpmiConfig`
 
 #### Syslog Forwarding
 
-- Forwarding to external syslog-ng target may be configured through a CLI or the API (see `SetRemoteLoggingHosts` method in Solidfire documentation)
+- Forwarding to external syslog-ng target may be configured through a CLI or the API (see `SetRemoteLoggingHosts` method in SolidFire documentation)
 - VMware-based NetApp HCI surfaces Element cluster events and alerts to vCenter; if ActiveIQ is enabled, these alerts are also sent to ActiveIQ
 
 #### Event Notifications
@@ -176,7 +178,7 @@
 - Users with existing notification solution: use Syslog forwarding or SNMP. You may also [integrate](https://www.youtube.com/watch?v=el2FBI0v27E) NetApp ActiveIQ with your existing system
 - Users without an existing solution may consider one of these:
   - NetApp ActiveIQ: mobile app notifications (faster), email notifications (slower; enable them in the ActiveIQ Web UI)
-  - Grafana: ([HCICollector](https://github.com/scaleoutsean/hcicollector) can send email notifications. Other Grafana methods may be used as well
+  - Grafana: [HCICollector](https://github.com/scaleoutsean/hcicollector) and (Grafana in general) can send email notifications
   - Icinga and Nagios (email)
 
 ### Backup, Restore, Site Failover
@@ -185,18 +187,26 @@
   - Cleondris
   - Commvault
   - Veeam
-- You can also replicate to, and then backup from ONTAP, which becomes attractive with large backup jobs: set up SolidFire SnapMirror to ONTAP with NL-SAS disks and backup the volume on ONTAP. When you have to backup a 20TB database on HCI, you'll be better off with NetApp HCI and ONTAP than with any other HCI
+- You can also replicate to, and then backup from ONTAP, which becomes attractive with large backup jobs: set up SolidFire SnapMirror to an ONTAP system with NL-SAS disks and backup the volume on ONTAP. When you have to backup a 20TB database on HCI, you're better off backing it up with NetApp HCI replicated to ONTAP than directly from HCI (either NetApp or any other)
 - DR
   - Native Synchronous and Asynchronous Replication - see NetApp TR-4741 or newer
   - Site failover
     - SolidFire SRA for VMware SRM
+    - Some of backup offerings mentioned above provide functionality similar to VMware SRM
+
+### Security
+
+- Minimal security footprint - HTTPS (management interfaces) and iSCSI (storage)
+- Uses SED drives with cluster-managed keys
+- Supports KMIP-compatible external key manager (see the IMT for the current list of tested ISV solutions (HyTrust, Gemalto KeySecure, etc.))
+- FIPS 140-2 Level 2 certified SSDs (NetApp HCI H610S-2F model only)
 
 ## Demo VM, Tools and Utilities
 
 ### SolidFire/Element Demo VM
 
 - Element Demo VM: partners and customers may [download](https://mysupport.netapp.com/tools/info/ECMLP2848232I.html?pcfContentID=ECMLP2848232&productID=62139&pcfContentID=ECMLP2848232) (NetApp partner or support login required) and use it at no cost. Data and configuration persist after a reboot. It works with Kubernetes (Trident), VMware ESXi and other iSCSI clients supported by SolidFire
-- NetApp OneCollect: this awesome and gratis multi-purpose utility that runs on Windows, Linux and in [Docker](https://hub.docker.com/r/netapp/onecollect/) containers is generally used for log data gathering but it can be used for configuration change tracking when set to run on schedule (watch [this video](https://www.youtube.com/watch?v=ksSs9wUi4sM) to get an idea - just don't run it in Element Management Node because that is not supported)
+- NetApp OneCollect: this awesome and gratis multi-purpose utility that runs on Windows, Linux and in [Docker](https://hub.docker.com/r/netapp/onecollect/) containers is generally used for log data gathering but it can be used for configuration change tracking when set to run on schedule (watch [this video](https://www.youtube.com/watch?v=ksSs9wUi4sM) to get an idea - just don't run it on Element Management Node because that is not supported)
 
 ### Recorded Demos
 
@@ -206,9 +216,9 @@
 
 ### VMware
 
-- PowerShell [Script](https://github.com/kpapreck/test-plan/blob/master/kp-clone-snap-to-datastore.ps1) to clone a VMFS6 volume from a SolidFire snapshot and import it to vCenter
+- PowerShell [script](https://github.com/kpapreck/test-plan/blob/master/kp-clone-snap-to-datastore.ps1) to clone a VMFS6 volume from a SolidFire snapshot and import it to vCenter
 - PowerShell [examples](https://github.com/solidfire/PowerShell/tree/release/1.5.1/VMware) for VMware
-- PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/SPBM) for integration with Storage Policy Based Management
+- PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/SPBM) for integration with Storage Policy Based Management (SPBM)
 
 Do not use old performance-tuning scripts from these examples on VMware ESXi 6.5 and above because they were written for ESXi 5.5 and 6.0. ESXi 6.5 and later have appropriate SolidFire MPIO settings built-in and require no special modification or tuning
 
@@ -259,17 +269,17 @@ If unsure, contact NetApp with any questions or ask in the [NetApp Community For
 
 Q: Does SolidFire work with my Kubernetes?
 
-A: If Trident works, SolidFIre works too. Some known supported distros are listed [here](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) but other CSI-compatible distros should work as well (for example Rancher does). I recommend to check out Trident [issues](https://github.com/NetApp/trident/issues) as well to see if there's anything that you care about. Note that issues and requirements change between releases, so sometimes you may be better off with an older release in which case you shuold check supported requirements for older Trident releases.
+A: If Trident works with it, SolidFire can too. Some K8s distributions known to work are listed [here](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) but other CSI-compatible distros should work as well (for example Rancher). I recommend to check out Trident [issues](https://github.com/NetApp/trident/issues) as well to see if there's anything that you care about. Note that issues and requirements change between releases, so sometimes you may be better off with an older release in which case you shuold check supported requirements for older Trident releases.
 
 ### Workloads
 
 Q: Should I use SolidFire with (or for) ...
 
-A: It depends. At the highest level of abstraction SolidFire is suitable for 95% of apps people virtualize or containerize on on-premises x86_64 infrastructure. If you think you're a one percenter, you may want to discuss it with a SolidFire or Cloud Infrastructure architect. NetApp HCI may be able to accommodate even extreme workloads if you offload some data processing to external NFS or iSCSI storage such as NetApp AFF or E-Series.
+A: It depends. At the highest level of abstraction SolidFire is suitable for 95% of apps people virtualize or containerize on on-premises x86_64 infrastructure. If you think you're a "one percenter", you may want to discuss your requirements with a NetApp SolidFire or Cloud Infrastructure architect. NetApp HCI may be able to accommodate even extreme workloads if data processing to external NFS or iSCSI storage such as NetApp AFF or E-Series. Some HCI vendors force such storage workloads on their HCI storage which doesn't work well (or sort-of-works, but at a much higher price).
 
 Q: Is NetApp HCI suitable for AI, Hadoop, Splunk and similar "heavy" workloads?
 
-A: For some applications from that stack (such as databases) it is, but for HDFS you may consider connecting compute nodes ONTAP hardware (see [NIPAM](https://pypi.org/project/netapp-ontap/)) or E-Series (Raw Device Mapping to iSCSI, formatted with HDFS or [BeeGFS](https://blog.netapp.com/solution-support-for-beegfs-and-e-series/), for example)
+A: For some applications from that stack (such as databases) it is, but for HDFS you may consider connecting compute nodes to ONTAP hardware (see [NIPAM](https://pypi.org/project/netapp-ontap/)) or E-Series (Raw Device Mapping to iSCSI, formatted with HDFS or [BeeGFS](https://blog.netapp.com/solution-support-for-beegfs-and-e-series/), for example)
 
 ### Storage Services
 
@@ -283,8 +293,8 @@ A: You can buy a software-based ONTAP license (NetApp ONTAP Select) and run it o
 
 ONTAP Select running on NetApp HCI compute nodes can store its data either (or both) on NetApp HCI storage or external storage supported by hypervisor (ESXi 6.7, for example).
 
-- [TR-4669](https://www.netapp.com/us/media/tr-4669.pdf): HCIFile Services Powered by ONTAP Select
-- ONTAP Select [documentation](https://docs.netapp.com/us-en/ontap-select/)
+- NetApp [TR-4669](https://www.netapp.com/us/media/tr-4669.pdf): HCI File Services Powered by ONTAP Select
+- NetApp ONTAP Select [documentation](https://docs.netapp.com/us-en/ontap-select/)
 
 ### DevOps
 
@@ -315,7 +325,7 @@ SolidFire can be ordered with Mellanox SN2010 switches (which work really well) 
 
 Q: Can I connect my FC SAN clients to SolidFire?
 
-A: SolidFire and later NetApp used to sell a SolidFire Fibre Channel gateway node, but it's no longer available. I don't know what the official reason is, but I suspect fewer and fewer people use Fibre Channel in VI and now container environments. It's complex, hard to manage, expensive, and frankly unnecessary (not that FC itself is unnecessary, but in my opinion it's unnecessary for 95% of workloads people run in containers and virtual machines). The other reason is iSCSI works well and is also cheaper. Almost noone can work without Ethernet, but most people can work without FC, so... If you haven't considered iSCSI yet take a look at [TR-4367](https://www.netapp.com/us/media/tr-4367.pdf) created by ONTAP specialists, which provides a fairly recent comparison between NFS, iSCSI and FC.
+A: SolidFire and later NetApp used to sell a SolidFire Fibre Channel gateway node, but it's no longer sold. I don't know what the official reason was, but I suspect fewer and fewer people use Fibre Channel in VI and now container environments. It's complex, hard to manage, expensive, and frankly unnecessary (not that FC itself is unnecessary for everyone, but in my opinion it's unnecessary for 95% of workloads people run in containers and virtual machines). The other reason is iSCSI works well and is also cheaper. Almost no one can work without Ethernet, but most people can work without FC, so if two links will do, why use four... If you haven't considered iSCSI yet take a look at [TR-4367](https://www.netapp.com/us/media/tr-4367.pdf) created by ONTAP specialists, which provides a fairly recent comparison between NFS, iSCSI and FC.
 
 ## License and Trademarks
 
