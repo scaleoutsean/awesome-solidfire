@@ -132,8 +132,8 @@
 
 - [Ansible modules](https://docs.ansible.com/ansible/latest/search.html?q=NetApp+Element+Software) for Element Software (look for `na_elementsw_* modules`)
 - [SolidFire Puppet plugin](https://github.com/solidfire/solidfire-puppet)
-- [Terraform Plugin for SolidFire (unofficial)](https://github.com/solidfire/terraform-provider-solidfire) - works with Terraform v0.12
-- [Terraform for NetApp Kubernetes Service on HCI](https://docs.netapp.com/us-en/kubernetes-service/intro-to-terraform-on-nks.html)
+- [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw) - recommended for v0.12 and newer
+  - [Terraform Plugin for SolidFire (unofficial)](https://github.com/solidfire/terraform-provider-solidfire) - works with Terraform v0.11 and v0.12, here for reference only
 
 ### Alerting, Monitoring, Telemetry
 
