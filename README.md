@@ -10,6 +10,7 @@
       - [VMware vSphere](#vmware-vsphere)
       - [Microsoft Hyper-V](#microsoft-hyper-v)
       - [Linux-related (OpenStack, KVM, XenServer, Oracle VM)](#linux-related-openstack-kvm-xenserver-oracle-vm)
+      - [Oracle VirtualBox](#oracle-virtualbox)
       - [Storage Provisioning for Containers (CSI and Docker)](#storage-provisioning-for-containers-csi-and-docker)
     - [CLI, API, SDK Resources](#cli-api-sdk-resources)
       - [CLI](#cli)
@@ -95,11 +96,16 @@
 
 #### Linux-related (OpenStack, KVM, XenServer, Oracle VM)
 
-- Cinder driver for OpenStack (in-tree, does not need to be installed, it only needs to be configured)
-- [Juju charm](https://github.com/solidfire/charm-cinder-solidfire) for Cinder to use Element cluster back-end
+- Cinder driver for OpenStack (in-tree, does not need to be installed, it only needs to be configured - see NetApp TR-6420 or [this video](https://youtu.be/rW5ZTlyhm7U))
+- [Juju charm](https://github.com/solidfire/charm-cinder-solidfire) for Cinder to use Element cluster back-end (may need to be updated)
 - NetApp's [OpenStack resources and docs](https://netapp.io/openstack/)
 - Redhat OpenShift with NetApp HCI - [NetApp Validated Design 1133](https://www.netapp.com/us/media/nva-1133-design.pdf)
 - Recommended deployment method for Redhat OpenStack on NetApp HCI is Ansible playbooks, but you may use PowerShell, Terraform or other approach to deploy SolidFire storage cluster
+
+#### Oracle VirtualBox
+
+- VirtualBox iSCSI initiator isn't officially supported but [it appears to work](https://youtu.be/EqxK-mT9Fxw)
+- VirtualBox on top of OS-provisioned storage works as usual, as do supported VirtualBox guests with direct access to SolidFire iSCSI targets
 
 #### Storage Provisioning for Containers (CSI and Docker)
 
