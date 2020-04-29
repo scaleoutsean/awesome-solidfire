@@ -22,6 +22,7 @@
       - [NetApp Cloud Insights](#netapp-cloud-insights)
       - [Grafana/Graphite - HCICollector](#grafanagraphite---hcicollector)
       - [Prometheus - solidfire-exporter](#prometheus---solidfire-exporter)
+      - [Prometheus - NetApp Trident metrics](#prometheus---netapp-trident-metrics)
       - [Icinga and Nagios](#icinga-and-nagios)
       - [SNMP MIBs](#snmp-mibs)
       - [Syslog Forwarding](#syslog-forwarding)
@@ -165,6 +166,10 @@
 
 - [Solidfire Exporter](https://github.com/mjavier2k/solidfire-exporter/) fetches and serves SolidFire metrics in the Prometheus format
 
+#### Prometheus - NetApp Trident metrics
+
+- In v20.01 NetApp Trident delivered support for Prometheus metrics. A how-to is available [here](https://netapp.io/2020/02/20/prometheus-and-trident/)
+
 #### Icinga and Nagios
 
 - [ElementOS-Monitoring](https://github.com/aleex42/elementOS-monitoring) - more [here](https://blog.krogloth.de/nagios-icinga-monitoring-for-netapp-solidfire/)
@@ -192,21 +197,21 @@
 ### Backup, Restore, Site Failover
 
 - While you backup SolidFire by backing up front-end VMs or application data, the following vendors (ordered alphabetically) can integrate with SolidFire API to make backups better
-  - Cleondris
+  - Cleondris HCC
   - Commvault
-  - Veeam
+  - Veeam BR
 - You can also replicate to, and then backup from ONTAP, which becomes attractive with large backup jobs: set up SolidFire SnapMirror to an ONTAP system with NL-SAS disks and backup the volume on ONTAP. When you have to backup a 20TB database on HCI, you're better off backing it up with NetApp HCI replicated to ONTAP than directly from HCI (either NetApp or any other)
 - DR
   - Native Synchronous and Asynchronous Replication - see NetApp TR-4741 or newer
   - Site failover
     - SolidFire SRA for VMware SRM
-    - Some of backup offerings mentioned above provide functionality similar to VMware SRM
+    - Some of the backup offerings mentioned above provide functionality similar to VMware SRM
 
 ### Security
 
 - Minimal security footprint - HTTPS (management interfaces) and iSCSI (storage)
 - Uses SED drives with cluster-managed keys
-- Supports KMIP-compatible external key manager (see the IMT for the current list of tested ISV solutions (HyTrust, Gemalto KeySecure, etc.))
+- Supports KMIP-compatible external key managers (see the IMT for the current list of tested ISV solutions (HyTrust, [Thales KeySecure](./encryption/kmip-thales-keysecure.md), etc.))
 - FIPS 140-2 Level 2 certified SSDs (NetApp HCI H610S-2F model only)
 
 ## Demo VM, Tools and Utilities
