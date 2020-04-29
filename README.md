@@ -29,6 +29,7 @@
       - [Event Notifications](#event-notifications)
     - [Backup, Restore, Site Failover](#backup-restore-site-failover)
     - [Security](#security)
+    - [Encryption](#encryption)
   - [Demo VM, Tools and Utilities](#demo-vm-tools-and-utilities)
     - [SolidFire/Element Demo VM](#solidfireelement-demo-vm)
     - [Recorded Demos](#recorded-demos)
@@ -209,9 +210,12 @@
 
 ### Security
 
-- Minimal security footprint - HTTPS (management interfaces) and iSCSI (storage)
+- Minimal security footprint - HTTPS (management interfaces) and iSCSI (storage) and on-demand SSH for remote support
+
+### Encryption
+
 - Uses SED drives with cluster-managed keys
-- Supports KMIP-compatible external key managers (see the IMT for the current list of tested ISV solutions (HyTrust, [Thales KeySecure](./encryption/kmip-thales-keysecure.md), etc.))
+- Supports KMIP-compatible external key managers (see the IMT for the current list of tested ISV solutions (HyTrust, [Thales SafeNet KeySecure](./encryption/kmip-thales-keysecure.md), etc.))
 - FIPS 140-2 Level 2 certified SSDs (NetApp HCI H610S-2F model only)
 
 ## Demo VM, Tools and Utilities
