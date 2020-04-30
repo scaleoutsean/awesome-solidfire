@@ -19,17 +19,17 @@
 
 ## Workflow
 
-These aren't recommended or required steps. This is what I did.
+These aren't recommended or required steps. This is simply what I did to get to the last step (enable encryption at rest) without errors.
 
 - KeySecure
   - Configure KeySecure CA
-  - Enable KMIP server (probably should use `CN` to map certificates to accounts)
-  - Create user (same as cluster name)
+  - Enable KMIP server (I used `OU` to map certificates to accounts, mostly because vCenter requires it)
+  - Create Local User (same as SolidFire cluster name; may not be necessary)
 - SolidFire
-  - Create cluster-specific key pair and CSR
-  - Create KMIP Provider and Server, and pair them
-  - Test KMIP
-  - Disable (if enabled) and then Enable Encryption at Rest
+  - Create cluster-specific pub-priv key pair and CSR
+  - Create KMIP Provider and Server, and pair Server with Provider
+  - Test KMIP provider and server
+  - Disable (if enabled) and then enable Encryption at Rest
 - Check KeySecure and SolidFire Logs
   - KeySecure log viewer should show KeyGen request and other activity
   - SolidFire or NetApp HCI should not show alerts about external KMIP not working
@@ -40,10 +40,11 @@ These aren't recommended or required steps. This is what I did.
   - Password Authentication: Optional
   - Client Certificate Authentication: Used for SSL session and username
   - Trusted CA List Profile: Default
-  - Username Field in Client Certificate: `OU` (Organizational Unit)
+  - Username Field in Client Certificate: `OU` (Organizational Unit) (for vCenter)
 - Local user accounts were used; an account named `$CLUSTERNAME` was created in KeySecure (I'm not sure if this is required, to have a user account that matches cluster name)
-- SolidFire CSR was created on SolidFire as per below; creating CSR from KeySecure Web UI didn't work out (certifiate could be uploaded to SolidFire with `SetSslCertificate` but there were errors later on, when creating KMIP Server, so best don't try if you don't know how it's supposed to work)
-- From the issued SolidFire certificate and API method it seems that `CN` is pre-set to `$CLUSTERNAME`, and `OU` worked as Username Field in Client Certificate for me only because I manually entered `organizationalUnit` value that was identical to `CN` (and equal to cluster name)
+- Certificates and certificates: 
+  - SolidFire CSR for KMIP certificate was created on SolidFire as per below; creating a CSR from KeySecure Web UI didn't work out (such a certificate could be uploaded to SolidFire with `SetSslCertificate` but it didn't appear to work for KMIP (when creating KMIP Server). I haven't had a fully functioning SolidFire cluster (I used a demo VM) to begin with, but it seems that only the SolidFire cluster certificate for Web/API can be externally created and uploaded, while the KMIP certificate is held by the cluster so you can't use one externally created CSR for KMIP)
+  - tldr: KeySecure may sign two certificates for SolidFire; keys and CSR for type used for KMIP can be generated with the SolidFire API, the keys and CSR for the type used for SolidFire API endpoint and Web UI must be created externally (KeySecure Web UI, openssl CLI, etc.). For KMIP you need the former, but it makes sense to generate the both since you don't want to use the self-signed certificate for Web/API anyway
 - It is strongly recommended to thoroughly understand KeySecure (or find somebody who does) for actual production use
 
 ![KeySecure KMIP Server](./01-kmip-server.png)
@@ -52,6 +53,7 @@ These aren't recommended or required steps. This is what I did.
 
 ## Create SolidFire Cluster Key Pair
 
+- I used `OU=Taiwan`, as that was used in KMIP server but I can't tell if OU must equal cluster name
 - Request:
 
 ```json
@@ -78,6 +80,8 @@ These aren't recommended or required steps. This is what I did.
     "result": {}
 }
 ```
+- Notice that SolidFire hangs onto the keys, so nope, you can't use these for the Web UI/API endpoint!
+
 
 ## Create CSR
 
@@ -105,7 +109,7 @@ These aren't recommended or required steps. This is what I did.
 
 ![KeySecure Signed CSR](./05-csr.png)
 
-- Copy the value of `clientCertificateSignRequest`, remove `\n` and save to `${CLUSTERNAME}.csr` (the file name can be arbitrary, of course).
+- Copy the value of `clientCertificateSignRequest`, remove (or replace with hard breaks) all `\n`'s and save to a file such as `${CLUSTERNAME}.csr` (the file name can be arbitrary, of course).
 
 ## Sign SolidFire Cluster CSR with CA key in SafeNet KeySecure UI
 
@@ -141,8 +145,8 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
 
 ## Create KMIP Key Provider and Server(s)
 
-- Responses were empty (no error)
-- Request which simply returns a number (e.g. 1, on the first succesful attempt) of the created Key Provider (in theory you should have at least 2, for HA purposes):
+- Responses were empty (which means no error)
+- Request which simply returns a number (e.g. 1, on the first succesful attempt) of the created Key Provider (in theory you could have 2, say one per site, for HA):
 
 ```json
 {
@@ -154,7 +158,7 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
 }
 ```
 
-- Request that registers SolidFire cluster with KeySecure (CA Certificate is from KeySecure, Client Certificate is KeySecure-signed certificate for SolidFire):
+- Request that registers SolidFire cluster with KeySecure. You could have two servers per site. CA Certificate is from KeySecure CA that runs KMIP and Client Certificate is KeySecure CA-signed certificate for SolidFire cluster:
 
 ```json
 {
@@ -217,7 +221,7 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
 }
 ```
 
-- Response (note and remember keyServerID, in this case 11):
+- Response (note and remember your keyServerID, in this case 11, as well as keyProvider ID from earlier; you can use `List` methods to find the ID's if you forget them:
 
 ```json
 {
@@ -304,3 +308,7 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
     "id": 1
 }
 ```
+
+## Video walkthrough
+
+- [NetApp HCI and SolidFire & SafeNet KeySecure](https://youtu.be/fHRTJCzyRZY)
