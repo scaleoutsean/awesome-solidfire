@@ -6,11 +6,12 @@
     - [Notes](#notes)
   - [Create SolidFire Cluster Key Pair](#create-solidfire-cluster-key-pair)
   - [Create CSR](#create-csr)
-  - [Sign the CSR in KeySecure UI](#sign-the-csr-in-keysecure-ui)
+  - [Sign SolidFire Cluster CSR with CA key in SafeNet KeySecure UI](#sign-solidfire-cluster-csr-with-ca-key-in-safenet-keysecure-ui)
   - [Create KMIP Key Provider and Server(s)](#create-kmip-key-provider-and-servers)
   - [Attach KMIP Server to KMIP Provider](#attach-kmip-server-to-kmip-provider)
   - [Test Key Provider and Server](#test-key-provider-and-server)
   - [Enable Encryption at Rest with External Key Manager](#enable-encryption-at-rest-with-external-key-manager)
+  - [Video walkthrough](#video-walkthrough)
 
 ## What's inside
 
@@ -28,6 +29,7 @@ These aren't recommended or required steps. This is simply what I did to get to 
 - SolidFire
   - Create cluster-specific pub-priv key pair and CSR
   - Create KMIP Provider and Server, and pair Server with Provider
+    - Multiple KMIP Providers and Servers may be configured. One could have one KMIP Provider with four Servers (VMs) for two on-prem sites, and another with 2 VMs in public cloud, for example
   - Test KMIP provider and server
   - Disable (if enabled) and then enable Encryption at Rest
 - Check KeySecure and SolidFire Logs
@@ -44,7 +46,7 @@ These aren't recommended or required steps. This is simply what I did to get to 
 - Local user accounts were used; an account named `$CLUSTERNAME` was created in KeySecure (I'm not sure if this is required, to have a user account that matches cluster name)
 - Certificates and certificates: 
   - SolidFire CSR for KMIP certificate was created on SolidFire as per below; creating a CSR from KeySecure Web UI didn't work out (such a certificate could be uploaded to SolidFire with `SetSslCertificate` but it didn't appear to work for KMIP (when creating KMIP Server). I haven't had a fully functioning SolidFire cluster (I used a demo VM) to begin with, but it seems that only the SolidFire cluster certificate for Web/API can be externally created and uploaded, while the KMIP certificate is held by the cluster so you can't use one externally created CSR for KMIP)
-  - tldr: KeySecure may sign two certificates for SolidFire; keys and CSR for type used for KMIP can be generated with the SolidFire API, the keys and CSR for the type used for SolidFire API endpoint and Web UI must be created externally (KeySecure Web UI, openssl CLI, etc.). For KMIP you need the former, but it makes sense to generate the both since you don't want to use the self-signed certificate for Web/API anyway
+  - tldr: KeySecure may be used to sign two certificates for SolidFire; keys and CSR for the one used for KMIP must be generated with the SolidFire API, the keys and CSR for the type used for SolidFire API endpoint and the nodes' Web UI must be created externally (KeySecure Web UI, OpenSSL CLI, etc.). For KMIP you need the former, but it makes sense to generate the both since you don't want to use the (built-in) self-signed certificate for Web/API anyway
 - It is strongly recommended to thoroughly understand KeySecure (or find somebody who does) for actual production use
 
 ![KeySecure KMIP Server](./01-kmip-server.png)
@@ -53,7 +55,7 @@ These aren't recommended or required steps. This is simply what I did to get to 
 
 ## Create SolidFire Cluster Key Pair
 
-- I used `OU=Taiwan`, as that was used in KMIP server but I can't tell if OU must equal cluster name
+- I used `OU=Taiwan`, as that was used in KMIP server but I can't tell if OU must be equal to cluster name
 - Request:
 
 ```json
@@ -80,8 +82,8 @@ These aren't recommended or required steps. This is simply what I did to get to 
     "result": {}
 }
 ```
-- Notice that SolidFire hangs onto the keys, so nope, you can't use these for the Web UI/API endpoint!
 
+- Notice that SolidFire hangs onto the keys, so nope, you can't use these for the Web UI/API endpoint!
 
 ## Create CSR
 

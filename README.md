@@ -86,6 +86,7 @@
 
 - Check out VMware related material on the NetApp web site (Private cloud, VDI/EUC, GPU computing and more)
 - vCenter Plugin for Element Software (used to be called "VCP") is built into NetApp HCI and may be installed in other vCenter servers you want to connect to separate NetApp HCI volumes. SolidFire users may get it from NetApp downloads for Element Software
+- [Element SRA](https://www.vmware.com/resources/compatibility/detail.php?productid=46049&deviceCategory=sra&details=1&srmVer=336&partner=64&releases=336&page=1&display_interval=10&sortColumn=Partner&sortOrder=Asc) for VMware SRM
 - [vRealize Orchestrator Plugin for Element Software](https://github.com/solidfire/vrealize-orchestrator-plugin)
 - [vRealize Automation for NetApp HCI and SolidFire](https://bluemedora.com/resource/vmware-vrealize-operations-management-pack-for-netapp-hci-solidfire/)
 - [pyNSXdeploy](https://github.com/solidfire/pyNSXdeploy) -  automate deployment of NSX on vSphere 6.x on NetApp HCI
@@ -103,6 +104,7 @@
 - NetApp's [OpenStack resources and docs](https://netapp.io/openstack/)
 - Redhat OpenShift with NetApp HCI - [NetApp Validated Design 1133](https://www.netapp.com/us/media/nva-1133-design.pdf)
 - Recommended deployment method for Redhat OpenStack on NetApp HCI is Ansible playbooks, but you may use PowerShell, Terraform or other approach to deploy SolidFire storage cluster
+- Additional details about SolidFire in Linux environments: [solidfire-linux](https://github.com/scaleoutsean/solidfire-linux/)
 
 #### Oracle VirtualBox
 
@@ -121,7 +123,7 @@
 #### CLI
 
 - SolidFire has two fully functional CLI's - PowerShell & Python
-  - SolidFire [PowerShell Tools (Win/Lin)](https://github.com/solidfire/PowerShell)b - not (yet) officially supported, but module `SolidFire.core` has been field-tested and found to work on ARM64 (PowerShell 6) and with PowerShell 7 (Ubuntu 18.04)
+  - SolidFire [PowerShell Tools (Win/Lin)](https://github.com/solidfire/PowerShell) for the x86_64 architecture. It's not (yet) officially supported, but module `SolidFire.core` has been field-tested and found to work on ARM64 (PowerShell 6) and with PowerShell 7 (Ubuntu 18.04)
   - SolidFire [Python CLI (Win/Lin/OS X)](https://github.com/solidfire/solidfire-cli)
 
 #### SolidFire/Element Software Development Kits (SDKs)
@@ -138,7 +140,7 @@
 
 #### Automation and Configuration Tools and Frameworks
 
-- [Ansible modules](https://docs.ansible.com/ansible/latest/search.html?q=NetApp+Element+Software) for Element Software (look for `na_elementsw_* modules`)
+- [Ansible modules](https://docs.ansible.com/ansible/latest/search.html?q=NetApp+Element+Software) for Element Software (look for `na_elementsw_*` modules)
 - [SolidFire Puppet plugin](https://github.com/solidfire/solidfire-puppet)
 - [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw) - recommended for v0.12 and newer
   - [Terraform Plugin for SolidFire (unofficial)](https://github.com/solidfire/terraform-provider-solidfire) - works with Terraform v0.11 and v0.12, here for reference only
@@ -155,7 +157,7 @@
 #### NetApp Cloud Insights
 
 - Enterprise-grade, professional infrastructure monitoring
-- Cloud-hosted service, requires on-prem VM to acquire data and send it to your NeApp Cloud account
+- Cloud-hosted service, requires on-prem VM to acquire data and send it to your NetApp Cloud Insights account
 - The free version has basic functionality and supports all NetApp products including SolidFire and NetApp HCI
 - Monitor performance and OPEX of all on-prem assets (NetApp- and non-NetApp-made) as well as in public clouds (see examples in NetApp [WP-7319](https://www.netapp.com/us/media/wp-7319.pdf)
 
@@ -174,7 +176,7 @@
 #### Icinga and Nagios
 
 - [ElementOS-Monitoring](https://github.com/aleex42/elementOS-monitoring) - more [here](https://blog.krogloth.de/nagios-icinga-monitoring-for-netapp-solidfire/)
-- [nagfire](https://github.com/scaleoutsean/nagfire/) - supports status both SolidFire clusters and individual nodes (Python 3)
+- [nagfire](https://github.com/scaleoutsean/nagfire/) - supports status check of both SolidFire clusters and individual nodes (Python 3)
 
 #### SNMP MIBs
 
@@ -195,9 +197,9 @@
   - Grafana: [HCICollector](https://github.com/scaleoutsean/hcicollector) and (Grafana in general) can send email notifications
   - Icinga and Nagios (email)
 
-### Backup, Restore, Site Failover
+### Backup, Restore, DR and BC (Site Failover)
 
-- While you backup SolidFire by backing up front-end VMs or application data, the following vendors (ordered alphabetically) can integrate with SolidFire API to make backups better
+- While you backup SolidFire data by backing up front-end VMs or application data, the following vendors (ordered alphabetically) can integrate with SolidFire API to make data protection and business continuity easier and better
   - Cleondris HCC
   - Commvault
   - Veeam BR
@@ -211,6 +213,7 @@
 ### Security
 
 - Minimal security footprint - HTTPS (management interfaces) and iSCSI (storage) and on-demand SSH for remote support
+- Multi-Factor Authentication (MFA) for management access (since v12.0)
 
 ### Encryption
 
@@ -267,7 +270,7 @@ Do not use old performance-tuning scripts from these examples on VMware ESXi 6.5
 ```
 
 - Not all environments assign ownership (tags) to teams or have the need to set attributes on SolidFire objects (for example, vSphere users can tag vSphere objects - they don't need to talk to SolidFire), but if they do, they can easily create reports and automate operations with only several lines of PowerShell
-- Efficiency report for one owner's volumes (1x for empty volumes):
+- Efficiency report for all volumes tagged with one such owner (empty volumes have the efficiency of 1X, if Thin Provisioning is not counted):
 
 ```pwsh
 PS > foreach ($vol in $(Get-SFVolume)){ if ($vol.Attributes.owner -eq "scaleoutSean"){Write-Host "Efficiency of Sean's Volumes:"`n "Volume ID:" $vol.VolumeID ; Get-SFVolumeEfficiency -VolumeID $vol.volumeID}}
@@ -280,8 +283,8 @@ MissingVolumes   : {}
 ThinProvisioning : 1
 Timestamp        : 1970-01-01T00:00:00Z
 ```
-- Please do not confuse AccountID with custom "owner" attribute; large Kubernetes or Hyper-V cluster can use one AccountID for all Management OS, but volume "owners" can be many (or none, if the key is named differently or not at all used) and the latter is just a custom tag
-- In Kubernetes or Docker environments, pay attention to avoid the user of the same volume attribute keys used by NetApp Trident
+- Please do not confuse AccountID with custom "owner" attribute above; large Kubernetes or Hyper-V cluster can use one AccountID for all Management OS, but volume "owners" can be many (or none, if the key is named differently or not at all used) and the latter is just a custom tag
+- In Kubernetes or Docker environments, pay attention to avoid the use of the same volume attribute keys used by NetApp Trident
 
 ## Questions and Answers
 
@@ -321,7 +324,7 @@ A: To be clear, this is about iSCSI clients supported by SolidFire storage (whic
 - XenServer (Xen) - refer to the HCLs for [storage](http://hcl.xenserver.org/storage/?vendor=56) and [servers](http://hcl.xenserver.org/servers/?vendor=56)
 - Oracle VM - go [here](https://linux.oracle.com/pls/apex/f?p=117:3::::::). Click on Storage Systems and in filter rop-down list select NetApp. Look for SolidFire models from the NetApp HCI Datasheet or Web site (for example, H610S)
 - Other Linux distributions validated (Cinder iSCSI) for SolidFire Element OS - Ubuntu, SuSE, etc. (the details can be found in the IMT)
-- Oracle Virtualbox - not suported (as it uses its own client) but you may want to use it in lab environment
+- Oracle Virtualbox - not suported (as it uses its own iSCSI client that isn't validated by NetApp) but it works and you may want to use it in lab environment
 
 If unsure, contact NetApp with any questions or ask in the [NetApp Community Forum](https://community.netapp.com/t5/AFF-NVMe-EF-Series-and-SolidFire-Discussions/bd-p/flash-storage-systems-discussions) (free membership account required)
 
