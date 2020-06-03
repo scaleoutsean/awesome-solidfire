@@ -27,7 +27,7 @@
       - [SNMP MIBs](#snmp-mibs)
       - [Syslog Forwarding](#syslog-forwarding)
       - [Event Notifications](#event-notifications)
-    - [Backup, Restore, Site Failover](#backup-restore-site-failover)
+    - [Backup, Restore, DR and BC (Site Failover)](#backup-restore-dr-and-bc-site-failover)
     - [Security](#security)
     - [Encryption](#encryption)
   - [Demo VM, Tools and Utilities](#demo-vm-tools-and-utilities)
@@ -40,6 +40,7 @@
   - [Questions and Answers](#questions-and-answers)
     - [Meta](#meta)
     - [Element Demo VM](#element-demo-vm)
+    - [Logging and Monitoring](#logging-and-monitoring)
     - [Hypervisors and Containers](#hypervisors-and-containers)
     - [Workloads](#workloads)
     - [Storage Services](#storage-services)
@@ -75,6 +76,10 @@
 ## Resources and Solutions
 
 - You may want to check out the official [catalog of NetApp HCI solutions](https://docs.netapp.com/us-en/hci/solutions/index.html). Even though some of the solutions may require NetApp HCI, a lot of that content also applies to SolidFire
+- Where to find more:
+  - Products: look under NetApp HCI or (storage-only) SolidFire in the [list of NetApp storage products](https://www.netapp.com/us/products/a-z/index.aspx)
+  - Availability of products and support: for General Availability, End of Availability (EOA, also known as end of Sale), End of Support (EOS) info go to NetApp Support, search by model and filter results by "Product Communique"
+
 
 ### Cloud
 
@@ -187,8 +192,8 @@
 
 #### Syslog Forwarding
 
-- Forwarding to external syslog-ng target may be configured through a CLI or the API (see `SetRemoteLoggingHosts` method in SolidFire documentation)
-- VMware-based NetApp HCI surfaces Element cluster events and alerts to vCenter; if ActiveIQ is enabled, these alerts are also sent to ActiveIQ
+- Forwarding to external syslog-ng target may be configured through a CLI or the API (see `SetRemoteLoggingHosts` method in SolidFire PowerShell Tools, for example). Element uses TCP and logs may be forwarded to one or more destinations. There's a sample further below
+- VMware-based NetApp HCI surfaces Element storage cluster events and alerts to vCenter; if ActiveIQ is enabled, these alerts are also sent to ActiveIQ
 
 #### Event Notifications
 
@@ -313,6 +318,17 @@ Q: Can I throw a couple of VMs on an Element Demo VM datastore to estimate how m
 
 A: I believe it should be fairly accurate, but I haven't tested it. Get a representative sample of 5-10 VMs (up to 400GB combined) and clone them to an Element Demo VM-based test datastore. Give it a couple of hours to churn through that data and take a look.
 
+### Logging and Monitoring
+
+Q: I'd like to do some SoliFire logging stuff, how do SolidFire logs look like?
+
+A: These two lines obtained by forwarding SolidFire cluster log to syslog-ng (from which we can forward it elsewhere): the second is an API call and therefore in the JSON format)
+
+```shell
+Jun  3 16:14:46 192.168.1.29 master-1[20395]: [APP-5] [API] 24018 DBCallback httpserver/RestAPIServer.cpp:408:operator()|Calling RestAPI::ListBulkVolumeJobs activeApiThreads=1 totalApiThreads=16 user=admin authMethod=Cluster sourceIP=192.168.1.12
+Jun  3 16:14:46 192.168.1.29 master-1[20395]: {"action":"ApiCall","idg":"1775127282990285","idx":294566,"system":"Cluster","utc":"2020-06-03T16:14:46.058806Z","ver":"1.1","xClusterApiCall":{"AuthMthd":"Cluster","Method":"ListSyncJobs","SourceIP":"192.168.1.12","Threads":1,"Time":3,"TotalThreads":16,"Username":"admin"}}
+```
+
 ### Hypervisors and Containers
 
 Q: What hypervisor platforms work with SolidFire?
@@ -395,3 +411,4 @@ awesome-solidfire by scaleoutSean is licensed under the Do What The F*ck You Wan
 
 NetApp, ONTAP, SolidFire, SnapMirror and the marks listed at www.netapp.com/TM are trademarks of NetApp, Inc.
 Redhat, Kubernetes, and other brands and marks belong to their respective owners.
+
