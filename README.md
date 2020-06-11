@@ -12,7 +12,9 @@
       - [Linux-related (OpenStack, KVM, XenServer, Oracle VM)](#linux-related-openstack-kvm-xenserver-oracle-vm)
       - [Oracle VirtualBox](#oracle-virtualbox)
       - [Storage Provisioning for Containers (CSI and Docker)](#storage-provisioning-for-containers-csi-and-docker)
+    - [File-sharing (NFS, SMB)](#file-sharing-nfs-smb)
     - [CLI, API, SDK Resources](#cli-api-sdk-resources)
+      - [API](#api)
       - [CLI](#cli)
       - [SolidFire/Element Software Development Kits (SDKs)](#solidfireelement-software-development-kits-sdks)
     - [Automation](#automation)
@@ -80,7 +82,6 @@
   - Products: look under NetApp HCI or (storage-only) SolidFire in the [list of NetApp storage products](https://www.netapp.com/us/products/a-z/index.aspx)
   - Availability of products and support: for General Availability, End of Availability (EOA, also known as end of Sale), End of Support (EOS) info go to NetApp Support, search by model and filter results by "Product Communique"
 
-
 ### Cloud
 
 - Data synchronization to/from public cloud: Element OS supports NetApp SnapMirror (async) replication to/from [Cloud Volumes ONTAP](https://cloud.netapp.com/ontap-cloud) which is available on all major public clouds. See [NetApp TR-4641](https://www.netapp.com/us/media/tr-4641.pdf) for additional details
@@ -123,7 +124,21 @@
 - Docker and all [container orchestrators supported](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) by NetApp Trident
 - [NetApp Kubernetes Service](https://cloud.netapp.com/kubernetes-service): NetApp's Kubernetes-as-a-service is currently in preview on NetApp HCI (not yet stand-alone SolidFire)
 
+### File-sharing (NFS, SMB)
+
+- NetApp ONTAP Select 9 (single node or HA, including Active-Active stretch clusters with one ONTAP Select VM and NetApp HCI cluster per each site ([Metrocluster SDS](https://docs.netapp.com/us-en/ontap-select/concept_ha_config.html))
+- Read-only and read-write caching:
+  - NFS (on-prem and hybrid cloud, read-only): NetApp ONTAP Select with [FlexCache](https://www.netapp.com/us/info/what-is-flex-cache.aspx)
+  - SMB (hybrid cloud, read-write): [NetApp Global File Cache](https://cloud.netapp.com/global-file-cache) running as edge node in Microsoft Windows VM, with core file service running in public cloud (Cloud Volumes ONTAP or Cloud Volumes Service)
+
 ### CLI, API, SDK Resources
+
+#### API
+
+- SolidFire has a versioned API, which means you can run your "old" automation against an older API endpoint of your choosing
+- SolidFire / Element Software API Reference Guide: 
+  - PDF: [v12.0](https://docs.netapp.com/sfe-120/topic/com.netapp.doc.sfe-api/Managing%20storage%20with%20the%20Element%20API.pdf)
+  - HTML: [v12.0](https://docs.netapp.com/sfe-120/topic/com.netapp.doc.sfe-api/home.html?cp=4_2)
 
 #### CLI
 
@@ -289,8 +304,8 @@ MissingVolumes   : {}
 ThinProvisioning : 1
 Timestamp        : 1970-01-01T00:00:00Z
 ```
-- Please do not confuse AccountID with custom "owner" attribute above; large Kubernetes or Hyper-V cluster can use one AccountID for all Management OS, but volume "owners" can be many (or none, if the key is named differently or not at all used) and the latter is just a custom tag
-- In Kubernetes or Docker environments, pay attention to avoid the use of the same volume attribute keys used by NetApp Trident
+- Please do not confuse (storage) AccountID with the custom "owner" attribute above; large Kubernetes or Hyper-V cluster can use one AccountID for all Management OS, but volume "owners" can be many (or none, if the key is named differently or not at all used) and the latter is just a custom tag
+- In Kubernetes, Docker and other orchestrated environments, pay attention to avoid the use of the same volume attribute keys used by NetApp Trident or other software that touches storage (such as Ansible, which stuffs KV pairs with keys such as "config-mgmt" and "event-source" into Attributes)
 
 ## Questions and Answers
 
@@ -322,7 +337,7 @@ A: I believe it should be fairly accurate, but I haven't tested it. Get a repres
 
 Q: I'd like to do some SoliFire logging stuff, how do SolidFire logs look like?
 
-A: These two lines obtained by forwarding SolidFire cluster log to syslog-ng (from which we can forward it elsewhere): the second is an API call and therefore in the JSON format)
+A: These two lines were obtained by forwarding SolidFire cluster log to syslog-ng (from which we can forward it elsewhere): the second is an API call and therefore in the JSON format). Element logs in the rsyslog format and timestamps (format: `MMM  d HH:mm:ss`) use UTC.
 
 ```shell
 Jun  3 16:14:46 192.168.1.29 master-1[20395]: [APP-5] [API] 24018 DBCallback httpserver/RestAPIServer.cpp:408:operator()|Calling RestAPI::ListBulkVolumeJobs activeApiThreads=1 totalApiThreads=16 user=admin authMethod=Cluster sourceIP=192.168.1.12
@@ -393,6 +408,10 @@ A: There are situations where certain operations may be done faster or more effi
 Q: How can I use a feature that is availble but not exposed in a SolidFire SDK or API or CLI?
 
 A: PowerShell Tools for SolidFire and all SDKs have a wrapper method (Invoke SF API) that simplifies the use of the API methods for which there is no cmdlet or direct method in an SDK. You can also use generic JSON RPC calls which may be a good choice for simple scripts in which you don't intend to use a SolidFire SDK because you don't want to install additional dependencies for simple projects.
+
+Q: How can I find the limits - say the maximum number of volumes - of my SolidFire cluster?
+
+A: To get most if not all software-related limits use the API (`"GetLimits`) or a CLI equivalent. For example, assuming `$MVIP` is the cluster management virtual IP, with SolidFire Powershell Tools `$sf = Connect-SFCluster $MVIP; $sf.limits` would do it. Note that there may be hardware-related limits or best practices that limit or impact overall cluster limits.
 
 ### Networking
 
