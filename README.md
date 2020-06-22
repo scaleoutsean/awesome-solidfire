@@ -106,6 +106,7 @@
 #### Linux-related (OpenStack, KVM, XenServer, Oracle VM)
 
 - Cinder driver for OpenStack (in-tree, does not need to be installed, it only needs to be configured - see NetApp TR-6420 or [this video](https://youtu.be/rW5ZTlyhm7U))
+  - RHOSP16 certification: https://catalog.redhat.com/software/openstack/detail/2257111
 - [Juju charm](https://github.com/solidfire/charm-cinder-solidfire) for Cinder to use Element cluster back-end (may need to be updated)
 - NetApp's [OpenStack resources and docs](https://netapp.io/openstack/)
 - Redhat OpenShift with NetApp HCI - [NetApp Validated Design 1133](https://www.netapp.com/us/media/nva-1133-design.pdf)
@@ -207,7 +208,7 @@
 
 #### Syslog Forwarding
 
-- Forwarding to external syslog-ng target may be configured through a CLI or the API (see `SetRemoteLoggingHosts` method in SolidFire PowerShell Tools, for example). Element uses TCP and logs may be forwarded to one or more destinations. There's a sample further below
+- Forwarding to external syslog target may be configured through one of the CLI or the API (see `SetRemoteLoggingHosts` method). Element uses TCP and the log may be forwarded to one or more destinations. Sample lines from the log are provided further below
 - VMware-based NetApp HCI surfaces Element storage cluster events and alerts to vCenter; if ActiveIQ is enabled, these alerts are also sent to ActiveIQ
 
 #### Event Notifications
@@ -337,7 +338,7 @@ A: I believe it should be fairly accurate, but I haven't tested it. Get a repres
 
 Q: I'd like to do some SoliFire logging stuff, how do SolidFire logs look like?
 
-A: These two lines were obtained by forwarding SolidFire cluster log to syslog-ng (from which we can forward it elsewhere): the second is an API call and therefore in the JSON format). Element logs in the rsyslog format and timestamps (format: `MMM  d HH:mm:ss`) use UTC.
+A: The following lines were obtained by forwarding SolidFire cluster log to syslog-ng (from which we can forward it elsewhere): the second is an API call and therefore in the JSON format). Element Software creates log using the rsyslog format and timestamps (format: `MMM  d HH:mm:ss`; RFC3336). To make archived SolidFire logs more useful we'd have to create several filters (to gather only useful content and convert it to a format that's easier to analyse) somewhere along our log forwarding path.
 
 ```shell
 Jun  3 16:14:46 192.168.1.29 master-1[20395]: [APP-5] [API] 24018 DBCallback httpserver/RestAPIServer.cpp:408:operator()|Calling RestAPI::ListBulkVolumeJobs activeApiThreads=1 totalApiThreads=16 user=admin authMethod=Cluster sourceIP=192.168.1.12
@@ -412,6 +413,10 @@ A: PowerShell Tools for SolidFire and all SDKs have a wrapper method (Invoke SF 
 Q: How can I find the limits - say the maximum number of volumes - of my SolidFire cluster?
 
 A: To get most if not all software-related limits use the API (`"GetLimits`) or a CLI equivalent. For example, assuming `$MVIP` is the cluster management virtual IP, with SolidFire Powershell Tools `$sf = Connect-SFCluster $MVIP; $sf.limits` would do it. Note that there may be hardware-related limits or best practices that limit or impact overall cluster limits.
+
+Q: Is there a quick way to try SolidFire PowerShell Tools or SolidFire Python CLI from Docker?
+
+A: Yes. Sample Ubuntu-based container with SolidFire PowerShell Tools can be started with `docker run -it scaleoutsean/solidshell` (run `Connect-SFCluster` once inside). You can also build your own and include 3rd party PowerShell or Python modules you commonly use.
 
 ### Networking
 
