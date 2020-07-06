@@ -109,8 +109,10 @@
   - RHOSP16 certification: https://catalog.redhat.com/software/openstack/detail/2257111
 - [Juju charm](https://github.com/solidfire/charm-cinder-solidfire) for Cinder to use Element cluster back-end (may need to be updated)
 - NetApp's [OpenStack resources and docs](https://netapp.io/openstack/)
-- Redhat OpenShift with NetApp HCI - [NetApp Validated Design 1133](https://www.netapp.com/us/media/nva-1133-design.pdf)
-- Recommended deployment method for Redhat OpenStack on NetApp HCI is Ansible playbooks, but you may use PowerShell, Terraform or other approach to deploy SolidFire storage cluster
+- Redhat OpenShift with NetApp HCI 
+  - [NetApp Verfied Architecture 1133 (NVA-1133 DESIGN)](https://www.netapp.com/us/media/nva-1133-design.pdf) - design
+  - [NetApp Verified Architecture 1133 (NVA_1133 DEPLOY)](https://www.netapp.com/us/media/nva-1133-deploy.pdf) - deployment
+  - [Heat templates](https://github.com/NetApp/hci-solutions/tree/master/netapp-hci-heat-templates) for Redhat OpenStack
 - Additional details about SolidFire in Linux environments: [solidfire-linux](https://github.com/scaleoutsean/solidfire-linux/)
 
 #### Oracle VirtualBox
