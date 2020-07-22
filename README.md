@@ -146,16 +146,20 @@
 #### CLI
 
 - SolidFire has two fully functional CLI's - PowerShell & Python
+- Current releases: free download for registered users from [https://mysupport.netapp.com/site/tools](https://mysupport.netapp.com/site/tools) (search for 'element' in Tools)
+- Older releases:
   - SolidFire [PowerShell Tools (Win/Lin)](https://github.com/solidfire/PowerShell) for the x86_64 architecture. It's not (yet) officially supported, but module `SolidFire.core` has been field-tested and found to work on ARM64 (PowerShell 6) and with PowerShell 7 (Ubuntu 18.04)
   - SolidFire [Python CLI (Win/Lin/OS X)](https://github.com/solidfire/solidfire-cli)
 
 #### SolidFire/Element Software Development Kits (SDKs)
 
-- [SolidFire Python SDK](https://github.com/solidfire/solidfire-sdk-python)
-- [SolidFire Microsoft .NET SDK](https://github.com/solidfire/sdk-dotnet)
-- [SolidFire Java SDK](https://github.com/solidfire/solidfire-sdk-java)
-- [SolidFire Ruby SDK](https://github.com/solidfire/solidfire-sdk-ruby)
-- [(Unofficial) SolidFire Go SDK](https://github.com/solidfire/solidfire-sdk-golang) and its cousin [solidfire-go](https://github.com/j-griffith/solidfire-go) with a convenient wrapper for common volume operations
+- Current releases: free download for registered users from [https://mysupport.netapp.com/site/tools](https://mysupport.netapp.com/site/tools) (search for 'element' in Tools)
+- Older releases:
+  - [SolidFire Python SDK](https://github.com/solidfire/solidfire-sdk-python)
+  - [SolidFire Microsoft .NET SDK](https://github.com/solidfire/sdk-dotnet)
+  - [SolidFire Java SDK](https://github.com/solidfire/solidfire-sdk-java)
+  - [SolidFire Ruby SDK](https://github.com/solidfire/solidfire-sdk-ruby)
+  - [(Unofficial) SolidFire Go SDK](https://github.com/solidfire/solidfire-sdk-golang) and its cousin [solidfire-go](https://github.com/j-griffith/solidfire-go) with a convenient wrapper for common volume operations
 
 ### Automation
 
