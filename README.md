@@ -9,9 +9,11 @@
     - [Virtualization](#virtualization)
       - [VMware vSphere](#vmware-vsphere)
       - [Microsoft Hyper-V](#microsoft-hyper-v)
-      - [Linux-related (OpenStack, KVM, XenServer, Oracle VM)](#linux-related-openstack-kvm-xenserver-oracle-vm)
+      - [Red Hat Virtualization (RHEV)](#red-hat-virtualization-rhev)
+      - [Citrix Hypervisor](#citrix-hypervisor)
+      - [Linux-related (OpenStack, KVM, Oracle VM)](#linux-related-openstack-kvm-oracle-vm)
       - [Oracle VirtualBox](#oracle-virtualbox)
-      - [Storage Provisioning for Containers (CSI and Docker)](#storage-provisioning-for-containers-csi-and-docker)
+      - [Storage Provisioning for Containers (CSI-compatible orchestrators and Docker)](#storage-provisioning-for-containers-csi-compatible-orchestrators-and-docker)
     - [File-sharing (NFS, SMB)](#file-sharing-nfs-smb)
     - [CLI, API, SDK Resources](#cli-api-sdk-resources)
       - [API](#api)
@@ -92,7 +94,7 @@
 
 - Check out VMware related material on the NetApp web site (Private cloud, VDI/EUC, GPU computing and more)
 - vCenter Plugin for Element Software (used to be called "VCP") is built into NetApp HCI and may be installed in other vCenter servers you want to connect to separate NetApp HCI volumes. SolidFire users may get it from NetApp downloads for Element Software
-- [Element SRA](https://www.vmware.com/resources/compatibility/detail.php?productid=46049&deviceCategory=sra&details=1&srmVer=336&partner=64&releases=336&page=1&display_interval=10&sortColumn=Partner&sortOrder=Asc) for VMware SRM
+- [Element SRA](https://www.vmware.com/resources/compatibility/search.php?deviceCategory=sra&details=1&partner=64,439&keyword=solidfire&page=1&display_interval=10&sortColumn=Partner&sortOrder=Asc) for VMware SRM
 - [vRealize Orchestrator Plugin for Element Software](https://github.com/solidfire/vrealize-orchestrator-plugin)
 - [vRealize Automation for NetApp HCI and SolidFire](https://bluemedora.com/resource/vmware-vrealize-operations-management-pack-for-netapp-hci-solidfire/)
 - [pyNSXdeploy](https://github.com/solidfire/pyNSXdeploy) -  automate deployment of NSX on vSphere 6.x on NetApp HCI
@@ -103,16 +105,24 @@
 - PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/Microsoft) for automated storage deployment with Microsoft Hyper-V (for Windows Server 2012 R2; requires minor updates for Microsoft Windows Server 2016 and 2019)
 - [SolidFire VSS Provider](https://mysupport.netapp.com/products/p/elementvss.html) for MS Windows (login required)
 
-#### Linux-related (OpenStack, KVM, XenServer, Oracle VM)
+#### Red Hat Virtualization (RHEV)
+
+- Red Hat Virtualization [solution page](https://docs.netapp.com/us-en/hci-solutions/redhat_virtualization_solution_overview__netapp_hci_with_rhv.html)
+- Red Hat OpenShift with NetApp HCI 
+  - [NetApp Verfied Architecture 1133 (NVA-1133 DESIGN)](https://www.netapp.com/us/media/nva-1133-design.pdf) - design
+  - [NetApp Verified Architecture 1133 (NVA_1133 DEPLOY)](https://www.netapp.com/us/media/nva-1133-deploy.pdf) - deployment
+  - [Heat templates](https://github.com/NetApp/hci-solutions/tree/master/netapp-hci-heat-templates) for Redhat OpenStack
+
+#### Citrix Hypervisor
+
+- NetApp HCI with Citrix Hypervisor ([solution summary](https://docs.netapp.com/us-en/hci-solutions/citrix_executive_summary.html))
+
+#### Linux-related (OpenStack, KVM, Oracle VM)
 
 - Cinder driver for OpenStack (in-tree, does not need to be installed, it only needs to be configured - see NetApp TR-6420 or [this video](https://youtu.be/rW5ZTlyhm7U))
   - RHOSP16 certification: https://catalog.redhat.com/software/openstack/detail/2257111
 - [Juju charm](https://github.com/solidfire/charm-cinder-solidfire) for Cinder to use Element cluster back-end (may need to be updated)
 - NetApp's [OpenStack resources and docs](https://netapp.io/openstack/)
-- Redhat OpenShift with NetApp HCI 
-  - [NetApp Verfied Architecture 1133 (NVA-1133 DESIGN)](https://www.netapp.com/us/media/nva-1133-design.pdf) - design
-  - [NetApp Verified Architecture 1133 (NVA_1133 DEPLOY)](https://www.netapp.com/us/media/nva-1133-deploy.pdf) - deployment
-  - [Heat templates](https://github.com/NetApp/hci-solutions/tree/master/netapp-hci-heat-templates) for Redhat OpenStack
 - Additional details about SolidFire in Linux environments: [solidfire-linux](https://github.com/scaleoutsean/solidfire-linux/)
 
 #### Oracle VirtualBox
@@ -120,10 +130,10 @@
 - VirtualBox iSCSI initiator isn't officially supported but [it appears to work](https://youtu.be/EqxK-mT9Fxw)
 - VirtualBox on top of OS-provisioned storage works as usual, as do supported VirtualBox guests with direct access to SolidFire iSCSI targets
 
-#### Storage Provisioning for Containers (CSI and Docker)
+#### Storage Provisioning for Containers (CSI-compatible orchestrators and Docker)
 
-- [NetApp Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Redhat OpenShift and others)
-- Redhat OpenShift Container Platform. You can run it two ways: VM-based OCP VMs on vSphere or OpenStack clusters, or bare metal-based OCP on OpenStack clusters
+- [NetApp Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Red Hat OpenShift and others)
+- Red Hat OpenShift Container Platform. You can run it two ways: VM-based OCP VMs on vSphere, Red Hat Virtualization or OpenStack, and bare metal-based OCP on RHEL
 - Docker and all [container orchestrators supported](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) by NetApp Trident
 - [NetApp Kubernetes Service](https://cloud.netapp.com/kubernetes-service): NetApp's Kubernetes-as-a-service is currently in preview on NetApp HCI (not yet stand-alone SolidFire)
 
@@ -379,7 +389,7 @@ A: It depends. At the highest level of abstraction SolidFire is suitable for 95%
 
 Q: Is NetApp HCI suitable for AI, Hadoop, Splunk and similar "heavy" workloads?
 
-A: For some applications from that stack (such as databases) it is, but for HDFS you may consider connecting compute nodes to ONTAP hardware (see [NIPAM](https://pypi.org/project/netapp-ontap/)) or E-Series (Raw Device Mapping to iSCSI, formatted with HDFS or [BeeGFS](https://blog.netapp.com/solution-support-for-beegfs-and-e-series/), for example)
+A: For some applications from that stack (such as databases) it is, but for HDFS you may consider connecting compute nodes to ONTAP systems (usually NFSv3 or NFSv4) or E-Series (Raw Device Mapping to iSCSI, formatted with HDFS or [BeeGFS](https://blog.netapp.com/solution-support-for-beegfs-and-e-series/), for example)
 
 ### Storage Services
 
@@ -400,7 +410,7 @@ ONTAP Select running on NetApp HCI compute nodes can store its data either (or b
 
 Q: Where can I find some examples of SolidFire use in DevOps?
 
-A: Check out SolidFire-related blog posts in [DevOps and Automation](https://netapp.io/devops/) category at [NetApp.io](https://netapp.io/). Ideally we should maximize automation by using a front-end orchestrator (vSphere, Kubernetes, and so on) rather than directly accessing storage, although the Element API makes that convenient and easy.
+A: Check out SolidFire-related blog posts in [DevOps and Automation](https://netapp.io/devops/) category at [NetApp.io](https://netapp.io/). Ideally we should maximize automation by using a front-end orchestrator (vSphere, Kubernetes, and so on) rather than directly accessing storage, although the Element API makes that convenient and easy. Each SDK or CLI has documentation which contains some examples on getting started and the same goes for various Github repositories such as SolidiFire/Element Provider for Terraform.
 
 Q: When should I use the SolidFire API?
 
@@ -418,7 +428,7 @@ A: PowerShell Tools for SolidFire and all SDKs have a wrapper method (Invoke SF 
 
 Q: How can I find the limits - say the maximum number of volumes - of my SolidFire cluster?
 
-A: To get most if not all software-related limits use the API (`"GetLimits`) or a CLI equivalent. For example, assuming `$MVIP` is the cluster management virtual IP, with SolidFire Powershell Tools `$sf = Connect-SFCluster $MVIP; $sf.limits` would do it. Note that there may be hardware-related limits or best practices that limit or impact overall cluster limits.
+A: To get most if not all software-related limits use the API (`GetLimits`) or a CLI equivalent. For example, assuming `$MVIP` is the cluster management virtual IP, with SolidFire Powershell Tools `$sf = Connect-SFCluster $MVIP; $sf.limits` would do it. Note that there may be hardware-related limits or best practices that limit or impact overall cluster limits.
 
 Q: Is there a quick way to try SolidFire PowerShell Tools or SolidFire Python CLI from Docker?
 
@@ -437,7 +447,7 @@ A: SolidFire and later NetApp used to sell a SolidFire Fibre Channel gateway nod
 
 ## License and Trademarks
 
-awesome-solidfire by scaleoutSean is licensed under the Do What The F*ck You Want To Public License (see LICENSE.md)
+awesome-solidfire by scaleoutSean is licensed under the Do What The F*ck You Want To Public License (see [LICENSE](LICENSE))
 
 NetApp, ONTAP, SolidFire, SnapMirror and the marks listed at www.netapp.com/TM are trademarks of NetApp, Inc.
 Redhat, Kubernetes, and other brands and marks belong to their respective owners.
