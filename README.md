@@ -41,6 +41,7 @@
     - [VMware](#vmware)
     - [Windows](#windows)
     - [SolidFire Objects](#solidfire-objects)
+    - [Date and Time in SolidFire API](#date-and-time-in-solidfire-api)
   - [Questions and Answers](#questions-and-answers)
     - [Meta](#meta)
     - [Element Demo VM](#element-demo-vm)
@@ -326,6 +327,10 @@ Timestamp        : 1970-01-01T00:00:00Z
 - Please do not confuse (storage) AccountID with the custom "owner" attribute above; large Kubernetes or Hyper-V cluster can use one AccountID for all Management OS, but volume "owners" can be many (or none, if the key is named differently or not at all used) and the latter is just a custom tag
 - In Kubernetes, Docker and other orchestrated environments, pay attention to avoid the use of the same volume attribute keys used by NetApp Trident or other software that touches storage (such as Ansible, which stuffs KV pairs with keys such as "config-mgmt" and "event-source" into Attributes)
 
+### Date and Time in SolidFire API
+
+- The SolidFire API works with UTC date and time based on [ISO8601](https://en.wikipedia.org/wiki/ISO_8601). Python users may want to check out [pyiso8601](https://github.com/micktwomey/pyiso8601).
+
 ## Questions and Answers
 
 ### Meta
@@ -370,9 +375,9 @@ Q: What hypervisor platforms work with SolidFire?
 A: To be clear, this is about iSCSI clients supported by SolidFire storage (which may or may not be different from hypervisors supported by NetApp HCI compute hardware). You can find the official NetApp info with the [NetApp Interoperability Matrix Tool (IMT)](https://mysupport.netapp.com/matrix/#welcome) (look under Element software, not NetApp HCI!). The simple answer is NetApp HCI ships with VMware, but SolidFire (that is, iSCSI storage of NetApp HCI clusters) can work with other supported hypervisors. Some links to get you started with compatibility research:
 
 - VMware ESXi - refer to the IMT
-- Redhat OpenStack (KVM) - refer to the IMT
+- Redhat OpenStack and Enterprise Virtualization - refer to the IMT
 - MicroSoft Windows (Hyper-V) - search the WSC site (example for the [H615C](https://www.windowsservercatalog.com/item.aspx?idItem=4109a235-2b2e-3200-d3ef-065c8ea7c0c6&bCatID=1282))
-- XenServer (Xen) - refer to the HCLs for [storage](http://hcl.xenserver.org/storage/?vendor=56) and [servers](http://hcl.xenserver.org/servers/?vendor=56)
+- Citrix Hypervisor (formerly known as XenServer) - v8 is supported as per NetApp HCI VDI Solution with Citrix Hypervisor; for v7 refer to the HCLs for [storage](http://hcl.xenserver.org/storage/?vendor=56) and [servers](http://hcl.xenserver.org/servers/?vendor=56)
 - Oracle VM - go [here](https://linux.oracle.com/pls/apex/f?p=117:3::::::). Click on Storage Systems and in filter rop-down list select NetApp. Look for SolidFire models from the NetApp HCI Datasheet or Web site (for example, H610S)
 - Other Linux distributions validated (Cinder iSCSI) for SolidFire Element OS - Ubuntu, SuSE, etc. (the details can be found in the IMT)
 - Oracle Virtualbox - not suported (as it uses its own iSCSI client that isn't validated by NetApp) but it works and you may want to use it in lab environment
