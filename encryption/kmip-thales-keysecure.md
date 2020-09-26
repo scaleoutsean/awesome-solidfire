@@ -313,4 +313,4 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
 
 ## Video walkthrough
 
-- [NetApp HCI and SolidFire & SafeNet KeySecure](https://youtu.be/fHRTJCzyRZY)
+- [NetApp HCI and SolidFire & SafeNet KeySecure](https://youtu.be/_OcmptzgSRQ)

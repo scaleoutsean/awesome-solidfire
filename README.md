@@ -230,7 +230,7 @@
 
 #### Event Notifications
 
-- Users with existing notification solution: use Syslog forwarding or SNMP. You may also [integrate](https://www.youtube.com/watch?v=el2FBI0v27E) NetApp ActiveIQ with your existing system
+- Users with existing notification solution: use Syslog forwarding or SNMP. You may also [integrate](https://youtu.be/aiwkKQaz7AQ) NetApp ActiveIQ with your existing monitoring application
 - Users without an existing solution may consider one of these:
   - NetApp ActiveIQ: mobile app notifications (faster), email notifications (slower; enable them in the ActiveIQ Web UI)
   - Grafana: [HCICollector](https://github.com/scaleoutsean/hcicollector) and (Grafana in general) can send email notifications
