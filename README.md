@@ -199,6 +199,11 @@
 - The free version has basic functionality and supports all NetApp products including SolidFire and NetApp HCI
 - Monitor performance and OPEX of all on-prem assets (NetApp- and non-NetApp-made) as well as in public clouds (see examples in NetApp [WP-7319](https://www.netapp.com/us/media/wp-7319.pdf)
 
+#### Blue Medora True Visibility for VMware vRealize Operations
+
+- True Visibility [product suite](https://bluemedora.com/products/vmware-vrealize-true-visibility/) (now part of VMware)
+- See True Visibility for NetApp HCI and SolidFire [product documentation](https://support.bluemedora.com/s/article/User-Documentation-vRealize-Operations-Management-Pack-for-NetApp-HCI-SolidFire)
+
 #### Grafana/Graphite - HCICollector
 
 - [HCICollector](https://github.com/scaleoutsean/hcicollector/) is a permissively-licensed monitoring and alerting for SolidFire and NetApp HCI systems. It gathers SolidFire and vSphere 6.x metrics, stores them in Graphite and lets you visualize them in Grafana
