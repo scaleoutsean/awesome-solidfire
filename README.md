@@ -14,6 +14,7 @@
       - [Linux-related (OpenStack, KVM, Oracle VM)](#linux-related-openstack-kvm-oracle-vm)
       - [Oracle VirtualBox](#oracle-virtualbox)
       - [Storage Provisioning for Containers (CSI-compatible orchestrators and Docker)](#storage-provisioning-for-containers-csi-compatible-orchestrators-and-docker)
+      - [Virtual Desktop Infrastructure and End User Computing (VDI & EUC)](#virtual-desktop-infrastructure-and-end-user-computing-vdi--euc)
     - [File-sharing (NFS, SMB)](#file-sharing-nfs-smb)
     - [CLI, API, SDK Resources](#cli-api-sdk-resources)
       - [API](#api)
@@ -24,6 +25,7 @@
     - [Alerting, Monitoring, Telemetry](#alerting-monitoring-telemetry)
       - [ActiveIQ](#activeiq)
       - [NetApp Cloud Insights](#netapp-cloud-insights)
+      - [Blue Medora True Visibility for VMware vRealize Operations](#blue-medora-true-visibility-for-vmware-vrealize-operations)
       - [Grafana/Graphite - HCICollector](#grafanagraphite---hcicollector)
       - [Prometheus - solidfire-exporter](#prometheus---solidfire-exporter)
       - [Prometheus - NetApp Trident metrics](#prometheus---netapp-trident-metrics)
@@ -137,6 +139,12 @@
 - [NetApp Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Red Hat OpenShift, Rancher RKE and others)
 - Red Hat OpenShift Container Platform. You can run it two ways: VM-based OCP VMs on vSphere, Red Hat Virtualization or OpenStack, and bare metal-based OCP on RHEL
 - Docker and all [container orchestrators supported](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) by NetApp Trident
+
+#### Virtual Desktop Infrastructure and End User Computing (VDI & EUC)
+
+- [VMware EUC/VDI with VMware Horizon View](https://docs.netapp.com/us-en/hci-solutions/nhci_euc_vmware.html)
+- [Citrix Virtual Desktop and Virtual Apps](https://docs.netapp.com/us-en/hci-solutions/citrix_executive_summary.html)
+- [Hybrid Cloud VDI with NetApp Virtual Desktop Service](https://docs.netapp.com/us-en/hci-solutions/hcvdivds_netapp_virtual_desktop_service_overview.html) - works with NetApp Global File Cache (GFC) for SMB
 
 ### File-sharing (NFS, SMB)
 
