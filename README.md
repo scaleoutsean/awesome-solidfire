@@ -59,7 +59,7 @@
 
 - SolidFire iSCSI storage clusters (available as storage-only clusters composed of storage nodes from NetApp HCI product line; you may view all currently available models in 3D [here](https://apps.kaonadn.net/4817930843848704/index.html) (click on NetApp HCI))
 - NetApp HCI (NetApp HCI compute nodes connected via iSCSI to NetApp HCI storage nodes - some call it "disaggregated HCI" or dHCI)
-- SolidFire Enterprise SDS (eSDS) - enterprise Software Defined Storage for certified hardware appliances ([Documentation]https://docs.netapp.com/sfe-122/topic/com.netapp.nav.sfsds/home.html?cp=1)
+- SolidFire Enterprise SDS (eSDS) - enterprise Software Defined Storage for certified hardware appliances ([Documentation](https://docs.netapp.com/sfe-122/topic/com.netapp.nav.sfsds/home.html?cp=1))
 
 ## Why SolidFire
 
