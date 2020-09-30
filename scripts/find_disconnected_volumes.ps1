@@ -9,6 +9,8 @@
 # License: the BSD License 3.0                                                #
 ###############################################################################
 
+# Import-Module SolidFire # if you don't have it already 
+
 $SolidFireClusterIp = Read-Host -Prompt "Enter the SolidFire Management IP/FQDN" 
 $SolidFireConnection = Connect-SFCluster $SolidFireClusterIp -Credential (Get-Credential)
 $accList = (Get-SFAccount) ; $volList = @()

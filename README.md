@@ -460,11 +460,18 @@ A: Yes. Sample Ubuntu-based container with SolidFire PowerShell Tools can be sta
 Q: What network switches are recommended for use with SolidFire?
 
 A: I think there's no officially recommended switch model or brand. Any enterprise-grade 10G (or faster) switch should work. Some switches are better, some worse.
-SolidFire can be ordered with Mellanox SN2010 switches (which work really well) and NetApp can deploy them and SolidFire for you (it usually takes just a couple of hours).
+SolidFire can be ordered with Mellanox SN2010 switches (which work really well) and NetApp can deploy them and SolidFire for you (it usually takes just a couple of hours). Also available are SN2100 and SN2700.
+
+Q: What 4x25GBE copper and fiber breakout cables are available for SN2100 and SN2700?
+
+Consider using these:
+
+- [MFA7A50](https://www.mellanox.com/related-docs/prod_cables/PB_MFA7A50-Cxxx_100GbE_QSFP28_to_4x25GbE_SFP28_MMF_AOC.pdf)
+- [MCP7F00](https://www.mellanox.com/related-docs/prod_cables/PB_MCP7F00-A0xxRyyz_100GbE_QSFP28_to_4x25GbE_4xSFP28_DAC_Splitter.pdf)
 
 Q: Can I connect my FC SAN clients to SolidFire?
 
-A: SolidFire and later NetApp used to sell a SolidFire Fibre Channel gateway node, but it's no longer sold. I don't know what the official reason was, but I suspect fewer and fewer people use Fibre Channel in VI and now container environments. It's complex, hard to manage, expensive, and frankly unnecessary (not that FC itself is unnecessary for everyone, but in my opinion it's unnecessary for 95% of workloads people run in containers and virtual machines). The other reason is iSCSI works well and is also cheaper. Almost no one can work without Ethernet, but most people can work without FC, so if two links will do, why use four... If you haven't considered iSCSI yet take a look at [TR-4367](https://www.netapp.com/us/media/tr-4367.pdf) created by ONTAP specialists, which provides a fairly recent comparison between NFS, iSCSI and FC.
+A: SolidFire and later NetApp used to sell SolidFire Fibre Channel gateway node, but it's no longer sold. I don't know what the official reason was, but I suspect fewer and fewer people use Fibre Channel in VI and now container environments. It's complex, hard to manage, expensive, and frankly unnecessary (not that FC itself is unnecessary for everyone, but in my opinion it's unnecessary for 95% of workloads people run in containers and virtual machines). The other reason is iSCSI works well and is also cheaper. Almost no one can work without Ethernet, but most people can work without FC, so if two links will do, why use four... If you haven't considered iSCSI yet take a look at [TR-4367](https://www.netapp.com/us/media/tr-4367.pdf) created by ONTAP specialists, which provides a fairly recent comparison between NFS, iSCSI and FC.
 
 ## License and Trademarks
 
