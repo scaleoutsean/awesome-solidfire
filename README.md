@@ -380,7 +380,7 @@ A: I believe it should be fairly accurate, but I haven't tested it. Get a repres
 
 Q: I'd like to do some SoliFire logging stuff, how do SolidFire logs look like?
 
-A: The following lines were obtained by forwarding SolidFire cluster log to syslog-ng (from which we can forward it elsewhere): the second is an API call and therefore in the JSON format). Element Software creates log using the rsyslog format (RFC-5424 and RFC-3164 (source: Wikipedia)) and timestamps (format: `MMM  d HH:mm:ss`; RFC-3336). To make archived SolidFire logs more useful we'd have to create several filters (to gather only useful content and convert it to a format that's easier to analyse) somewhere along our log forwarding path. For comparison, vRealize Log Insight accepts formats in RFC-6587, RFC-5424, and RFC-3164 - see the Log Insight [link above]((#vmware--blue-medora-true-visibility-for-vmware-vrealize-operations).
+A: The following lines were obtained by forwarding SolidFire cluster log to syslog-ng (from which we can forward it elsewhere): the second is an API call and therefore in the JSON format). Element Software creates log using the rsyslog format (RFC-5424 and RFC-3164 (source: Wikipedia)) and timestamps (format: `MMM  d HH:mm:ss`; RFC-3336). To make archived SolidFire logs more useful we'd have to create several filters (to gather only useful content and convert it to a format that's easier to analyse) somewhere along our log forwarding path. For comparison, vRealize Log Insight accepts formats in RFC-6587, RFC-5424, and RFC-3164 - see the Log Insight [link above](#vmware--blue-medora-true-visibility-for-vmware-vrealize-operations).
 
 ```shell
 Jun  3 16:14:46 192.168.1.29 master-1[20395]: [APP-5] [API] 24018 DBCallback httpserver/RestAPIServer.cpp:408:operator()|Calling RestAPI::ListBulkVolumeJobs activeApiThreads=1 totalApiThreads=16 user=admin authMethod=Cluster sourceIP=192.168.1.12
@@ -391,7 +391,7 @@ Jun  3 16:14:46 192.168.1.29 master-1[20395]: {"action":"ApiCall","idg":"1775127
 
 Q: What hypervisor platforms work with SolidFire?
 
-A: To be clear, this is about iSCSI clients supported by SolidFire storage (which may or may not be different from hypervisors supported by NetApp HCI compute hardware). You can find the official NetApp info with the [NetApp Interoperability Matrix Tool (IMT)](https://mysupport.netapp.com/matrix/#welcome) (look under Element software, not NetApp HCI!). The simple answer is NetApp HCI ships with VMware, but SolidFire (that is, iSCSI storage of NetApp HCI clusters) can work with other supported hypervisors. Some links to get you started with compatibility research:
+A: To be clear, this is about iSCSI clients supported by SolidFire storage (which may or may not be different from hypervisors supported by NetApp HCI compute hardware). You can find the official NetApp info with the [NetApp Interoperability Matrix Tool (IMT)](https://mysupport.netapp.com/matrix/#welcome) (look under Element software, not NetApp HCI!). The simple answer is NetApp HCI ships with VMware, but SolidFire (that is, the iSCSI storage component of NetApp HCI) can work with other supported hypervisors (even at the same time). Some links to get you started with compatibility research:
 
 - VMware ESXi - refer to the IMT
 - Redhat OpenStack and Enterprise Virtualization - refer to the IMT
@@ -484,4 +484,3 @@ awesome-solidfire by scaleoutSean is licensed under the Do What The F*ck You Wan
 
 NetApp, ONTAP, SolidFire, SnapMirror and the marks listed at www.netapp.com/TM are trademarks of NetApp, Inc.
 Redhat, Kubernetes, and other brands and marks belong to their respective owners.
-
