@@ -25,7 +25,8 @@
     - [Alerting, Monitoring, Telemetry](#alerting-monitoring-telemetry)
       - [ActiveIQ](#activeiq)
       - [NetApp Cloud Insights](#netapp-cloud-insights)
-      - [Blue Medora True Visibility for VMware vRealize Operations](#blue-medora-true-visibility-for-vmware-vrealize-operations)
+      - [VMware / Blue Medora True Visibility for VMware vRealize Operations](#vmware--blue-medora-true-visibility-for-vmware-vrealize-operations)
+      - [VMware vRealize Log Insight](#vmware-vrealize-log-insight)
       - [Grafana/Graphite - HCICollector](#grafanagraphite---hcicollector)
       - [Prometheus - solidfire-exporter](#prometheus---solidfire-exporter)
       - [Prometheus - NetApp Trident metrics](#prometheus---netapp-trident-metrics)
@@ -208,10 +209,14 @@
 - The free version has basic functionality and supports all NetApp products including SolidFire and NetApp HCI
 - Monitor performance and OPEX of all on-prem assets (NetApp- and non-NetApp-made) as well as in public clouds (see examples in NetApp [WP-7319](https://www.netapp.com/us/media/wp-7319.pdf)
 
-#### Blue Medora True Visibility for VMware vRealize Operations
+#### VMware / Blue Medora True Visibility for VMware vRealize Operations
 
 - True Visibility [product suite](https://bluemedora.com/products/vmware-vrealize-true-visibility/) (now part of VMware)
 - See True Visibility for NetApp HCI and SolidFire [product documentation](https://support.bluemedora.com/s/article/User-Documentation-vRealize-Operations-Management-Pack-for-NetApp-HCI-SolidFire)
+
+#### VMware vRealize Log Insight
+
+- Log Insight [can serve (v8.1)](https://docs.vmware.com/en/vRealize-Log-Insight/8.1/com.vmware.log-insight.administration.doc/GUID-848E4804-3837-4D5E-956E-2216B17376AD.html) as the destination for SolidFire logs
 
 #### Grafana/Graphite - HCICollector
 
@@ -375,7 +380,7 @@ A: I believe it should be fairly accurate, but I haven't tested it. Get a repres
 
 Q: I'd like to do some SoliFire logging stuff, how do SolidFire logs look like?
 
-A: The following lines were obtained by forwarding SolidFire cluster log to syslog-ng (from which we can forward it elsewhere): the second is an API call and therefore in the JSON format). Element Software creates log using the rsyslog format and timestamps (format: `MMM  d HH:mm:ss`; RFC3336). To make archived SolidFire logs more useful we'd have to create several filters (to gather only useful content and convert it to a format that's easier to analyse) somewhere along our log forwarding path.
+A: The following lines were obtained by forwarding SolidFire cluster log to syslog-ng (from which we can forward it elsewhere): the second is an API call and therefore in the JSON format). Element Software creates log using the rsyslog format (RFC-5424 and RFC-3164 (source: Wikipedia)) and timestamps (format: `MMM  d HH:mm:ss`; RFC-3336). To make archived SolidFire logs more useful we'd have to create several filters (to gather only useful content and convert it to a format that's easier to analyse) somewhere along our log forwarding path. For comparison, vRealize Log Insight accepts formats in RFC-6587, RFC-5424, and RFC-3164 - see the Log Insight [link above]((#vmware--blue-medora-true-visibility-for-vmware-vrealize-operations).
 
 ```shell
 Jun  3 16:14:46 192.168.1.29 master-1[20395]: [APP-5] [API] 24018 DBCallback httpserver/RestAPIServer.cpp:408:operator()|Calling RestAPI::ListBulkVolumeJobs activeApiThreads=1 totalApiThreads=16 user=admin authMethod=Cluster sourceIP=192.168.1.12
