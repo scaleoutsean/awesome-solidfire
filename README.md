@@ -27,6 +27,7 @@
       - [NetApp Cloud Insights](#netapp-cloud-insights)
       - [VMware / Blue Medora True Visibility for VMware vRealize Operations](#vmware--blue-medora-true-visibility-for-vmware-vrealize-operations)
       - [VMware vRealize Log Insight](#vmware-vrealize-log-insight)
+      - [Splunk](#splunk)
       - [Grafana/Graphite - HCICollector](#grafanagraphite---hcicollector)
       - [Prometheus - solidfire-exporter](#prometheus---solidfire-exporter)
       - [Prometheus - NetApp Trident metrics](#prometheus---netapp-trident-metrics)
@@ -218,6 +219,11 @@
 
 - Log Insight [can serve (v8.1)](https://docs.vmware.com/en/vRealize-Log-Insight/8.1/com.vmware.log-insight.administration.doc/GUID-848E4804-3837-4D5E-956E-2216B17376AD.html) as the destination for SolidFire logs
 
+#### Splunk
+
+- Redirect SolidFire log to a TCP port on Universal Forwarder or Indexer
+- Send SNMP events to UF or Indexer. The MIB files can be downloaded from the SolidFire Web UI. If you redirect SolidFire syslog, you probably don't want to also send SNMP traps to Splunk
+
 #### Grafana/Graphite - HCICollector
 
 - [HCICollector](https://github.com/scaleoutsean/hcicollector/) is a permissively-licensed monitoring and alerting for SolidFire and NetApp HCI systems. It gathers SolidFire and vSphere 6.x metrics, stores them in Graphite and lets you visualize them in Grafana
@@ -380,7 +386,7 @@ A: I believe it should be fairly accurate, but I haven't tested it. Get a repres
 
 Q: I'd like to do some SoliFire logging stuff, how do SolidFire logs look like?
 
-A: The following lines were obtained by forwarding SolidFire cluster log to syslog-ng (from which we can forward it elsewhere): the second is an API call and therefore in the JSON format). Element Software creates log using the rsyslog format (RFC-5424 and RFC-3164 (source: Wikipedia)) and timestamps (format: `MMM  d HH:mm:ss`; RFC-3336). To make archived SolidFire logs more useful we'd have to create several filters (to gather only useful content and convert it to a format that's easier to analyse) somewhere along our log forwarding path. For comparison, vRealize Log Insight accepts formats in RFC-6587, RFC-5424, and RFC-3164 - see the Log Insight [link above](#vmware--blue-medora-true-visibility-for-vmware-vrealize-operations).
+A: The following lines were obtained by forwarding SolidFire cluster log to syslog-ng (from which we can forward it elsewhere): the second is an API call and therefore in the JSON format). Element Software creates log using the rsyslog format (RFC-5424 and RFC-3164 (source: [Wikipedia](https://en.wikipedia.org/wiki/Rsyslog#Protocol)) and timestamps (format: `MMM  d HH:mm:ss`; RFC-3336). To make archived SolidFire logs more useful we'd have to create several filters (to gather only useful content and convert it to a format that's easier to analyse) somewhere along our log forwarding path. For comparison, vRealize Log Insight accepts formats in RFC-6587, RFC-5424, and RFC-3164 - see the Log Insight [link above](#vmware--blue-medora-true-visibility-for-vmware-vrealize-operations).
 
 ```shell
 Jun  3 16:14:46 192.168.1.29 master-1[20395]: [APP-5] [API] 24018 DBCallback httpserver/RestAPIServer.cpp:408:operator()|Calling RestAPI::ListBulkVolumeJobs activeApiThreads=1 totalApiThreads=16 user=admin authMethod=Cluster sourceIP=192.168.1.12
