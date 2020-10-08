@@ -274,7 +274,9 @@
   - Site failover
     - SolidFire SRA for VMware SRM
     - Some of the backup offerings mentioned above provide functionality similar to VMware SRM
-- Trident `solidfire-san` back-end can be backed up by creating thin clones and presenting them to a VM or container running a backup software agent (example with [Duplicacy](https://youtu.be/bvI7pgXKh6w))
+- Trident `solidfire-san` back-end
+  - Can be backed up by creating thin clones and presenting them to a VM or container running a backup software agent (example with [Duplicacy](https://youtu.be/bvI7pgXKh6w))
+  - Enterprise backup software can also backup Trident volumes (example: [Commvault](https://documentation.commvault.com/11.21/essential/123637_system_requirements_for_kubernetes.html))
 
 ### Security
 
