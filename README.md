@@ -61,12 +61,12 @@
 
 - SolidFire iSCSI storage clusters (available as storage-only clusters composed of storage nodes from NetApp HCI product line; you may view all currently available models in 3D [here](https://apps.kaonadn.net/4817930843848704/index.html) (click on NetApp HCI))
 - NetApp HCI (NetApp HCI compute nodes connected via iSCSI to NetApp HCI storage nodes - some call it "disaggregated HCI" or dHCI)
-- SolidFire Enterprise SDS (eSDS) - enterprise Software Defined Storage for certified hardware appliances ([Documentation](https://docs.netapp.com/sfe-122/topic/com.netapp.nav.sfsds/home.html?cp=1))
+- SolidFire Enterprise SDS (eSDS) - containerized enterprise Software Defined Storage for certified hardware appliances ([Documentation](https://docs.netapp.com/sfe-122/topic/com.netapp.nav.sfsds/home.html?cp=1))
 
 ## Why SolidFire
 
 - Fully programmable storage - from the initial node configuration to automated storage provisioning for containers
-- Public cloud-like, set-and-forget iSCSI storage for clients ranging from bare metal x86-64 servers to hypervisors, VMs and containers
+- Public Cloud-like, set-and-forget iSCSI storage for clients ranging from bare metal x86-64 servers to hypervisors, VMs and containers
 - Always-on storage effciency with zero-performance impact. Compression and deduplication cannot be disabled
 - Granular storage capacity and performance management - Minimum, Maximum and Burst storage policies may be assigned on a per-volume basis
 - General purpose scale-out storage clusters that are easy to provision, manage, refresh, and scale
@@ -104,6 +104,9 @@
 - [vRealize Orchestrator Plugin for Element Software](https://github.com/solidfire/vrealize-orchestrator-plugin)
 - [vRealize Automation for NetApp HCI and SolidFire](https://bluemedora.com/resource/vmware-vrealize-operations-management-pack-for-netapp-hci-solidfire/)
 - [pyNSXdeploy](https://github.com/solidfire/pyNSXdeploy) -  automate deployment of NSX on vSphere 6.x on NetApp HCI
+- Datastore naming conventions:
+  - Best use VMware SDDC conventions and have workflows and procedures that eliminate the possibility of duplicate names (both on SolidFire and VMware side)
+  - Convention: `<location><az_id>-<pod_type><pod_id>-<datastore_type><datastore_id>` where `datastore_type` is `iscsi` and `datastore_id` is a 2 or 3 digit datastore ID (unrelated to SolidFire Volume ID)
 
 #### Microsoft Hyper-V
 
