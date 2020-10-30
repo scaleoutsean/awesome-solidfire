@@ -2,6 +2,9 @@
 
 - [Awesome SolidFire: An Unofficial Collection of NetApp SolidFire Resources](#awesome-solidfire-an-unofficial-collection-of-netapp-solidfire-resources)
   - [NetApp SolidFire-based Offerings](#netapp-solidfire-based-offerings)
+    - [NetApp SolidFire All Flash Storage](#netapp-solidfire-all-flash-storage)
+    - [NetApp HCI](#netapp-hci)
+    - [NetApp Enterprise Software-Defined Storage (eSDS)](#netapp-enterprise-software-defined-storage-esds)
   - [Why SolidFire](#why-solidfire)
     - [Why NetApp HCI](#why-netapp-hci)
   - [Resources and Solutions](#resources-and-solutions)
@@ -45,6 +48,7 @@
     - [VMware](#vmware)
     - [Windows](#windows)
     - [SolidFire Objects](#solidfire-objects)
+    - [Unique Object Names](#unique-object-names)
     - [Date and Time in SolidFire API](#date-and-time-in-solidfire-api)
   - [Questions and Answers](#questions-and-answers)
     - [Meta](#meta)
@@ -59,9 +63,24 @@
 
 ## NetApp SolidFire-based Offerings
 
-- SolidFire iSCSI storage clusters (available as storage-only clusters composed of storage nodes from NetApp HCI product line; you may view all currently available models in 3D [here](https://apps.kaonadn.net/4817930843848704/index.html) (click on NetApp HCI))
+### NetApp SolidFire All Flash Storage
+
+- SolidFire iSCSI storage clusters (available as storage-only clusters)
+  - Shares storage nodes with the NetApp HCI product line
+  - View all currently available models in 3D [here](https://apps.kaonadn.net/4817930843848704/index.html) (click on NetApp HCI))
+
+### NetApp HCI
+
 - NetApp HCI (NetApp HCI compute nodes connected via iSCSI to NetApp HCI storage nodes - some call it "disaggregated HCI" or dHCI)
-- SolidFire Enterprise SDS (eSDS) - containerized enterprise Software Defined Storage for certified hardware appliances ([Documentation](https://docs.netapp.com/sfe-122/topic/com.netapp.nav.sfsds/home.html?cp=1))
+  - View all currently available models in 3D [here](https://apps.kaonadn.net/4817930843848704/index.html) (click on NetApp HCI))
+
+### NetApp Enterprise Software-Defined Storage (eSDS)
+
+- SolidFire Enterprise SDS (eSDS) - containerized enterprise Software Defined Storage for certified 3rd party hardware appliances
+  - Apart from h/w monitoring and OS (Red Hat, in this case), main storage features are nearly identical to SolidFire and NetApp HCI
+  - The first platform is HPE Proliant DL360
+  - [Documentation](https://docs.netapp.com/sfe-122/topic/com.netapp.nav.sfsds/home.html?cp=1)
+  - Ansible deployment scripts: `nar_solidfire*` scripts [such as this one](https://github.com/NetApp/ansible/tree/master/nar_solidfire_sds_install)
 
 ## Why SolidFire
 
@@ -100,7 +119,7 @@
 
 - Check out VMware related material on the NetApp web site (Private cloud, VDI/EUC, GPU computing and more)
 - vCenter Plugin for Element Software (used to be called "VCP") is built into NetApp HCI and may be installed in other vCenter servers you want to connect to separate NetApp HCI volumes. SolidFire users may get it from NetApp downloads for Element Software
-- [Element SRA](https://www.vmware.com/resources/compatibility/search.php?deviceCategory=sra&details=1&partner=64,439&keyword=solidfire&page=1&display_interval=10&sortColumn=Partner&sortOrder=Asc) for VMware SRM
+- [Element SRA](https://www.vmware.com/resources/compatibility/search.php?deviceCategory=sra&details=1&partner=64,439&keyword=solidfire&page=1&display_interval=10&sortColumn=Partner&sortOrder=Asc) for VMware SRM 8.3
 - [vRealize Orchestrator Plugin for Element Software](https://github.com/solidfire/vrealize-orchestrator-plugin)
 - [vRealize Automation for NetApp HCI and SolidFire](https://bluemedora.com/resource/vmware-vrealize-operations-management-pack-for-netapp-hci-solidfire/)
 - [pyNSXdeploy](https://github.com/solidfire/pyNSXdeploy) -  automate deployment of NSX on vSphere 6.x on NetApp HCI
@@ -157,23 +176,25 @@
 - NetApp ONTAP Select 9 (single node or HA, including Active-Active stretch clusters with one ONTAP Select VM and NetApp HCI cluster per each site ([Metrocluster SDS](https://docs.netapp.com/us-en/ontap-select/concept_ha_config.html))
 - Read-only and read-write caching:
   - NFS (on-prem and hybrid cloud, read-only): NetApp ONTAP Select with [FlexCache](https://www.netapp.com/us/info/what-is-flex-cache.aspx)
-  - SMB (hybrid cloud, read-write): [NetApp Global File Cache](https://cloud.netapp.com/global-file-cache) running as edge node in Microsoft Windows VM, with core file service running in public cloud (Cloud Volumes ONTAP or Cloud Volumes Service)
+  - SMB (hybrid cloud, read-write):
+    - NetApp FlexCache (ONTAP Select 9.8+)
+    - [NetApp Global File Cache](https://cloud.netapp.com/global-file-cache) running as edge node in Microsoft Windows VM, with core file service running in public cloud (Cloud Volumes ONTAP or Cloud Volumes Service). As indicated, you don't need ONTAP Select on NetApp HCI for this one
 
 ### CLI, API, SDK Resources
 
 #### API
 
-- SolidFire has a versioned API, which means you can run your "old" automation against an older API endpoint of your choosing
+- SolidFire has a versioned API, which means you can run your "old" automation scripts against an older API endpoint of your choosing (e.g. version 8.0 still works despite 12.2 being the latest version)
 - SolidFire / Element Software API Reference Guide: 
-  - PDF: [v12.0](https://docs.netapp.com/sfe-120/topic/com.netapp.doc.sfe-api/Managing%20storage%20with%20the%20Element%20API.pdf)
-  - HTML: [v12.0](https://docs.netapp.com/sfe-120/topic/com.netapp.doc.sfe-api/home.html?cp=4_2)
+  - PDF: [v12.2](https://docs.netapp.com/sfe-122/topic/com.netapp.doc.sfe-api/Managing%20storage%20with%20the%20Element%20API.pdf)
+  - HTML: [v12.2](https://docs.netapp.com/sfe-122/topic/com.netapp.doc.sfe-api/home.html)
 
 #### CLI
 
 - SolidFire has two fully functional CLI's - PowerShell & Python
-- Current releases: free download for registered users from [https://mysupport.netapp.com/site/tools](https://mysupport.netapp.com/site/tools) (search for 'element' in Tools)
-- Older releases:
-  - SolidFire [PowerShell Tools (Win/Lin)](https://github.com/solidfire/PowerShell) for the x86_64 architecture. It's not (yet) officially supported, but module `SolidFire.core` has been field-tested and found to work on ARM64 (PowerShell 6) and with PowerShell 7 (Ubuntu 18.04)
+- Current releases: free download for registered users from [https://mysupport.netapp.com/site/tools](https://mysupport.netapp.com/site/tools) (search for 'element' in Tools). Works with PowerShell 6 and 7 on Win/Lin/OS X on x64 architecture.
+- Older releases (work fine with latest Element, but connect to older API endpoints and use older API version):
+  - SolidFire [PowerShell Tools (Win/Lin)](https://github.com/solidfire/PowerShell) for the x86_64 architecture. It's not (yet) officially supported, but module `SolidFire.Core` has been field-tested and found to work on ARM64 (PowerShell 6) and with PowerShell 7 (Ubuntu 18.04)
   - SolidFire [Python CLI (Win/Lin/OS X)](https://github.com/solidfire/solidfire-cli)
 
 #### SolidFire/Element Software Development Kits (SDKs)
@@ -307,11 +328,11 @@
 
 ### VMware
 
+- SolidFire devices start with `naa.6f47acc1`
 - PowerShell [script](https://github.com/kpapreck/test-plan/blob/master/kp-clone-snap-to-datastore.ps1) to clone a VMFS6 volume from a SolidFire snapshot and import it to vCenter
 - PowerShell [examples](https://github.com/solidfire/PowerShell/tree/release/1.5.1/VMware) for VMware
-- PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/SPBM) for integration with Storage Policy Based Management (SPBM)
 
-Do not use old performance-tuning scripts from these examples on VMware ESXi 6.5 and above because they were written for ESXi 5.5 and 6.0. ESXi 6.5 and later have appropriate SolidFire MPIO settings built-in and require no special modification or tuning
+Do not use old performance-tuning scripts from the SolidFire PowerShell repo. They were written for ESXi 5.5 and 6.0. ESXi 6.5 and later have appropriate SolidFire MPIO settings built-in and require no special modification or tuning
 
 ### Windows
 
@@ -356,6 +377,12 @@ Timestamp        : 1970-01-01T00:00:00Z
 - Please do not confuse (storage) AccountID with the custom "owner" attribute above; large Kubernetes or Hyper-V cluster can use one AccountID for all Management OS, but volume "owners" can be many (or none, if the key is named differently or not at all used) and the latter is just a custom tag
 - In Kubernetes, Docker and other orchestrated environments, pay attention to avoid the use of the same volume attribute keys used by NetApp Trident or other software that touches storage (such as Ansible, which stuffs KV pairs with keys such as "config-mgmt" and "event-source" into Attributes)
 - NetApp ElementSW (SolidFire) modules for Ansible also set volume attributes since at least v20.10.0 (key names: `confg-mgmt` and `event-source`) so don't use those if you use Ansible with SolidFire and keep an eye on other objects
+
+### Unique Object Names
+
+- SolidFire uses unique integer IDs to distinguish among most objects. While some Objects must have unique names, it is not the case for all Objects
+- Main Object Names that can be non-unique: Volume, Volume Access Group, QoS Policy, Snapshot, Group Snapshot, Snapshot Schedule
+- While it is a best practice to pick different names, SolidFire won't force you to do that, so either rely on Object IDs or stick to naming conventions for your environment or rely on Object IDs to distinguish among Objects. Note, however, that in the latter case any monitoring or other systems that use and display Names may malfunction or display confusing information
 
 ### Date and Time in SolidFire API
 
