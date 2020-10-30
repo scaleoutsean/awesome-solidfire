@@ -30,12 +30,14 @@
       - [NetApp Cloud Insights](#netapp-cloud-insights)
       - [VMware / Blue Medora True Visibility for VMware vRealize Operations](#vmware--blue-medora-true-visibility-for-vmware-vrealize-operations)
       - [VMware vRealize Log Insight](#vmware-vrealize-log-insight)
-      - [Splunk](#splunk)
+      - [Graylog](#graylog)
+      - [ELK](#elk)
       - [Grafana/Graphite - HCICollector](#grafanagraphite---hcicollector)
       - [Prometheus - solidfire-exporter](#prometheus---solidfire-exporter)
       - [Prometheus - NetApp Trident metrics](#prometheus---netapp-trident-metrics)
       - [Icinga and Nagios](#icinga-and-nagios)
       - [SNMP MIBs](#snmp-mibs)
+      - [Splunk](#splunk)
       - [Syslog Forwarding](#syslog-forwarding)
       - [Event Notifications](#event-notifications)
     - [Backup, Restore, DR and BC (Site Failover)](#backup-restore-dr-and-bc-site-failover)
@@ -243,10 +245,13 @@
 
 - Log Insight [can serve (v8.1)](https://docs.vmware.com/en/vRealize-Log-Insight/8.1/com.vmware.log-insight.administration.doc/GUID-848E4804-3837-4D5E-956E-2216B17376AD.html) as the destination for SolidFire logs
 
-#### Splunk
+#### Graylog
 
-- Redirect SolidFire log to a TCP port on Universal Forwarder or Indexer
-- Send SNMP events to UF or Indexer. The MIB files can be downloaded from the SolidFire Web UI. If you redirect SolidFire syslog, you probably don't want to also send SNMP traps to Splunk
+- Redirect SolidFire log directly or indirectly (for example first to syslog-ng and from there forward to Graylog in the GELF format)
+
+#### ELK
+
+- Redirect SolidFire to syslog-ng or LogStash or whatever, and from there to Elastic
 
 #### Grafana/Graphite - HCICollector
 
@@ -271,6 +276,11 @@
 - SolidFire OID is 1.3.6.1.4.1.38091 (`.iso.org.dod.internet.private.enterprises.solidFire`)
 - SNMP is disabled by default. If you enable it, you may choose v2 or v3
 - Element API also lets you access essential hardware status information via API methods `GetIpmiInfo` and `GetIpmiConfig`
+
+#### Splunk
+
+- Redirect SolidFire log to a TCP port on Universal Forwarder or Indexer
+- Send SNMP events to UF or Indexer. The MIB files can be downloaded from the SolidFire Web UI. If you redirect SolidFire syslog, you probably don't want to also send SNMP traps to Splunk
 
 #### Syslog Forwarding
 
