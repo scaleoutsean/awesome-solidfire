@@ -158,7 +158,7 @@
 
 #### Oracle VirtualBox
 
-- VirtualBox iSCSI initiator isn't officially supported but [it appears to work](https://youtu.be/EqxK-mT9Fxw)
+- VirtualBox iSCSI initiator isn't officially supported but [it appears to work](https://youtu.be/EqxK-mT9Fxw) on both Linux and Windows (iSCSI initiator in VirtualBox for Windows seems prone to timeouts and I/O errors)
 - VirtualBox on top of OS-provisioned storage works as usual, as do supported VirtualBox guests with direct access to SolidFire iSCSI targets
 
 #### Storage Provisioning for Containers (CSI-compatible orchestrators and Docker)
@@ -217,7 +217,7 @@
 
 - [Ansible modules](https://galaxy.ansible.com/netapp/elementsw?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW) for Element Software (`ansible-galaxy collection install netapp.elementsw`)
 - [SolidFire Puppet plugin](https://github.com/solidfire/solidfire-puppet)
-- [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw) - recommended for v0.12 and newer
+- [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw) - recommended for v0.12 and v0.13
   - [Terraform Plugin for SolidFire (unofficial)](https://github.com/solidfire/terraform-provider-solidfire) - works with Terraform v0.11 and v0.12, here for reference only
 
 ### Alerting, Monitoring, Telemetry
@@ -260,6 +260,7 @@
 #### Prometheus - solidfire-exporter
 
 - [Solidfire Exporter](https://github.com/mjavier2k/solidfire-exporter/) fetches and serves SolidFire metrics in the Prometheus format
+- Should be able to work within Kubernetes without changes
 
 #### Prometheus - NetApp Trident metrics
 
@@ -370,6 +371,7 @@ Do not use old performance-tuning scripts from the SolidFire PowerShell repo. Th
         "id": 1
 }
 ```
+
 - Not all environments assign ownership (tags) to teams or have the need to set attributes on SolidFire objects (for example, vSphere users can tag vSphere objects - they don't need to talk to SolidFire), but if they do, they can easily create reports and automate operations with only several lines of PowerShell
 - Efficiency report for all volumes tagged with one such owner (empty volumes have the efficiency of 1X, if Thin Provisioning is not counted):
 
@@ -384,6 +386,7 @@ MissingVolumes   : {}
 ThinProvisioning : 1
 Timestamp        : 1970-01-01T00:00:00Z
 ```
+
 - Please do not confuse (storage) AccountID with the custom "owner" attribute above; large Kubernetes or Hyper-V cluster can use one AccountID for all Management OS, but volume "owners" can be many (or none, if the key is named differently or not at all used) and the latter is just a custom tag
 - In Kubernetes, Docker and other orchestrated environments, pay attention to avoid the use of the same volume attribute keys used by NetApp Trident or other software that touches storage (such as Ansible, which stuffs KV pairs with keys such as "config-mgmt" and "event-source" into Attributes)
 - NetApp ElementSW (SolidFire) modules for Ansible also set volume attributes since at least v20.10.0 (key names: `confg-mgmt` and `event-source`) so don't use those if you use Ansible with SolidFire and keep an eye on other objects
