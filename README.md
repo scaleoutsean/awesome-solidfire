@@ -16,7 +16,7 @@
       - [Citrix Hypervisor](#citrix-hypervisor)
       - [Linux-related (OpenStack, KVM, Oracle VM)](#linux-related-openstack-kvm-oracle-vm)
       - [Oracle VirtualBox](#oracle-virtualbox)
-      - [Storage Provisioning for Containers (CSI-compatible orchestrators and Docker)](#storage-provisioning-for-containers-csi-compatible-orchestrators-and-docker)
+      - [Kubernetes, Docker and Similar](#kubernetes-docker-and-similar)
       - [Virtual Desktop Infrastructure and End User Computing (VDI & EUC)](#virtual-desktop-infrastructure-and-end-user-computing-vdi--euc)
     - [File-sharing (NFS, SMB)](#file-sharing-nfs-smb)
     - [CLI, API, SDK Resources](#cli-api-sdk-resources)
@@ -158,14 +158,15 @@
 
 #### Oracle VirtualBox
 
-- VirtualBox iSCSI initiator isn't officially supported but [it appears to work](https://youtu.be/EqxK-mT9Fxw) on both Linux and Windows (iSCSI initiator in VirtualBox for Windows seems prone to timeouts and I/O errors)
+- VirtualBox iSCSI initiator isn't officially supported but [it appears to work](https://youtu.be/EqxK-mT9Fxw) on both Linux and Windows (VirtualBox (host) iSCSI initiator for Windows seems prone to timeouts and I/O errors; it's better to use Linux or Windows initiators out of guest VMs)
 - VirtualBox on top of OS-provisioned storage works as usual, as do supported VirtualBox guests with direct access to SolidFire iSCSI targets
 
-#### Storage Provisioning for Containers (CSI-compatible orchestrators and Docker)
+#### Kubernetes, Docker and Similar
 
 - [NetApp Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Red Hat OpenShift, Rancher RKE and others)
-- Red Hat OpenShift Container Platform. You can run it two ways: VM-based OCP VMs on vSphere, Red Hat Virtualization or OpenStack, and bare metal-based OCP on RHEL
+- Red Hat OpenShift Container Platform. You can run it two ways: VM-based OCP VMs on vSphere, Red Hat Virtualization or OpenStack, and bare metal-based OCP on RHEL. See the official NetApp HCI solutions page for additional details
 - Docker and all [container orchestrators supported](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) by NetApp Trident
+- Rancher on NetApp HCI: See the official NetApp HCI solutions page for additional details. I have a personal site with some notes on this solution [here](https://scaleoutsean.github.io/solid-rancher)
 
 #### Virtual Desktop Infrastructure and End User Computing (VDI & EUC)
 
@@ -175,7 +176,7 @@
 
 ### File-sharing (NFS, SMB)
 
-- NetApp ONTAP Select 9 (single node or HA, including Active-Active stretch clusters with one ONTAP Select VM and NetApp HCI cluster per each site ([Metrocluster SDS](https://docs.netapp.com/us-en/ontap-select/concept_ha_config.html))
+- NetApp ONTAP Select 9.8 (single node or HA, including Active-Active stretch clusters with one ONTAP Select VM and NetApp HCI cluster per each site ([Metrocluster SDS](https://docs.netapp.com/us-en/ontap-select/concept_ha_config.html))
 - Read-only and read-write caching:
   - NFS (on-prem and hybrid cloud, read-only): NetApp ONTAP Select with [FlexCache](https://www.netapp.com/us/info/what-is-flex-cache.aspx)
   - SMB (hybrid cloud, read-write):
