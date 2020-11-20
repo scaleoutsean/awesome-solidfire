@@ -11,3 +11,13 @@
 
 # Import-Module SolidFire # if you don't have it already 
 
+$SolidFireClusterIp = Read-Host -Prompt "Enter the SolidFire Management IP/FQDN" 
+$SolidFireConnection = Connect-SFCluster $SolidFireClusterIp -Credential (Get-Credential)
+$accList = (Get-SFAccount) ; $volList = @()
+ForEach ($acc in $accList) { 
+  $vols = Get-SFVolume -AccountID $acc.AccountID
+  ForEach ($v in $vols) { $volList = $volList + $v.VolumeID }}
+$volActiveList = @(); $Sessions = Get-SfIscsiSession
+ForEach ($s in $Sessions) { $volActiveList = $volActiveList + $s.VolumeID }
+$volIdleList = ($volList | ? { $volActiveList -notcontains $_})
+ForEach ($v in $volIdleList){ Write-Host (Get-SFVolume -VolumeID $v).Name }
