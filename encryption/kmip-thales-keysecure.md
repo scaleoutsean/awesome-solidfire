@@ -4,6 +4,7 @@
   - [What's inside](#whats-inside)
   - [Workflow](#workflow)
     - [Notes](#notes)
+    - [Automate with PowerShell](#automate-with-powershell)
   - [Create SolidFire Cluster Key Pair](#create-solidfire-cluster-key-pair)
   - [Create CSR](#create-csr)
   - [Sign SolidFire Cluster CSR with CA key in SafeNet KeySecure UI](#sign-solidfire-cluster-csr-with-ca-key-in-safenet-keysecure-ui)
@@ -44,7 +45,7 @@ These aren't recommended or required steps. This is simply what I did to get to 
   - Trusted CA List Profile: Default
   - Username Field in Client Certificate: `OU` (Organizational Unit) (for vCenter)
 - Local user accounts were used; an account named `$CLUSTERNAME` was created in KeySecure (I'm not sure if this is required, to have a user account that matches cluster name)
-- Certificates and certificates: 
+- Certificates and certificates:
   - SolidFire CSR for KMIP certificate was created on SolidFire as per below; creating a CSR from KeySecure Web UI didn't work out (such a certificate could be uploaded to SolidFire with `SetSslCertificate` but it didn't appear to work for KMIP (when creating KMIP Server). I haven't had a fully functioning SolidFire cluster (I used a demo VM) to begin with, but it seems that only the SolidFire cluster certificate for Web/API can be externally created and uploaded, while the KMIP certificate is held by the cluster so you can't use one externally created CSR for KMIP)
   - tldr: KeySecure may be used to sign two certificates for SolidFire; keys and CSR for the one used for KMIP must be generated with the SolidFire API, the keys and CSR for the type used for SolidFire API endpoint and the nodes' Web UI must be created externally (KeySecure Web UI, OpenSSL CLI, etc.). For KMIP you need the former, but it makes sense to generate the both since you don't want to use the (built-in) self-signed certificate for Web/API anyway
 - It is strongly recommended to thoroughly understand KeySecure (or find somebody who does) for actual production use
@@ -52,6 +53,13 @@ These aren't recommended or required steps. This is simply what I did to get to 
 ![KeySecure KMIP Server](./01-kmip-server.png)
 
 ![KeySecure Local Users](./02-local-users.png)
+
+### Automate with PowerShell
+
+With the release of SolidFire PowerShell Tools 1.7, we can automate this from the CLI (for example one of the new cmdlets is `Add-SFKeyServerToProviderKmip` - search for `Kmip` cmdlets to find the rest). Get SolidFire PowerShell Tools v1.7 or higher (NetApp Support login required) to get started:
+
+- Element PowerShell Tools 1.7: https://mysupport.netapp.com/site/tools/tool-eula/elem-powershell-tools
+  - Release Notes: https://mysupport.netapp.com/api/tools-service/toolsbinary/elem-powershell-tools/download/NetAppElementPowerShellReleaseNotes1_7.pdf
 
 ## Create SolidFire Cluster Key Pair
 

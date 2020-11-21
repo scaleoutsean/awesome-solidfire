@@ -16,8 +16,12 @@
       - [Citrix Hypervisor](#citrix-hypervisor)
       - [Linux-related (OpenStack, KVM, Oracle VM)](#linux-related-openstack-kvm-oracle-vm)
       - [Oracle VirtualBox](#oracle-virtualbox)
-      - [Kubernetes, Docker and Similar](#kubernetes-docker-and-similar)
       - [Virtual Desktop Infrastructure and End User Computing (VDI & EUC)](#virtual-desktop-infrastructure-and-end-user-computing-vdi--euc)
+    - [Kubernetes and Containers](#kubernetes-and-containers)
+      - [Red Hat OpenShift Container Platform](#red-hat-openshift-container-platform)
+      - [Rancher](#rancher)
+      - [Google Anthos](#google-anthos)
+      - [Docker](#docker)
     - [File-sharing (NFS, SMB)](#file-sharing-nfs-smb)
     - [CLI, API, SDK Resources](#cli-api-sdk-resources)
       - [API](#api)
@@ -161,18 +165,32 @@
 - VirtualBox iSCSI initiator isn't officially supported but [it appears to work](https://youtu.be/EqxK-mT9Fxw) on both Linux and Windows (VirtualBox (host) iSCSI initiator for Windows seems prone to timeouts and I/O errors; it's better to use Linux or Windows initiators out of guest VMs)
 - VirtualBox on top of OS-provisioned storage works as usual, as do supported VirtualBox guests with direct access to SolidFire iSCSI targets
 
-#### Kubernetes, Docker and Similar
-
-- [NetApp Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Red Hat OpenShift, Rancher RKE and others)
-- Red Hat OpenShift Container Platform. You can run it two ways: VM-based OCP VMs on vSphere, Red Hat Virtualization or OpenStack, and bare metal-based OCP on RHEL. See the official NetApp HCI solutions page for additional details
-- Docker and all [container orchestrators supported](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) by NetApp Trident
-- Rancher on NetApp HCI: See the official NetApp HCI solutions page for additional details. I have a personal site with some notes on this solution [here](https://scaleoutsean.github.io/solid-rancher)
-
 #### Virtual Desktop Infrastructure and End User Computing (VDI & EUC)
 
 - [VMware EUC/VDI with VMware Horizon View](https://docs.netapp.com/us-en/hci-solutions/nhci_euc_vmware.html)
 - [Citrix Virtual Desktop and Virtual Apps](https://docs.netapp.com/us-en/hci-solutions/citrix_executive_summary.html)
 - [Hybrid Cloud VDI with NetApp Virtual Desktop Service](https://docs.netapp.com/us-en/hci-solutions/hcvdivds_netapp_virtual_desktop_service_overview.html) - works with NetApp Global File Cache (GFC) for SMB
+
+### Kubernetes and Containers
+
+- [NetApp Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Red Hat OpenShift, Rancher RKE and others)
+
+#### Red Hat OpenShift Container Platform
+
+- You can run it two ways: VM-based OCP VMs on vSphere, Red Hat Virtualization or OpenStack, and bare metal-based OCP on RHEL. See the official NetApp HCI solutions page for additional details
+
+#### Rancher
+
+- Rancher on NetApp HCI: See the official NetApp HCI solutions page for additional details. I have a personal site with notes on this solution [here](https://scaleoutsean.github.io/solid-rancher)
+
+#### Google Anthos
+
+- Anthos is supported on vSphere clusters. See the official NetApp HCI solutions page for additional details
+
+#### Docker
+
+- Docker and other [container orchestrators supported](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) by NetApp Trident
+- Docker Swarm is not supported with SolidFire and Trident
 
 ### File-sharing (NFS, SMB)
 
@@ -450,7 +468,7 @@ A: To be clear, this is about iSCSI clients supported by SolidFire storage (whic
 - MicroSoft Windows (Hyper-V) - search the WSC site (example for the [H615C](https://www.windowsservercatalog.com/item.aspx?idItem=4109a235-2b2e-3200-d3ef-065c8ea7c0c6&bCatID=1282))
 - Citrix Hypervisor (formerly known as XenServer) - v8 is supported as per NetApp HCI VDI Solution with Citrix Hypervisor; for v7 refer to the HCLs for [storage](http://hcl.xenserver.org/storage/?vendor=56) and [servers](http://hcl.xenserver.org/servers/?vendor=56)
 - Oracle VM - go [here](https://linux.oracle.com/pls/apex/f?p=117:3::::::). Click on Storage Systems and in filter rop-down list select NetApp. Look for SolidFire models from the NetApp HCI Datasheet or Web site (for example, H610S)
-- Other Linux distributions validated (Cinder iSCSI) for SolidFire Element OS - Ubuntu, SuSE, etc. (the details can be found in the IMT)
+- Other Linux distributions validated (Cinder iSCSI) for SolidFire Element OS - Ubuntu, SuSE, etc. (the details can be found in the NetApp IMT)
 - Oracle Virtualbox - not suported (as it uses its own iSCSI client that isn't validated by NetApp) but it works and you may want to use it in lab environment
 
 If unsure, contact NetApp with any questions or ask in the [NetApp Community Forum](https://community.netapp.com/t5/AFF-NVMe-EF-Series-and-SolidFire-Discussions/bd-p/flash-storage-systems-discussions) (free membership account required)
@@ -463,7 +481,7 @@ A: If Trident works with it, SolidFire can too. Some K8s distributions known to 
 
 Q: Should I use SolidFire with (or for) ...
 
-A: It depends. At the highest level of abstraction SolidFire is suitable for 95% of apps people virtualize or containerize on on-premises x86_64 infrastructure. If you think you're a "one percenter", you may want to discuss your requirements with a NetApp SolidFire or Cloud Infrastructure architect. NetApp HCI may be able to accommodate even extreme workloads if data processing to external NFS or iSCSI storage such as NetApp AFF or E-Series. Some HCI vendors force such storage workloads on their HCI storage which doesn't work well (or sort-of-works, but at a much higher price).
+A: It depends. At the highest level of abstraction SolidFire is suitable for 95% of apps people virtualize or containerize on on-premises x86_64 infrastructure. If you think you're "one percenter", you may want to discuss your requirements with a NetApp SolidFire or Cloud Infrastructure architect. NetApp HCI may be able to accommodate even extreme workloads if data processing to external NFS or iSCSI storage such as NetApp AFF or E-Series. Some HCI vendors force such storage workloads on their HCI storage which doesn't work well (or sort-of-works, but at a much higher price).
 
 Q: Is NetApp HCI suitable for AI, Hadoop, Splunk and similar "heavy" workloads?
 
