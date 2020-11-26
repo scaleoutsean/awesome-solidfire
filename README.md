@@ -27,7 +27,7 @@
       - [API](#api)
       - [CLI](#cli)
       - [SolidFire/Element Software Development Kits (SDKs)](#solidfireelement-software-development-kits-sdks)
-    - [Automation](#automation)
+    - [API Automation](#api-automation)
       - [Automation and Configuration Tools and Frameworks](#automation-and-configuration-tools-and-frameworks)
     - [Alerting, Monitoring, Telemetry](#alerting-monitoring-telemetry)
       - [ActiveIQ](#activeiq)
@@ -228,7 +228,7 @@
   - [SolidFire Ruby SDK](https://github.com/solidfire/solidfire-sdk-ruby)
   - [(Unofficial) SolidFire Go SDK](https://github.com/solidfire/solidfire-sdk-golang) and its cousin [solidfire-go](https://github.com/j-griffith/solidfire-go) with a convenient wrapper for common volume operations
 
-### Automation
+### API Automation
 
 - Postman JSON [collection](https://github.com/solidfire/postman) for Element software
 
@@ -236,8 +236,8 @@
 
 - [Ansible modules](https://galaxy.ansible.com/netapp/elementsw?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW) for Element Software (`ansible-galaxy collection install netapp.elementsw`)
 - [SolidFire Puppet plugin](https://github.com/solidfire/solidfire-puppet)
-- [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw) - recommended for v0.12 and v0.13
-  - [Terraform Plugin for SolidFire (unofficial)](https://github.com/solidfire/terraform-provider-solidfire) - works with Terraform v0.11 and v0.12, here for reference only
+- [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw) - official
+  - Install it directly from [Terraform registry](https://registry.terraform.io/providers/NetApp/netapp-elementsw/latest)
 
 ### Alerting, Monitoring, Telemetry
 
