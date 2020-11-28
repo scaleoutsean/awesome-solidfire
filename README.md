@@ -27,7 +27,7 @@
       - [API](#api)
       - [CLI](#cli)
       - [SolidFire/Element Software Development Kits (SDKs)](#solidfireelement-software-development-kits-sdks)
-    - [API Automation](#api-automation)
+    - [Automation](#automation)
       - [Automation and Configuration Tools and Frameworks](#automation-and-configuration-tools-and-frameworks)
     - [Alerting, Monitoring, Telemetry](#alerting-monitoring-telemetry)
       - [ActiveIQ](#activeiq)
@@ -51,6 +51,7 @@
     - [SolidFire/Element Demo VM](#solidfireelement-demo-vm)
     - [Recorded Demos](#recorded-demos)
   - [Scripts and How-To Articles](#scripts-and-how-to-articles)
+    - [Generic](#generic)
     - [VMware](#vmware)
     - [Windows](#windows)
     - [SolidFire Objects](#solidfire-objects)
@@ -182,6 +183,7 @@
 #### Rancher
 
 - Rancher on NetApp HCI: See the official NetApp HCI solutions page for additional details. I have a personal site with notes on this solution [here](https://scaleoutsean.github.io/solid-rancher)
+- Provision it to NetApp HCI vSphere clusters from the CLI with [ez-rancher](https://github.com/NetApp/ez-rancher/)
 
 #### Google Anthos
 
@@ -228,7 +230,7 @@
   - [SolidFire Ruby SDK](https://github.com/solidfire/solidfire-sdk-ruby)
   - [(Unofficial) SolidFire Go SDK](https://github.com/solidfire/solidfire-sdk-golang) and its cousin [solidfire-go](https://github.com/j-griffith/solidfire-go) with a convenient wrapper for common volume operations
 
-### API Automation
+### Automation
 
 - Postman JSON [collection](https://github.com/solidfire/postman) for Element software
 
@@ -236,7 +238,7 @@
 
 - [Ansible modules](https://galaxy.ansible.com/netapp/elementsw?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW) for Element Software (`ansible-galaxy collection install netapp.elementsw`)
 - [SolidFire Puppet plugin](https://github.com/solidfire/solidfire-puppet)
-- [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw) - official
+- [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw) - supports resources IQN, VAG, account, volume
   - Install it directly from [Terraform registry](https://registry.terraform.io/providers/NetApp/netapp-elementsw/latest)
 
 ### Alerting, Monitoring, Telemetry
@@ -253,7 +255,7 @@
 - Enterprise-grade, professional infrastructure monitoring
 - Cloud-hosted service, requires on-prem VM to acquire data and send it to your NetApp Cloud Insights account
 - The free version has basic functionality and supports all NetApp products including SolidFire and NetApp HCI
-- Monitor performance and OPEX of all on-prem assets (NetApp- and non-NetApp-made) as well as in public clouds (see examples in NetApp [WP-7319](https://www.netapp.com/us/media/wp-7319.pdf)
+- Monitor performance and OPEX of all on-prem assets (NetApp- and non-NetApp-made) as well as in public clouds (find examples in NetApp [WP-7319](https://www.netapp.com/us/media/wp-7319.pdf))
 
 #### VMware / Blue Medora True Visibility for VMware vRealize Operations
 
@@ -304,8 +306,12 @@
 
 #### Syslog Forwarding
 
-- Forwarding to external syslog target may be configured through one of the CLI or the API (see `SetRemoteLoggingHosts` method). Element uses TCP and the log may be forwarded to one or more destinations. Sample lines from the log are provided further below
-- VMware-based NetApp HCI surfaces Element storage cluster events and alerts to vCenter; if ActiveIQ is enabled, these alerts are also sent to ActiveIQ
+- SolidFire (or NetApp HCI or eSDS)
+  - Forwarding to external syslog target may be configured through the CLI or the API (see `SetRemoteLoggingHosts` method). Element uses TCP and the log may be forwarded to one or more destinations. Sample lines from the log are provided further below
+  - VMware-based NetApp HCI surfaces Element storage cluster events and alerts to vCenter; if ActiveIQ is enabled, these alerts are also sent to ActiveIQ
+- mNode and NetApp Hybrid Cloud Control (HCC)
+  - There are two components: mNode logs (rsyslog) and HCC (Docker service, in the current version). Both can be configured to forward logs to external syslog target (TCP or UDP). Only the former can forward to multiple destinations.
+  - `GET /logs` from HCC may be used to obtain the logs of individual HCC services (containers), which Docker service currently does not forward. This could be coded into a "polling" script written in PowerShell or Python, for example. See the HCC API for more on using this API method
 
 #### Event Notifications
 
@@ -355,6 +361,10 @@
 - [Search YouTube for SolidFire](https://www.youtube.com/results?search_query=solidfire&sp=CAI%253D) and sort by most recent. Also check out [NetApp HCI](https://www.youtube.com/results?search_query=netapp+hci&sp=CAI%253D) video demos since NetApp HCI uses SolidFire storage
 
 ## Scripts and How-To Articles
+
+### Generic
+
+- `Set-SFQosException.psm1` - takes a backup of a Volume's QoS Policy ID value and then sets the volume to a user-provided "temporary" QoS Policy ID. If the Policy ID is not provided, it resets the volume to the back-up value which is stored in Volume Attributes. Might be useful for any tasks that need a temporary change in performance profile. Written with SolidFire PowerShell Tools 1.6 and PowerShell 7 on Linux, but should work with PowerShell 6 or newer on Windows
 
 ### VMware
 
@@ -418,7 +428,7 @@ Timestamp        : 1970-01-01T00:00:00Z
 
 ### Date and Time in SolidFire API
 
-- The SolidFire API works with UTC date and time based on [ISO8601](https://en.wikipedia.org/wiki/ISO_8601). Python users may want to check out [pyiso8601](https://github.com/micktwomey/pyiso8601).
+- The SolidFire API uses the [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) formatted UTC clock.
 
 ## Questions and Answers
 
