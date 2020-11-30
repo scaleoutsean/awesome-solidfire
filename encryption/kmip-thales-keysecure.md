@@ -50,7 +50,7 @@ These aren't recommended or required steps. This is simply what I did to get to 
   - Username Field in Client Certificate: `OU` (Organizational Unit) (for vCenter)
 - Local user accounts were used; an account named `$CLUSTERNAME` was created in KeySecure (I'm not sure if this is required, to have a user account that matches cluster name)
 - Certificates and certificates:
-  - SolidFire CSR for KMIP certificate was created on SolidFire as per below; creating a CSR from KeySecure Web UI didn't work out (such a certificate could be uploaded to SolidFire with `SetSslCertificate` but it didn't appear to work for KMIP (when creating KMIP Server). I haven't had a fully functioning SolidFire cluster (I used a demo VM) to begin with, but it seems that only the SolidFire cluster certificate for Web/API can be externally created and uploaded, while the KMIP certificate is held by the cluster so you can't use one externally created CSR for KMIP)
+  - SolidFire CSR for KMIP certificate was created on SolidFire as per below; creating a CSR from KeySecure Web UI didn't work out (such a certificate could be uploaded to SolidFire with `SetSslCertificate` but it didn't appear to work for KMIP (when creating KMIP Server). I haven't had a fully functioning SolidFire cluster (I used a demo VM) to begin with, but it seems that only the SolidFire cluster certificate for Web/API can be externally created and uploaded, while SolidFire array's private key for KMIP CSR is held by the cluster so you can't use one externally created CSR for KMIP)
   - tldr: KeySecure may be used to sign two certificates for SolidFire; keys and CSR for the one used for KMIP must be generated with the SolidFire API, the keys and CSR for the type used for SolidFire API endpoint and the nodes' Web UI must be created externally (KeySecure Web UI, OpenSSL CLI, etc.). For KMIP you need the former, but it makes sense to generate the both since you don't want to use the (built-in) self-signed certificate for Web/API anyway
 - It is strongly recommended to thoroughly understand KeySecure (or find somebody who does) for actual production use
 
@@ -76,7 +76,7 @@ Do **not** enable FIPS if you don't need it, because it cannot be disabled. Inst
 {
     "method": "SetSupplementalTlsCiphers",
     "params": {
-        "supplementalCiphers": [ <CSV List of quoted ciphers from GetSupportedTlsCiphers> ]
+        "supplementalCiphers": [ "CSV List", "of quoted ciphers", "from GetSupportedTlsCiphers" ]
     },
     "id": 1
 }
@@ -99,6 +99,7 @@ With the release of SolidFire PowerShell Tools 1.7, we can automate KMIP-related
 
 ## Create SolidFire Cluster Key Pair
 
+- This will be used later to create "CSR" to [establish trust](https://docs.netapp.com/sfe-122/topic/com.netapp.doc.sfe-ug/GUID-A376CBFB-DCF3-42C2-A291-9E581AED5037.html?resultof=%22%43%72%65%61%74%65%50%75%62%6c%69%63%50%72%69%76%61%74%65%4b%65%79%50%61%69%72%22%20%22%63%72%65%61%74%65%70%75%62%6c%69%63%70%72%69%76%61%74%65%6b%65%79%70%61%69%72%22%20) between SolidFire and KMIP server
 - I used `OU=Taiwan`, as that was used in KMIP server but I can't tell if OU must be equal to cluster name
 - Request:
 
@@ -127,10 +128,11 @@ With the release of SolidFire PowerShell Tools 1.7, we can automate KMIP-related
 }
 ```
 
-- Notice that SolidFire hangs onto the keys, so nope, you can't use these for the Web UI/API endpoint!
+- Notice that SolidFire cluster hangs onto the keys, so nope - you can't use the same key pair to generate CSR the SF Web UI/API endpoint (MVIP)
 
 ## Create CSR
 
+- 
 - Request:
 
 ```json
@@ -191,17 +193,19 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
 
 ## Create KMIP Key Provider and Server(s)
 
-The following steps are directly related to KMIP configuration:
+Previously we used `CreatePublicPrivateKeyPair` to create a CSR that will be used to establish trust between SolidFire cluster and KMIP server.
+
+The following steps are directly related to KMIP configuration on SolidFire cluster:
 - Create KMIP provider
 - Create KMIP server(s)
-- Register server(s) with provider
+- Register KMIP server(s) with KMIP provider
 - Test KMIP integration
-- Enable external keys with KMIP configuration
+- Enable external encryption using KMIP configuration created in these steps
 
 Note:
 
-- Responses were empty (which means no error)
-- Request which simply returns a number (e.g. 1, on the first succesful attempt) of the created Key Provider (in theory you could have 2, say one per site, for HA):
+- API responses were empty (which means no error)
+- A request which simply returns a number (e.g. 1, on the first succesful attempt) of the created Key Provider (in theory you could have 2, say one per site, for HA):
 
 ```json
 {
@@ -213,7 +217,7 @@ Note:
 }
 ```
 
-- Request that registers SolidFire cluster with KeySecure. You could have two servers per site. CA Certificate is from KeySecure CA that runs KMIP and Client Certificate is KeySecure CA-signed certificate for SolidFire cluster:
+- A request that registers SolidFire cluster with KeySecure. You could have two servers per site. CA Certificate is from KeySecure CA that runs KMIP and Client Certificate is KeySecure CA-signed certificate for SolidFire cluster:
 
 ```json
 {
@@ -276,7 +280,7 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
 }
 ```
 
-- Response (note and remember your keyServerID, in this case 11, as well as keyProvider ID from earlier; you can use `List` methods to find the ID's if you forget them:
+- Response (note and remember your keyServerID, in this case 11, as well as keyProvider ID from the step above; you can use `List` methods to find the IDs of registered KMIP provider(s) if you've forgotten them:
 
 ```json
 {
@@ -300,7 +304,7 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
 
 ## Attach KMIP Server to KMIP Provider
 
-- Request to add Server ID 11 to Provider ID 5 (your IDs are likely to be different):
+- Request to add Server ID 11 to Provider ID 5 (in each case both IDs are likely to be different - they are simply incremented each time):
 
 ```json
 {
@@ -315,7 +319,7 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
 
 ## Test Key Provider and Server
 
-- Requests should return empty if no issues. Do not just copy and paste the IDs, yours might be different (use check output from previous commands or use `ListKeyProvidersKmip` and `ListKeyServersKmip` to figure it out):
+- Requests should return empty if no error. Do not just copy and paste these IDs, yours will likely be different (check output from previous commands or use `ListKeyProvidersKmip` and `ListKeyServersKmip` to figure it out):
 
 ```json
 {
@@ -339,7 +343,7 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
 
 ## Enable Encryption at Rest with External Key Manager
 
-- If Encryption at Rest is enabled (for example using the SolidFire internal key manager), first disable it and then you can enable it, otherwise just enable it:
+- If Encryption at Rest is currently enabled (for example using the SolidFire internal key manager), first disable it and then you can enable encryption, otherwise just enable it:
 
 ```json
 {
@@ -351,7 +355,7 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
 }
 ```
 
-- Empty response means it's OK. Error like this means there's a problem (in this case because I'm using Element Demo VM which doesn't support Encryption at Rest):
+- An empty response means the request was successful. Error like this below means there's a problem (in this case because I'm using Element Demo VM which doesn't support Encryption at Rest):
 
 ```json
 {
@@ -367,3 +371,4 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
 ## Video walkthrough of KMIP configuration steps
 
 - [NetApp HCI and SolidFire & SafeNet KeySecure](https://youtu.be/_OcmptzgSRQ)
+
