@@ -3,8 +3,10 @@
 - [SolidFire Encryption at Rest with External Key Manager (Thales SafeNet KeySecure)](#solidfire-encryption-at-rest-with-external-key-manager-thales-safenet-keysecure)
   - [What's inside](#whats-inside)
   - [Workflow](#workflow)
-    - [Notes](#notes)
-    - [Automate with PowerShell](#automate-with-powershell)
+  - [Notes](#notes)
+    - [Customize Ciphers for SolidFire TLS certificate](#customize-ciphers-for-solidfire-tls-certificate)
+    - [Automate KMIP integration with PowerShell](#automate-kmip-integration-with-powershell)
+    - [KeySecure Management Console](#keysecure-management-console)
   - [Create SolidFire Cluster Key Pair](#create-solidfire-cluster-key-pair)
   - [Create CSR](#create-csr)
   - [Sign SolidFire Cluster CSR with CA key in SafeNet KeySecure UI](#sign-solidfire-cluster-csr-with-ca-key-in-safenet-keysecure-ui)
@@ -12,36 +14,38 @@
   - [Attach KMIP Server to KMIP Provider](#attach-kmip-server-to-kmip-provider)
   - [Test Key Provider and Server](#test-key-provider-and-server)
   - [Enable Encryption at Rest with External Key Manager](#enable-encryption-at-rest-with-external-key-manager)
-  - [Video walkthrough](#video-walkthrough)
+  - [Video walkthrough of KMIP configuration steps](#video-walkthrough-of-kmip-configuration-steps)
 
 ## What's inside
 
 - Thales SafeNet KeySecure v8.10.1 (VM, IP 192.168.1.35)
-- SolidFire (Element) OS v11.7 ((Cluster "taiwan", Cluster  Management Virtual IP 192.168.1.30)
+- SolidFire (Element) OS v11.7 (Cluster "taiwan", Cluster  Management Virtual IP 192.168.1.30)
 
 ## Workflow
 
 These aren't recommended or required steps. This is simply what I did to get to the last step (enable encryption at rest) without errors.
 
 - KeySecure
-  - Configure KeySecure CA
-  - Enable KMIP server (I used `OU` to map certificates to accounts, mostly because vCenter requires it)
-  - Create Local User (same as SolidFire cluster name; may not be necessary)
+  - Configure KeySecure CA - presumably you want to use KeySecure to issue TLS certificates
+  - Enable KMIP server (I used `OU` to map certificates to accounts, mostly because vCenter requires it; if vCenter isn't involved, i.e. you only care about SolidFire, this isn't required)
+  - Create Local User (same as SolidFire cluster name; may not be necessary if you won't issue TLS for SolidFire nodes or will use another account for SolidFire nodes)
 - SolidFire
-  - Create cluster-specific pub-priv key pair and CSR
+  - Create a SolidFire cluster-specific pub-priv key pair and Certificate Signing Request (if you want to replace the pre-installed TSL certificate with a proper TLS certificate and sign the CSR with KeySecure; you can use another CA or Intermedia CA; SolidFire doesn't care)
+  - Sign the CSR with KeySecure and upload TLS certificate to SolidFire cluster
+    - SolidFire mNode TLS certificate upload process: use `SetNodeSSLCertificate` API
   - Create KMIP Provider and Server, and pair Server with Provider
     - Multiple KMIP Providers and Servers may be configured. One could have one KMIP Provider with four Servers (VMs) for two on-prem sites, and another with 2 VMs in public cloud, for example
   - Test KMIP provider and server
-  - Disable (if enabled) and then enable Encryption at Rest
+  - Disable (if enabled with SolidFire-manged internal encryption keys) Encryption at Rest, and then Enable Encryption at Rest for transparent online change (data won't need to be encrypted; this only rotates encryption keys)
 - Check KeySecure and SolidFire Logs
   - KeySecure log viewer should show KeyGen request and other activity
   - SolidFire or NetApp HCI should not show alerts about external KMIP not working
 
-### Notes
+## Notes
 
 - KMIP Authentication settings used:
   - Password Authentication: Optional
-  - Client Certificate Authentication: Used for SSL session and username
+  - Client Certificate Authentication: Used for TLS session and username
   - Trusted CA List Profile: Default
   - Username Field in Client Certificate: `OU` (Organizational Unit) (for vCenter)
 - Local user accounts were used; an account named `$CLUSTERNAME` was created in KeySecure (I'm not sure if this is required, to have a user account that matches cluster name)
@@ -50,16 +54,48 @@ These aren't recommended or required steps. This is simply what I did to get to 
   - tldr: KeySecure may be used to sign two certificates for SolidFire; keys and CSR for the one used for KMIP must be generated with the SolidFire API, the keys and CSR for the type used for SolidFire API endpoint and the nodes' Web UI must be created externally (KeySecure Web UI, OpenSSL CLI, etc.). For KMIP you need the former, but it makes sense to generate the both since you don't want to use the (built-in) self-signed certificate for Web/API anyway
 - It is strongly recommended to thoroughly understand KeySecure (or find somebody who does) for actual production use
 
-![KeySecure KMIP Server](./01-kmip-server.png)
+### Customize Ciphers for SolidFire TLS certificate
 
-![KeySecure Local Users](./02-local-users.png)
+Most users will want to replace the built-in TLS certificate with own. Another frequent ask is to add or remove certain ciphers. This isn't directly related to KMIP and can be skipped if your only purpose is to set up KMIP (maybe you already have proper TLS certificates in place).
 
-### Automate with PowerShell
+Do **not** enable FIPS if you don't need it, because it cannot be disabled. Instead, use `GetSupportedTlsCiphers` (`GetNodeSupportedTlsCiphers` for a node) to see what ciphers are can be used and then use `SetSupplementalTlsCiphers` (`SetNodeSupplementalTlsCiphers` for a node) to set the ones you want to use. If a cipher is missing but you need it, contact NetApp Support. Active TLS ciphers can be obtained with `GetActiveTlsCiphers` (`GetNodeActiveTlsCiphers` for a node.)
 
-With the release of SolidFire PowerShell Tools 1.7, we can automate this from the CLI (for example one of the new cmdlets is `Add-SFKeyServerToProviderKmip` - search for `Kmip` cmdlets to find the rest). Get SolidFire PowerShell Tools v1.7 or higher (NetApp Support login required) to get started:
+- Get SSL certificate:
+
+```json
+{
+    "method": "GetSupportedTlsCiphers",
+    "params": { },
+    "id": 1
+}
+```
+
+- Set SSL certificate:
+
+```json
+{
+    "method": "SetSupplementalTlsCiphers",
+    "params": {
+        "supplementalCiphers": [ <CSV List of quoted ciphers from GetSupportedTlsCiphers> ]
+    },
+    "id": 1
+}
+```
+
+You can find a video example of TLS certificate creation and upload process in [this](https://www.youtube.com/watch?v=xDik8l82IG0) YouTube video.
+
+### Automate KMIP integration with PowerShell
+
+With the release of SolidFire PowerShell Tools 1.7, we can automate KMIP-related steps from the CLI (for example one of the new cmdlets is `Add-SFKeyServerToProviderKmip` - search for `Kmip` cmdlets to find the rest). Get SolidFire PowerShell Tools v1.7 or higher (NetApp Support login required) to get started:
 
 - Element PowerShell Tools 1.7: https://mysupport.netapp.com/site/tools/tool-eula/elem-powershell-tools
   - Release Notes: https://mysupport.netapp.com/api/tools-service/toolsbinary/elem-powershell-tools/download/NetAppElementPowerShellReleaseNotes1_7.pdf
+
+### KeySecure Management Console
+
+![KeySecure KMIP Server](./01-kmip-server.png)
+
+![KeySecure Local Users](./02-local-users.png)
 
 ## Create SolidFire Cluster Key Pair
 
@@ -154,6 +190,15 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
 ![KeySecure Signed CSR](./07-signed-cert.png)
 
 ## Create KMIP Key Provider and Server(s)
+
+The following steps are directly related to KMIP configuration:
+- Create KMIP provider
+- Create KMIP server(s)
+- Register server(s) with provider
+- Test KMIP integration
+- Enable external keys with KMIP configuration
+
+Note:
 
 - Responses were empty (which means no error)
 - Request which simply returns a number (e.g. 1, on the first succesful attempt) of the created Key Provider (in theory you could have 2, say one per site, for HA):
@@ -253,7 +298,7 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
 }
 ```
 
-## Attach KMIP Server to KMIP Provider 
+## Attach KMIP Server to KMIP Provider
 
 - Request to add Server ID 11 to Provider ID 5 (your IDs are likely to be different):
 
@@ -294,7 +339,7 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
 
 ## Enable Encryption at Rest with External Key Manager
 
-- If encryption at rest is enabled, first disable it and then you can enable it, otherwise just enable it:
+- If Encryption at Rest is enabled (for example using the SolidFire internal key manager), first disable it and then you can enable it, otherwise just enable it:
 
 ```json
 {
@@ -319,6 +364,6 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
 }
 ```
 
-## Video walkthrough
+## Video walkthrough of KMIP configuration steps
 
 - [NetApp HCI and SolidFire & SafeNet KeySecure](https://youtu.be/_OcmptzgSRQ)

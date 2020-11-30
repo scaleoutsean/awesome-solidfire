@@ -61,7 +61,7 @@
         FunctionName: Set-SFQosException
         Created by  : scaleoutSean (github.com/scaleoutsean)
         Date        : 2020/11/28
-	    License     : The BSD 3.0 License
+        License     : The BSD 3.0 License
 
     .LINK
         https://github.com/scaleoutsean/awesome-solidfire
@@ -91,7 +91,7 @@ function Set-SFQosException {
             $VolList = (Get-SFVolume -Name $VolumeNameOrId -ExcludeVVOLs)
             if ((($VolList.Length) -gt 1) -or (($VolList.Length) -eq 0)) {
                 Write-Host "Volume Name found:" $VolList 
-                Write-Error -Message "ERROR: Volume Name provided does not exist or is not unique:"
+                Write-Error -Message "ERROR: Volume Name provided does not exist or is not unique"
             } else {
                 $SFVolumeId = ($VolList[0].VolumeID)
                 return $SFVolumeId
@@ -117,7 +117,7 @@ function Set-SFQosException {
             try {
                 $QosId = (Get-SFQoSPolicy -QoSPolicyID $SFQosPolicyId).QoSPolicyID
             } catch {
-                Write-Error -Message "ERROR: Unable to find target SFQosPolicyId: " $SFQosPolicyId
+                Write-Error -Message "ERROR: Unable to find target SFQosPolicyId:" $SFQosPolicyId
                 break
             }
             if ($QoSId) {
@@ -149,7 +149,7 @@ function Set-SFQosException {
         
         $SFVolumeAttrs = (Get-SFVolume -VolumeID $SFVolumeId).Attributes
         if ($SFVolumeAttrs.SfQosId -eq $SFQosPolicyId) {
-            Write-Host "WARNING: New and existing QoS Policy ID are identical to SfQosId. Nothing to do" -ForegroundColor DarkYellow
+            Write-Host "WARNING: New and existing QoS Policy ID are identical to SfQosId" -ForegroundColor DarkYellow
             Write-Error -Message "ERROR: To reset the Volume QoS to SfQosId value, run this cmdlet without SFQosPolicyId parameter"
         }
         

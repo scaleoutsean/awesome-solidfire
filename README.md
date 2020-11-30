@@ -106,7 +106,7 @@
 - Hybrid Cloud and Data Fabric integrations for a multi-cloud (including on-premises Private Cloud) world. Supports NetApp ONTAP Select, Cloud Volumes on HCI, and major Kubernetes platforms
 - Easily and quickly onboard VM or container workloads with confidence. Control network and compute resources through hypervisor and container engine. Control storage capacity and QoS with SolidFire
 - Never buy storage, compute and software that you don't need (a norm with _shared core_ HCI clusters)
-- Probably the best HCI platform for migration of old vSphere 5.x clusters to a modern vSphere and container infrastructure
+- Probably the best HCI platform for easy migration of old vSphere clusters to a modern vSphere and container infrastructure, and keeping your options open (due to the ability to connect to external non-HCI storage, use 3rd party servers and use multiple hypervisors)
 - Netapp HCI lets you repurpose your HCI compute nodes. VMware to OpenStack or the other way around, for example
 
 ## Resources and Solutions
@@ -184,6 +184,7 @@
 
 - Rancher on NetApp HCI: See the official NetApp HCI solutions page for additional details. I have a personal site with notes on this solution [here](https://scaleoutsean.github.io/solid-rancher)
 - Provision it to NetApp HCI vSphere clusters from the CLI with [ez-rancher](https://github.com/NetApp/ez-rancher/)
+- Check out my "Rancher with SolidFire" notes at [solid-rancher](https://scaleoutsean.github.com/solid-rancher/)
 
 #### Google Anthos
 
@@ -364,19 +365,21 @@
 
 ### Generic
 
-- `Set-SFQosException.psm1` - takes a backup of a Volume's QoS Policy ID value and then sets the volume to a user-provided "temporary" QoS Policy ID. If the Policy ID is not provided, it resets the volume to the back-up value which is stored in Volume Attributes. Might be useful for any tasks that need a temporary change in performance profile. Written with SolidFire PowerShell Tools 1.6 and PowerShell 7 on Linux, but should work with PowerShell 6 or newer on Windows
+- `Set-SFQosException` - set "temporary" Storage Policy on a SolidFire volume 
+  - When Storage QoS Policy ID is passed to this cmdlet, it takes Volume's current Storage QoS Policy ID value, stores it in Volume Attributes, and sets Volume to user-provided "temporary" Storage QoS Policy ID 
+  - If Storage QoS Policy ID is not provided, it resets Volume to value stored in Volume Attributes 
+  - Can be used for any task that can benefit from short-lived change in volume performance settings. Written with SolidFire PowerShell Tools 1.6 and PowerShell 7 on Linux, but should work with PowerShell 6 or newer on Windows 10 or Windows Server 2016 or newer
 
 ### VMware
 
-- SolidFire devices start with `naa.6f47acc1`
+- SolidFire device names start with `naa.6f47acc1`
 - PowerShell [script](https://github.com/kpapreck/test-plan/blob/master/kp-clone-snap-to-datastore.ps1) to clone a VMFS6 volume from a SolidFire snapshot and import it to vCenter
-- PowerShell [examples](https://github.com/solidfire/PowerShell/tree/release/1.5.1/VMware) for VMware
-
-Do not use old performance-tuning scripts from the SolidFire PowerShell repo. They were written for ESXi 5.5 and 6.0. ESXi 6.5 and later have appropriate SolidFire MPIO settings built-in and require no special modification or tuning
+- PowerShell [examples](https://github.com/solidfire/PowerShell/tree/release/1.5.1/VMware) for VMware. Do not use old performance-tuning scripts from the SolidFire PowerShell repo. They were written for ESXi 5.5 and 6.0. ESXi 6.5 and later have appropriate SolidFire MPIO settings built-in and require no special modification or tuning
 
 ### Windows
 
 - PowerShell [scripts for Hyper-V 2012 R2](https://github.com/solidfire/PowerShell/tree/master/Microsoft) (need a refresh for Windows Server 2016 and 2019)
+- See the SolidFire Windows repo for some newer PowerShell scripts specific to SolidFire with Windows
 
 ### SolidFire Objects
 
@@ -424,11 +427,12 @@ Timestamp        : 1970-01-01T00:00:00Z
 
 - SolidFire uses unique integer IDs to distinguish among most objects. While some Objects must have unique names, it is not the case for all Objects
 - Main Object Names that can be non-unique: Volume, Volume Access Group, QoS Policy, Snapshot, Group Snapshot, Snapshot Schedule
+  - It is strongly recommended to adopt a naming convention and avoid duplicate object names. Just because they're possible, it doesn't mean you should do it, especially if your management processes do not rely on Volume IDs 
 - While it is a best practice to pick different names, SolidFire won't force you to do that, so either rely on Object IDs or stick to naming conventions for your environment or rely on Object IDs to distinguish among Objects. Note, however, that in the latter case any monitoring or other systems that use and display Names may malfunction or display confusing information
 
 ### Date and Time in SolidFire API
 
-- The SolidFire API uses the [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) formatted UTC clock.
+- The SolidFire API uses [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) formatted UTC time.
 
 ## Questions and Answers
 
@@ -440,9 +444,9 @@ A: Absolutely not. For official information please visit the NetApp Web sites (s
 
 Q: I have a quick question about ...
 
-A: Please join [the NetApp community Slack](https://netapppub.slack.com/join/shared_invite/enQtNzc0MDAwNzQ5MDc2LTE4ZDQxODgwZmY3NGUwNWM2OGVkMDlkNjZjNTEzZDYwMDMwYWM1M2E4ZmNiNzYyMWE5NmVkYTMyODdlMzhhOTI) and ask your question in the `#netapp-hci` channel. If you need more eyes on the question or already have an account at the  [NetApp Community Forum](https://community.netapp.com/t5/AFF-NVMe-EF-Series-and-SolidFire-Discussions/bd-p/flash-storage-systems-discussions) please ask there and tag your question with 'solidfire'.
+A: Please join [the NetApp community Slack](https://join.slack.com/t/netapppub/shared_invite/zt-jdnzc1o7-Up1AIoNzZ4fEtONPG0_6Fw) and ask your question in the `#netapp-hci` channel. If you need more eyes on the question or already have an account at the  [NetApp Community Forum](https://community.netapp.com/t5/AFF-NVMe-EF-Series-and-SolidFire-Discussions/bd-p/flash-storage-systems-discussions) please ask there and tag your question with 'solidfire'.
 
-### Element Demo VM
+### SolidFire / Element Demo VM
 
 Q: Is Element Demo VM a simulator?
 
@@ -452,9 +456,9 @@ Q: Can Element Demo VM be used to estimate efficiency from compression and dedup
 
 A: It does compress and deduplicate, but I haven't compared how it fares against physical SolidFire clusters.
 
-Q: Can I throw a couple of VMs on an Element Demo VM datastore to estimate how much I could save?
+Q: Can I throw couple of VMs on an Element Demo VM datastore to estimate how much I could save?
 
-A: I believe it should be fairly accurate, but I haven't tested it. Get a representative sample of 5-10 VMs (up to 400GB combined) and clone them to an Element Demo VM-based test datastore. Give it a couple of hours to churn through that data and take a look.
+A: I believe that should be fairly accurate, but I haven't tested it. Get a representative sample of 5-10 VMs (up to 400GB combined) and clone them to an Element Demo VM-based test datastore. Give it a couple of hours to churn through that data and take a look.
 
 ### Logging and Monitoring
 
