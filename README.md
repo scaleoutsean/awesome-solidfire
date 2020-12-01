@@ -43,6 +43,7 @@
       - [SNMP MIBs](#snmp-mibs)
       - [Splunk](#splunk)
       - [Syslog Forwarding](#syslog-forwarding)
+      - [Security and General Auditing](#security-and-general-auditing)
       - [Event Notifications](#event-notifications)
     - [Backup, Restore, DR and BC (Site Failover)](#backup-restore-dr-and-bc-site-failover)
     - [Security](#security)
@@ -59,7 +60,7 @@
     - [Date and Time in SolidFire API](#date-and-time-in-solidfire-api)
   - [Questions and Answers](#questions-and-answers)
     - [Meta](#meta)
-    - [Element Demo VM](#element-demo-vm)
+    - [SolidFire / Element Demo VM](#solidfire--element-demo-vm)
     - [Logging and Monitoring](#logging-and-monitoring)
     - [Hypervisors and Containers](#hypervisors-and-containers)
     - [Workloads](#workloads)
@@ -313,6 +314,14 @@
 - mNode and NetApp Hybrid Cloud Control (HCC)
   - There are two components: mNode logs (rsyslog) and HCC (Docker service, in the current version). Both can be configured to forward logs to external syslog target (TCP or UDP). Only the former can forward to multiple destinations.
   - `GET /logs` from HCC may be used to obtain the logs of individual HCC services (containers), which Docker service currently does not forward. This could be coded into a "polling" script written in PowerShell or Python, for example. See the HCC API for more on using this API method
+
+#### Security and General Auditing
+
+- See Syslog Forwarding above
+- Due to space constraints within SolidFire storage nodes and mNode, if longer log retention is required it is suggested to forward logs to external destination
+- See [TR-4840](https://www.netapp.com/pdf.html?item=/media/19389-tr-4840.pdf) and SolidFire documentation for details on authentication and authorization (including MFA/2FA)
+- White paper on [PCI DSS](https://www.coalfire.com/resources/white-papers/netapp-hci-verified-architecture-for-pci-dss) contains information for users with PCI DSS compliance requirements
+- See the KMIP notes in this repo for practical notes on TLS certificates and KMIP
 
 #### Event Notifications
 
