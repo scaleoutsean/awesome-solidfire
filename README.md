@@ -313,7 +313,7 @@
   - VMware-based NetApp HCI surfaces Element storage cluster events and alerts to vCenter; if ActiveIQ is enabled, these alerts are also sent to ActiveIQ
 - mNode and NetApp Hybrid Cloud Control (HCC)
   - There are two components: mNode logs (rsyslog) and HCC (Docker service, in the current version). Both can be configured to forward logs to external syslog target (TCP or UDP). Only the former can forward to multiple destinations.
-  - `GET /logs` from HCC may be used to obtain the logs of individual HCC services (containers), which Docker service currently does not forward. This could be coded into a "polling" script written in PowerShell or Python, for example. See the HCC API for more on using this API method
+  - `GET /logs` from HCC may be used to obtain the logs of individual HCC services (containers), which Docker service currently does not forward. This could be coded into a "polling" script written in PowerShell or Python, for example. See the HCC API for more on using this API method or [this](https://scaleoutsean.github.io/2020/12/08/get-bearer-token-for-netapp-hci-hybrid-cloud-control-logs.html) article.
 
 #### Security and General Auditing
 
@@ -344,9 +344,11 @@
   - Site failover
     - SolidFire SRA for VMware SRM
     - Some of the backup offerings mentioned above provide functionality similar to VMware SRM
-- Trident `solidfire-san` back-end
+- CSI Trident with `solidfire-san` back-end
   - Can be backed up by creating thin clones and presenting them to a VM or container running a backup software agent (example with [Duplicacy](https://youtu.be/bvI7pgXKh6w))
-  - Enterprise backup software can also backup Trident volumes (example: [Commvault](https://documentation.commvault.com/11.21/essential/123637_system_requirements_for_kubernetes.html))
+  - Enterprise backup software can also backup Trident volumes. Examples in alphabetical order:
+    - [Commvault](https://documentation.commvault.com/11.21/essential/123637_system_requirements_for_kubernetes.html))
+    - [Kasten](https://docs.kasten.io/latest/install/storage.html?highlight=netapp#netapp-trident)
 
 ### Security
 
@@ -441,7 +443,7 @@ Timestamp        : 1970-01-01T00:00:00Z
 
 ### Date and Time in SolidFire API
 
-- The SolidFire API uses [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) formatted UTC time.
+- The SolidFire and HCC (Hybrid Cloud Control) APIs use [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) formatted UTC time.
 
 ## Questions and Answers
 
@@ -471,7 +473,7 @@ A: I believe that should be fairly accurate, but I haven't tested it. Get a repr
 
 ### Logging and Monitoring
 
-Q: I'd like to do some SoliFire logging stuff, how do SolidFire logs look like?
+Q: I'd like to do something with SoliFire logs, how do SolidFire logs look like?
 
 A: The following lines were obtained by forwarding SolidFire cluster log to syslog-ng (from which we can forward it elsewhere): the second is an API call and therefore in the JSON format). Element Software creates log using the rsyslog format (RFC-5424 and RFC-3164 (source: [Wikipedia](https://en.wikipedia.org/wiki/Rsyslog#Protocol)) and timestamps (format: `MMM  d HH:mm:ss`; RFC-3336). To make archived SolidFire logs more useful we'd have to create several filters (to gather only useful content and convert it to a format that's easier to analyse) somewhere along our log forwarding path. For comparison, vRealize Log Insight accepts formats in RFC-6587, RFC-5424, and RFC-3164 - see the Log Insight [link above](#vmware--blue-medora-true-visibility-for-vmware-vrealize-operations).
 
@@ -504,11 +506,11 @@ A: If Trident works with it, SolidFire can too. Some K8s distributions known to 
 
 Q: Should I use SolidFire with (or for) ...
 
-A: It depends. At the highest level of abstraction SolidFire is suitable for 95% of apps people virtualize or containerize on on-premises x86_64 infrastructure. If you think you're "one percenter", you may want to discuss your requirements with a NetApp SolidFire or Cloud Infrastructure architect. NetApp HCI may be able to accommodate even extreme workloads if data processing to external NFS or iSCSI storage such as NetApp AFF or E-Series. Some HCI vendors force such storage workloads on their HCI storage which doesn't work well (or sort-of-works, but at a much higher price).
+A: It depends. At the highest level of abstraction SolidFire is suitable for 95% of apps people virtualize or containerize on on-premises x86_64 infrastructure. If you think you're "one percenter", you may want to discuss your requirements with a NetApp SolidFire or Cloud Infrastructure architect. NetApp HCI may be able to accommodate even extreme workloads if data processing to external NFS or iSCSI storage such as NetApp AFF or E-Series (see [NVA-1152-DESIGN](https://www.netapp.com/pdf.html?item=/media/21016-nva-1152-design.pdf)). Some HCI vendors force such storage workloads on their HCI storage which doesn't work well (or sort-of-works, but at a much higher price).
 
 Q: Is NetApp HCI suitable for AI, Hadoop, Splunk and similar "heavy" workloads?
 
-A: For some applications from that stack (such as databases) it is, but for HDFS you may consider connecting compute nodes to ONTAP systems (usually NFSv3 or NFSv4) or E-Series (Raw Device Mapping to iSCSI, formatted with HDFS or [BeeGFS](https://blog.netapp.com/solution-support-for-beegfs-and-e-series/), for example)
+A: For some applications from that stack (such as databases) it is, but for HDFS you may consider connecting compute nodes to ONTAP systems (usually NFSv3 or NFSv4) or E-Series (physical Raw Device Mapping (pRDM) to iSCSI, formatted with HDFS or [BeeGFS](https://blog.netapp.com/solution-support-for-beegfs-and-e-series/), for example.) [NVA-1152-DESIGN](https://www.netapp.com/pdf.html?item=/media/21016-nva-1152-design.pdf) shows how adding the smallest EF-Series model can add 5 GB/s of throughput to NetApp HCI clusters without any investment in FC switches or new HCI compute nodes.
 
 ### Storage Services
 

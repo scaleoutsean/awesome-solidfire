@@ -280,7 +280,7 @@ N+Uzt/Jq6tcsE562AuPRyz3JOYe94OBF6i0ol7Dq7MRBVg==
 }
 ```
 
-- Response (note and remember your keyServerID, in this case 11, as well as keyProvider ID from the step above; you can use `List` methods to find the IDs of registered KMIP provider(s) if you've forgotten them:
+- Response (note and remember your keyServerID, in this case 11, as well as keyProvider ID from the step above; you can use `List` methods to find the IDs of registered KMIP provider(s) if you've forgotten them):
 
 ```json
 {
