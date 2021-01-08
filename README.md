@@ -183,9 +183,8 @@
 
 #### Rancher
 
-- Rancher on NetApp HCI: See the official NetApp HCI solutions page for additional details. I have a personal site with notes on this solution [here](https://scaleoutsean.github.io/solid-rancher)
-- Provision it to NetApp HCI vSphere clusters from the CLI with [ez-rancher](https://github.com/NetApp/ez-rancher/)
-- Check out my "Rancher with SolidFire" notes at [solid-rancher](https://scaleoutsean.github.com/solid-rancher/)
+- Rancher on NetApp HCI: See the official NetApp HCI solutions page for additional details. I have a personal site with notes on this solution from a SolidFire angle [here](https://scaleoutsean.github.io/solid-rancher)
+- Provision Rancher K8s to NetApp HCI vSphere clusters from the CLI with [ez-rancher](https://github.com/NetApp/ez-rancher/)
 
 #### Google Anthos
 
@@ -217,9 +216,9 @@
 #### CLI
 
 - SolidFire has two fully functional CLI's - PowerShell & Python
-- Current releases: free download for registered users from [https://mysupport.netapp.com/site/tools](https://mysupport.netapp.com/site/tools) (search for 'element' in Tools). Works with PowerShell 6 and 7 on Win/Lin/OS X on x64 architecture.
+- Current releases: download with `pip` (Python 3 and 2) and `Install-Module` (PowerShell), or Github, or (for registered users) from [https://mysupport.netapp.com/site/tools](https://mysupport.netapp.com/site/tools) (search for 'element' in Tools)
 - Older releases (work fine with latest Element, but connect to older API endpoints and use older API version):
-  - SolidFire [PowerShell Tools (Win/Lin)](https://github.com/solidfire/PowerShell) for the x86_64 architecture. It's not (yet) officially supported, but module `SolidFire.Core` has been field-tested and found to work on ARM64 (PowerShell 6) and with PowerShell 7 (Ubuntu 18.04)
+  - SolidFire [PowerShell Tools (Win/Lin)](https://github.com/solidfire/PowerShell) for the x86_64 architecture. It's not officially supported, but module `SolidFire.Core` has been field-tested and found to work on ARM64 (PowerShell 6) and with PowerShell 7 (Ubuntu 18.04)
   - SolidFire [Python CLI (Win/Lin/OS X)](https://github.com/solidfire/solidfire-cli)
 
 #### SolidFire/Element Software Development Kits (SDKs)
@@ -338,6 +337,7 @@
   - Commvault
   - Rubrik
   - Veeam BR
+- E/EF-Series (with iSCSI host interface) attached to NetApp HCI is ideal fast Tier 1 backup storage (gigabytes per second). You can find indicators of backup and restore performance in [this blog post](https://scaleoutsean.github.io/2020/12/30/netapp-hci-ef280-diskspd-for-backup.html)
 - You can also replicate to, and then backup from ONTAP, which becomes attractive with large backup jobs: set up SolidFire SnapMirror to an ONTAP system with NL-SAS disks and backup the volume on ONTAP. When you have to backup a 20TB database on HCI, you're better off backing it up with NetApp HCI replicated to ONTAP than directly from HCI (either NetApp or any other)
 - DR
   - Native Synchronous and Asynchronous Replication - see NetApp TR-4741 or newer
@@ -482,6 +482,10 @@ Jun  3 16:14:46 192.168.1.29 master-1[20395]: [APP-5] [API] 24018 DBCallback htt
 Jun  3 16:14:46 192.168.1.29 master-1[20395]: {"action":"ApiCall","idg":"1775127282990285","idx":294566,"system":"Cluster","utc":"2020-06-03T16:14:46.058806Z","ver":"1.1","xClusterApiCall":{"AuthMthd":"Cluster","Method":"ListSyncJobs","SourceIP":"192.168.1.12","Threads":1,"Time":3,"TotalThreads":16,"Username":"admin"}}
 ```
 
+Q: How can I get mNode and HCC logs?
+
+A: Simple answer: forward mNode VM syslog out, and use the mNode API to get HCC logs. The details can be found [here](https://scaleoutsean.github.io/2020/11/27/solidfire-mnode-hcc-log-forwarding.html).
+
 ### Hypervisors and Containers
 
 Q: What hypervisor platforms work with SolidFire?
@@ -508,9 +512,12 @@ Q: Should I use SolidFire with (or for) ...
 
 A: It depends. At the highest level of abstraction SolidFire is suitable for 95% of apps people virtualize or containerize on on-premises x86_64 infrastructure. If you think you're "one percenter", you may want to discuss your requirements with a NetApp SolidFire or Cloud Infrastructure architect. NetApp HCI may be able to accommodate even extreme workloads if data processing to external NFS or iSCSI storage such as NetApp AFF or E-Series (see [NVA-1152-DESIGN](https://www.netapp.com/pdf.html?item=/media/21016-nva-1152-design.pdf)). Some HCI vendors force such storage workloads on their HCI storage which doesn't work well (or sort-of-works, but at a much higher price).
 
-Q: Is NetApp HCI suitable for AI, Hadoop, Splunk and similar "heavy" workloads?
+Q: Is NetApp HCI suitable for AI, Splunk, Elasticsearch and similar "heavy" workloads?
 
 A: For some applications from that stack (such as databases) it is, but for HDFS you may consider connecting compute nodes to ONTAP systems (usually NFSv3 or NFSv4) or E-Series (physical Raw Device Mapping (pRDM) to iSCSI, formatted with HDFS or [BeeGFS](https://blog.netapp.com/solution-support-for-beegfs-and-e-series/), for example.) [NVA-1152-DESIGN](https://www.netapp.com/pdf.html?item=/media/21016-nva-1152-design.pdf) shows how adding the smallest EF-Series model can add 5 GB/s of throughput to NetApp HCI clusters without any investment in FC switches or new HCI compute nodes.
+
+  - [This post](https://scaleoutsean.github.io/2020/12/31/beegfs-on-netapp-hci-and-ef-series.html) demonstrates few GB/s with BeeGFS VMs (single HCI compute node attached to EF-Series EF280)
+  - Performance guesstimates for [Splunk](https://scaleoutsean.github.io/2020/12/31/virtualized-splunk-on-netapp-hci-and-ef-series.html) and [Elasticsearch](https://scaleoutsean.github.io/2021/01/04/elasticsearch-on-netapp-h615c-ef280.html)
 
 ### Storage Services
 
