@@ -38,17 +38,17 @@ ForEach ($v in $vs) {
     $r = (Get-SFVolumeEfficiency -VolumeID $SfVolId | Select-Object -Property Compression,Deduplication)
     $SfVolC = ([MATH]::Round($r.Compression,2)) ; $SfVolD = ([MATH]::Round($r.Deduplication,2))
     $SfVolT = ([MATH]::Round(($SfVolC * $SfVolD),2))
-    if ( $SfVolT -le $CutOff) {
-        Write-Host -ForegroundColor Red ($SfVolId, $SfVolName, $SfVolT)
-    } else {
-        Write-Host -ForegroundColor Green ($SfVolId, $SfVolName, $SfVolT)
-    }
     $vol = @{
         id = $SfVolId
         name = $SfVolName
         compression = $SfVolC
         deduplication = $SfVolD
         total = $SfVolT
+    }
+    if ( $SfVolT -le $CutOff) {
+        Write-Host -ForegroundColor Red $SfVolId `t $SfVolName `t $SfVolT
+    } else {
+        Write-Host -ForegroundColor Green $SfVolId `t $SfVolName `t $SfVolT
     }
     $SfVolEff.add($vol.id,$vol)
 }
@@ -57,7 +57,7 @@ Write-Host "==== SUMMARY: LOW EFFICIENCY VOLUMES (Volume ID, Name, Efficiency Fa
 ForEach ($k in $SfVolEff.keys) {
     ForEach ($kv in $SfVolEff[$k]) {
         if ($SfVolEff[$k]['total'] -le $CutOff) {
-            Write-Host -ForegroundColor Red $SfVolEff[$k]['id'], $SfVolEff[$k]['name'], $SfVolEff[$k]['total']
+            Write-Host -ForegroundColor Red $SfVolEff[$k]['id'] `t $SfVolEff[$k]['name'] `t $SfVolEff[$k]['total']
         }
     }
 }
