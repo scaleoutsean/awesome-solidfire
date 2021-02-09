@@ -349,6 +349,7 @@
   - Enterprise backup software can also backup Trident volumes. Examples in alphabetical order:
     - [Commvault](https://documentation.commvault.com/11.21/essential/123637_system_requirements_for_kubernetes.html))
     - [Kasten](https://docs.kasten.io/latest/install/storage.html?highlight=netapp#netapp-trident)
+    - [Velero](https://github.com/vmware-tanzu/velero) both [with](https://github.com/vmware-tanzu/velero-plugin-for-csi) and without CSI Plugin sort-of-works (CSI Plugin is beta quality, not yet production ready in Velero v1.5.3)
 
 ### Security
 
