@@ -348,7 +348,7 @@
   - Can be backed up by creating thin clones and presenting them to a VM or container running a backup software agent (example with [Duplicacy](https://youtu.be/bvI7pgXKh6w))
   - Enterprise backup software can also backup Trident volumes. Examples in alphabetical order:
     - [Commvault](https://documentation.commvault.com/11.21/essential/123637_system_requirements_for_kubernetes.html))
-    - [Kasten](https://docs.kasten.io/latest/install/storage.html?highlight=netapp#netapp-trident)
+    - [Kasten K10](https://docs.kasten.io/latest/install/storage.html?highlight=netapp#netapp-trident)
     - [Velero](https://github.com/vmware-tanzu/velero) both [with](https://github.com/vmware-tanzu/velero-plugin-for-csi) and without CSI Plugin sort-of-works (CSI Plugin is beta quality, not yet production ready in Velero v1.5.3)
 
 ### Security
@@ -377,10 +377,13 @@
 
 ### Generic
 
-- `Set-SFQosException` - set "temporary" Storage Policy on a SolidFire volume 
+Find them in `scripts` directory in this repo:
+
+- `Set-SFQosException` - set "temporary" Storage Policy on a SolidFire volume
   - When Storage QoS Policy ID is passed to this cmdlet, it takes Volume's current Storage QoS Policy ID value, stores it in Volume Attributes, and sets Volume to user-provided "temporary" Storage QoS Policy ID 
-  - If Storage QoS Policy ID is not provided, it resets Volume to value stored in Volume Attributes 
+  - If Storage QoS Policy ID is not provided, it resets Volume to value stored in Volume Attributes
   - Can be used for any task that can benefit from short-lived change in volume performance settings. Written with SolidFire PowerShell Tools 1.6 and PowerShell 7 on Linux, but should work with PowerShell 6 or newer on Windows 10 or Windows Server 2016 or newer
+- `Get-SFVolEff` - simple PowerShell script to list all volumes with storage efficiency below certain cut-off level (default: `2`, i.e. 2x)
 
 ### VMware
 
