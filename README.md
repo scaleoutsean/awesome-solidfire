@@ -367,7 +367,8 @@
 ### SolidFire/Element Demo VM
 
 - Element Demo VM: partners and customers may [download](https://mysupport.netapp.com/tools/info/ECMLP2848232I.html?pcfContentID=ECMLP2848232&productID=62139&pcfContentID=ECMLP2848232) (NetApp partner or support login required) and use it at no cost. Data and configuration persist after a reboot. It works with Kubernetes (Trident), VMware ESXi and other iSCSI clients supported by SolidFire. 
-  - SolidFire Demo VM can't be upgraded and scaled, but if you want to keep data, you can set up async replication to a new instance and terminate the old instance.
+  - SolidFire Demo VM can't be upgraded and scaled, but if you want to keep its data, you can stand up another one, set up async replication to a new instance and remove the old instance once replication is done. 
+  - VMware users can simply Storage vMotion their data. I tend to Storage vMotion data to another DS (not new SolidFire Demo VM), remove VCP plugin from vCenter, remove Demo VM's iSCSI devices from any clients, delete the old Demo VM and deploy new VM in its place. Then I redeploy VCP (and register Demo VM in HCC, if I use it). The reason for doing things this way is I want to retain the same Storage and Management IP (which isn't easy to do if you use SolidFire replication to copy data from old to new Demo VM).
 - NetApp OneCollect: this awesome and gratis multi-purpose utility that runs on Windows, Linux and in [Docker](https://hub.docker.com/r/netapp/onecollect/) containers is generally used for log data gathering but it can be used for configuration change tracking when set to run on schedule (watch [this video](https://www.youtube.com/watch?v=ksSs9wUi4sM) to get an idea - just don't run it on Element Management Node because that is not supported)
 
 ### Recorded Demos
