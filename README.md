@@ -339,7 +339,7 @@
   - Veeam BR
 - E/EF-Series (with iSCSI host interface) attached to NetApp HCI is ideal fast Tier 1 backup pool/storage (gigabytes per second). You can find indicators of backup and restore performance in [this blog post](https://scaleoutsean.github.io/2020/12/30/netapp-hci-ef280-diskspd-for-backup.html)
 - Open-source integrations for non-CSI environments (Borg, Duplicati, Restic, Borg, etc.)
-  - Snapshot, clone and mount SolidFire volumes, then use backup utility to replicate clone to backup storage (E-Series, etc.) or S3 (NetApp StorageGRID, AWS S3, etc.)
+  - Snapshot, clone and mount SolidFire volumes, then use a backup utility to replicate clone to backup storage (E-Series, etc.) or S3 (NetApp StorageGRID, AWS S3, etc.)
   - Video demo with [Duplicati](https://youtu.be/wP8nAgFo8og)
   - Kubernetes users can use Velero (see below)
 - You can also replicate to, and then backup from ONTAP, which becomes attractive with large backup jobs: set up SolidFire SnapMirror to an ONTAP system with NL-SAS disks and backup the volume on ONTAP. When you have to backup a 20TB database on HCI, you're better off backing it up with NetApp HCI replicated to ONTAP than directly from HCI (either NetApp or any other)
