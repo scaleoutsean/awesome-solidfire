@@ -337,7 +337,11 @@
   - Commvault
   - Rubrik
   - Veeam BR
-- E/EF-Series (with iSCSI host interface) attached to NetApp HCI is ideal fast Tier 1 backup storage (gigabytes per second). You can find indicators of backup and restore performance in [this blog post](https://scaleoutsean.github.io/2020/12/30/netapp-hci-ef280-diskspd-for-backup.html)
+- E/EF-Series (with iSCSI host interface) attached to NetApp HCI is ideal fast Tier 1 backup pool/storage (gigabytes per second). You can find indicators of backup and restore performance in [this blog post](https://scaleoutsean.github.io/2020/12/30/netapp-hci-ef280-diskspd-for-backup.html)
+- Open-source integrations for non-CSI environments (Borg, Duplicati, Restic, Borg, etc.)
+  - Snapshot, clone and mount SolidFire volumes, then use backup utility to replicate clone to backup storage (E-Series, etc.) or S3 (NetApp StorageGRID, AWS S3, etc.)
+  - Video demo with [Duplicati][https://youtu.be/wP8nAgFo8og)
+  - Kubernetes users can use Velero (see below)
 - You can also replicate to, and then backup from ONTAP, which becomes attractive with large backup jobs: set up SolidFire SnapMirror to an ONTAP system with NL-SAS disks and backup the volume on ONTAP. When you have to backup a 20TB database on HCI, you're better off backing it up with NetApp HCI replicated to ONTAP than directly from HCI (either NetApp or any other)
 - DR for Virtual Infrastructure
   - Native Synchronous and Asynchronous Replication - see NetApp TR-4741 or newer
@@ -350,7 +354,7 @@
     - Commvault B&R: [documentation](https://documentation.commvault.com/11.21/essential/123637_system_requirements_for_kubernetes.html) and [demo](https://www.youtube.com/watch?v=kiMf9Fkhxd8). Metallic VM is another offering with this technology.
     - Kasten K10: [documentation](https://docs.kasten.io/latest/install/storage.html?highlight=netapp#netapp-trident) and [demo](https://www.youtube.com/watch?v=ShrSDwzQ0uU)
     - Velero: [documentation](https://github.com/vmware-tanzu/velero) and [demo](https://www.youtube.com/watch?v=6RrlK2rmk24). It can work both [with](https://github.com/vmware-tanzu/velero-plugin-for-csi) and without CSI. CSI support sort-of-works (CSI Plugin is currently beta quality, not yet production ready in Velero v1.5.3)
-  - Storage cluster failover for Kubernetes with Trident CSI and two SolidFire clusters: use NetApp Trident's Volume Import feature (deep-dive walk-through and demo can be found [here](https://scaleoutsean.github.io/2021/03/20/kubernetes-solidfire-failover-failback.html))
+  - Storage cluster failover for Kubernetes with Trident CSI and two SolidFire clusters: use NetApp Trident's Volume Import feature (a quick demo (2m55s) can be viewed [here](https://youtu.be/aSFxlGoHgdA) while a deep-dive walk-through with a ton of detail can be found [here](https://scaleoutsean.github.io/2021/03/20/kubernetes-solidfire-failover-failback.html))
 
 ### Security
 
