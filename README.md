@@ -94,7 +94,7 @@
 
 - Fully programmable storage - from the initial node configuration to automated storage provisioning for containers
 - Public Cloud-like, set-and-forget iSCSI storage for clients ranging from bare metal x86-64 servers to hypervisors, VMs and containers
-- Always-on storage effciency with zero-performance impact. Compression and deduplication cannot be disabled
+- Always-on storage efficiency with zero-performance impact. Compression and deduplication cannot be disabled
 - Granular storage capacity and performance management - Minimum, Maximum and Burst storage policies may be assigned on a per-volume basis
 - General purpose scale-out storage clusters that are easy to provision, manage, refresh, and scale
 - Can be merged into or serve as a base for NetApp HCI - add two or more NetApp HCI compute nodes and convert your SolidFire cluster into NetApp HCI
@@ -138,7 +138,7 @@
 #### Microsoft Hyper-V
 
 - [solidfire-windows](https://github.com/scaleoutsean/solidfire-windows) - general notes on Windows Server 2019 Hyper-V with NetApp SolidFire
-- PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/Microsoft) for automated storage deployment with Microsoft Hyper-V (for Windows Server 2012 R2; requires minor updates for Microsoft Windows Server 2016 and 2019)
+- PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/Microsoft) for automated storage deployment with Microsoft Hyper-V (for Windows Server 2012 R2; requires minor updates for Microsoft Windows Server 2016+)
 - [SolidFire VSS Provider](https://mysupport.netapp.com/products/p/elementvss.html) for MS Windows (login required)
 
 #### Red Hat Virtualization (RHEV)
@@ -340,7 +340,7 @@
 - E/EF-Series (with iSCSI host interface) attached to NetApp HCI is ideal fast Tier 1 backup pool/storage (gigabytes per second). You can find indicators of backup and restore performance in [this blog post](https://scaleoutsean.github.io/2020/12/30/netapp-hci-ef280-diskspd-for-backup.html)
 - Open-source integrations for non-CSI environments (Borg, Duplicati, Restic, Borg, etc.)
   - Snapshot, clone and mount SolidFire volumes, then use backup utility to replicate clone to backup storage (E-Series, etc.) or S3 (NetApp StorageGRID, AWS S3, etc.)
-  - Video demo with [Duplicati][https://youtu.be/wP8nAgFo8og)
+  - Video demo with [Duplicati](https://youtu.be/wP8nAgFo8og)
   - Kubernetes users can use Velero (see below)
 - You can also replicate to, and then backup from ONTAP, which becomes attractive with large backup jobs: set up SolidFire SnapMirror to an ONTAP system with NL-SAS disks and backup the volume on ONTAP. When you have to backup a 20TB database on HCI, you're better off backing it up with NetApp HCI replicated to ONTAP than directly from HCI (either NetApp or any other)
 - DR for Virtual Infrastructure
