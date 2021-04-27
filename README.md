@@ -384,13 +384,14 @@
 
 ### Generic
 
-Find them in `scripts` directory in this repo:
+Find them in the `scripts` directory in this repo:
 
 - `Set-SFQosException` - set "temporary" Storage Policy on a SolidFire volume
   - When Storage QoS Policy ID is passed to this cmdlet, it takes Volume's current Storage QoS Policy ID value, stores it in Volume Attributes, and sets Volume to user-provided "temporary" Storage QoS Policy ID 
   - If Storage QoS Policy ID is not provided, it resets Volume to value stored in Volume Attributes
   - Can be used for any task that can benefit from short-lived change in volume performance settings. Written with SolidFire PowerShell Tools 1.6 and PowerShell 7 on Linux, but should work with PowerShell 6 or newer on Windows 10 or Windows Server 2016 or newer
 - `Get-SFVolEff` - simple PowerShell script to list all volumes with storage efficiency below certain cut-off level (default: `2`, i.e. 2x)
+- SolidFire-native Backup to S3 - run `$p` parallel jobs to backup a list of volumes identified by Volume ID (`$backup`) to S3-compatible object store
 
 ### VMware
 
@@ -429,7 +430,7 @@ Find them in `scripts` directory in this repo:
 - Not all environments assign ownership (tags) to teams or have the need to set attributes on SolidFire objects (for example, vSphere users can tag vSphere objects - they don't need to talk to SolidFire), but if they do, they can easily create reports and automate operations with only several lines of PowerShell
 - Efficiency report for all volumes tagged with one such owner (empty volumes have the efficiency of 1X, if Thin Provisioning is not counted):
 
-```pwsh
+```powershell
 PS > foreach ($vol in $(Get-SFVolume)){ if ($vol.Attributes.owner -eq "scaleoutSean"){Write-Host "Efficiency of Sean's Volumes:"`n "Volume ID:" $vol.VolumeID ; Get-SFVolumeEfficiency -VolumeID $vol.volumeID}}
 Efficiency of Sean's Volumes:
  Volume ID: 57

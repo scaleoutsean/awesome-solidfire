@@ -18,7 +18,7 @@
 ###############################################################################
 
 # Import-Module SolidFire
-# Connect-SFCluster
+# Connect-SFCluster 192.168.1.30 -Username admin -Password admin
 
 $CutOff = $args[0]
 $SfVolEff = @{}
@@ -33,7 +33,6 @@ if ($null -eq $CutOff) {
 Write-Host "==== OVERVIEW: VOLUMES' EFFICIENCY (Volume ID, Name, Efficiency Factor) ===="
 ForEach ($v in $vs) {
     $vol = @{}
-    $d = New-Object 'system.collections.generic.dictionary[string,string]'
     $SfVolName = $v.Name; $SfVolId = $v.VolumeID
     $r = (Get-SFVolumeEfficiency -VolumeID $SfVolId | Select-Object -Property Compression,Deduplication)
     $SfVolC = ([MATH]::Round($r.Compression,2)) ; $SfVolD = ([MATH]::Round($r.Deduplication,2))
