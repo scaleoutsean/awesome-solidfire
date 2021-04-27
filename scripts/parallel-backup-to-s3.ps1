@@ -9,6 +9,8 @@
 #   so 10 jobs should rarely hit the maximum on any single node               #
 #   If you want to run more jobs in parallel, consider to resubmit failed jobs#
 # - Backup array $backup contains Volume IDs to backup; any order will do     #
+# - If you can take quiesced snapshot before backup, set useLastSnap to $True #
+#   to have app-consistent (rather than crash-consistent) backup in S3        #
 # - For added security sign your script, move creds out and run from a secure #
 #   Windows workstation connected to SolidFire Management Network             #
 # - More:                                                                     #
