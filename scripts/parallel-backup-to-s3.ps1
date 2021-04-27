@@ -33,7 +33,7 @@ $backup | ForEach-Object -Parallel {
         Write-Host "Using last snapshot for Volume if any..."
         $snapshotID = (Get-SFSnapshot -VolumeID "$_" | Sort-Object -Descending -Property CreateTime | Select-Object -First 1).snapshotID
     } else { $snapshotID = 0 }
-    $b   = Invoke-SFApi -Method StartBulkVolumeRead -Params @{ "volumeID"= "$_"; "snapshotID" = $snapshotID.snapshotID ; "format" = "native"; "script" = "bv_internal.py"; "scriptParameters" = @{ "write" = @{ "awsAccess KeyID" = "AAAAAAAAAAAA"; "awsSecretAccessKey" = "BBBBBBBBBBB"; "bucket"= "backup"; "endpoint" = "s3"; "hostname" = "1.2.3.4:443" ;                                              "prefix" = $prefix}}}
+    $b   = Invoke-SFApi -Method StartBulkVolumeRead -Params @{ "volumeID"= "$_"; "snapshotID" = $snapshotID.snapshotID ; "format" = "native"; "script" = "bv_internal.py"; "scriptParameters" = @{ "write" = @{ "awsAccess KeyID" = "AAAAAAAAAAAA"; "awsSecretAccessKey" = "BBBBBBBBBBB"; "bucket"= "backup"; "endpoint" = "s3"; "hostname" = "1.2.3.4:443" ; "prefix" = $prefix}}}
     $vid = (Get-SFASyncResult -KeepResult:$True -ASyncResultID $b.asyncHandle).details.volumeID
     Write-Host "Bulk job running on VolumeID:" $vid
     while ($status -ne "complete"){
