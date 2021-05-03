@@ -85,9 +85,9 @@
 ### NetApp Enterprise Software-Defined Storage (eSDS)
 
 - SolidFire Enterprise SDS (eSDS) - containerized enterprise Software Defined Storage for certified 3rd party hardware appliances
-  - Apart from h/w monitoring and OS (Red Hat, in this case), main storage features are nearly identical to SolidFire and NetApp HCI
+  - Apart from h/w monitoring and the OS (Red Hat, in this case), most features are nearly identical to SolidFire and NetApp HCI
   - The first platform is HPE Proliant DL360
-  - [Documentation](https://docs.netapp.com/sfe-122/topic/com.netapp.nav.sfsds/home.html?cp=1)
+  - [Documentation](https://docs.netapp.com/us-en/element-software/index.html)
   - Ansible deployment scripts: `nar_solidfire*` scripts [such as this one](https://github.com/NetApp/ansible/tree/master/nar_solidfire_sds_install)
 
 ## Why SolidFire
@@ -391,7 +391,7 @@ Find them in the `scripts` directory in this repo:
   - If Storage QoS Policy ID is not provided, it resets Volume to value stored in Volume Attributes
   - Can be used for any task that can benefit from short-lived change in volume performance settings. Written with SolidFire PowerShell Tools 1.6 and PowerShell 7 on Linux, but should work with PowerShell 6 or newer on Windows 10 or Windows Server 2016 or newer
 - `Get-SFVolEff` - simple PowerShell script to list all volumes with storage efficiency below certain cut-off level (default: `2`, i.e. 2x)
-- SolidFire-native Backup to S3 - run `$p` parallel jobs to backup a list of volumes identified by Volume ID (`$backup`) to S3-compatible object store
+- SolidFire-native Backup to S3 - run `$p` parallel jobs to backup a list of volumes identified by Volume ID (`$backup`) to S3-compatible object store. The same script can be changed to restore in the same, parallel, fashion
 
 ### VMware
 
@@ -516,7 +516,7 @@ If unsure, contact NetApp with any questions or ask in the [NetApp Community For
 
 Q: Does SolidFire work with my Kubernetes?
 
-A: If Trident works with it, SolidFire can too. Some K8s distributions known to work are listed [here](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) but other CSI-compatible distros should work as well (for example Rancher). I recommend to check out Trident [issues](https://github.com/NetApp/trident/issues) as well to see if there's anything that you care about. Note that issues and requirements change between releases, so sometimes you may be better off with an older release in which case you shuold check supported requirements for older Trident releases.
+A: If Trident works with it, SolidFire can too. Some K8s distributions known to work are listed [here](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) but other CSI-compatible distros should work as well. I recommend to check out Trident [issues](https://github.com/NetApp/trident/issues) as well to see if there's anything that you care about. Note that issues and requirements change between releases, so sometimes you may be better off with an older release in which case you shuold check supported requirements for older Trident releases.
 
 ### Workloads
 
@@ -581,7 +581,7 @@ Q: What network switches are recommended for use with SolidFire?
 A: I think there's no officially recommended switch model or brand. Any enterprise-grade 10G (or faster) switch should work. Some switches are better, some worse.
 SolidFire can be ordered with Mellanox SN2010 switches (which work really well) and NetApp can deploy them and SolidFire for you (it usually takes just a couple of hours). Also available are SN2100 and SN2700.
 
-Q: What 4x25GBE copper and fiber breakout cables are available for SN2100 and SN2700?
+Q: What 4x25GBE copper and fiber breakout cables are available for NetApp HCI with SN2100 and SN2700?
 
 Consider using these:
 
