@@ -77,18 +77,18 @@
   - Shares storage nodes with the NetApp HCI product line
   - View all currently available models in 3D [here](https://apps.kaonadn.net/4817930843848704/index.html) (click on NetApp HCI))
 
-### NetApp HCI
-
-- NetApp HCI (NetApp HCI compute nodes connected via iSCSI to NetApp HCI storage nodes - some call it "disaggregated HCI" or dHCI)
-  - View all currently available models in 3D [here](https://apps.kaonadn.net/4817930843848704/index.html) (click on NetApp HCI))
-
 ### NetApp Enterprise Software-Defined Storage (eSDS)
 
 - SolidFire Enterprise SDS (eSDS) - containerized enterprise Software Defined Storage for certified 3rd party hardware appliances
   - Apart from h/w monitoring and the OS (Red Hat, in this case), most features are nearly identical to SolidFire and NetApp HCI
-  - The first platform is HPE Proliant DL360
+  - The first system supported by eSDS is HPE Proliant DL360
   - [Documentation](https://docs.netapp.com/us-en/element-software/index.html)
   - Ansible deployment scripts: `nar_solidfire*` scripts [such as this one](https://github.com/NetApp/ansible/tree/master/nar_solidfire_sds_install)
+
+### NetApp HCI
+
+- NetApp HCI (NetApp HCI compute nodes connected via iSCSI to NetApp HCI storage nodes - some call it "disaggregated HCI" or dHCI)
+  - View all currently available models in 3D [here](https://apps.kaonadn.net/4817930843848704/index.html) (click on NetApp HCI))
 
 ## Why SolidFire
 
@@ -112,7 +112,7 @@
 
 ## Resources and Solutions
 
-- You may want to check out the official [catalog of NetApp HCI solutions](https://docs.netapp.com/us-en/hci/solutions/index.html). Even though some of the solutions may require NetApp HCI, a lot of that content also applies to SolidFire
+- You may want to check out the official [catalog of NetApp HCI solutions](https://docs.netapp.com/us-en/hci/solutions/index.html). Even though some of the solutions may require NetApp HCI, a lot of that content also applies to SolidFire with 3rd party compute nodes (iSCSI clients) and networking
 - Where to find more:
   - Products: look under NetApp HCI or (storage-only) SolidFire in the [list of NetApp storage products](https://www.netapp.com/us/products/a-z/index.aspx)
   - Availability of products and support: for General Availability, End of Availability (EOA, also known as end of Sale), End of Support (EOS) info go to NetApp Support, search by model and filter results by "Product Communique"
@@ -120,6 +120,7 @@
 ### Cloud
 
 - Data synchronization to/from public cloud: Element OS supports NetApp SnapMirror (async) replication to/from [Cloud Volumes ONTAP](https://cloud.netapp.com/ontap-cloud) which is available on all major public clouds. See [NetApp TR-4641](https://www.netapp.com/us/media/tr-4641.pdf) for additional details
+- Backup, restore and DR to cloud can be achieved by using 3rd party backup/restore and replication software that performs file-level data protection and replication
 
 ### Virtualization
 
@@ -190,10 +191,10 @@
 
 - Anthos is supported on vSphere clusters. See the official NetApp HCI solutions page for additional details
 
-#### Docker
+#### Docker CE and Mirantis Kubernetes Engine (MKE)
 
 - Docker and other [container orchestrators supported](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) by NetApp Trident
-- Docker Swarm is not supported with SolidFire and Trident
+- Docker Swarm is not supported with SolidFire and Trident, but Mirantis Kubernetes Engine is. More [here](https://scaleoutsean.github.io/2021/05/02/mirantis-mke-netapp-trident-solidfire.html)
 
 ### File-sharing (NFS, SMB)
 
@@ -208,23 +209,22 @@
 
 #### API
 
-- SolidFire has a versioned API, which means you can run your "old" automation scripts against an older API endpoint of your choosing (e.g. version 8.0 still works despite 12.2 being the latest version)
+- SolidFire has versioned API which means you can run your "old" automation scripts against an older API endpoint of your choosing (e.g. API endpoint version 8.0 is still available and works (as of 12.2) despite SolidFire 8 no longer being supported)
 - SolidFire / Element Software API Reference Guide: 
-  - PDF: [v12.2](https://docs.netapp.com/sfe-122/topic/com.netapp.doc.sfe-api/Managing%20storage%20with%20the%20Element%20API.pdf)
-  - HTML: [v12.2](https://docs.netapp.com/sfe-122/topic/com.netapp.doc.sfe-api/home.html)
+  - HTML: [v12.3](https://docs.netapp.com/us-en/element-software/api/index.html)
 
 #### CLI
 
 - SolidFire has two fully functional CLI's - PowerShell & Python
-- Current releases: download with `pip` (Python 3 and 2) and `Install-Module` (PowerShell), or Github, or (for registered users) from [https://mysupport.netapp.com/site/tools](https://mysupport.netapp.com/site/tools) (search for 'element' in Tools)
+- Current releases: download with `pip` (Python 3) and `Install-Module` (PowerShell), or Github, or (for registered users) from [https://mysupport.netapp.com/site/tools](https://mysupport.netapp.com/site/tools) (search for 'element' in Tools)
 - Older releases (work fine with latest Element, but connect to older API endpoints and use older API version):
-  - SolidFire [PowerShell Tools (Win/Lin)](https://github.com/solidfire/PowerShell) for the x86_64 architecture. It's not officially supported, but module `SolidFire.Core` has been field-tested and found to work on ARM64 (PowerShell 6) and with PowerShell 7 (Ubuntu 18.04)
+  - SolidFire [PowerShell Tools (Win/Lin)](https://github.com/solidfire/PowerShell) for the x86_64 architecture. It's not officially supported, but module `SolidFire.Core` has been field-tested and found to work on ARM64 (PowerShell 6)
   - SolidFire [Python CLI (Win/Lin/OS X)](https://github.com/solidfire/solidfire-cli)
 
 #### SolidFire/Element Software Development Kits (SDKs)
 
-- Current releases: free download for registered users from [https://mysupport.netapp.com/site/tools](https://mysupport.netapp.com/site/tools) (search for 'element' in Tools)
-- Older releases:
+- Current releases: free download for registered users from [https://mysupport.netapp.com/site/tools](https://mysupport.netapp.com/site/tools) (search for 'element' in Tools); Python SDK can be installed from pip
+- Releases:
   - [SolidFire Python SDK](https://github.com/solidfire/solidfire-sdk-python)
   - [SolidFire Microsoft .NET SDK](https://github.com/solidfire/sdk-dotnet)
   - [SolidFire Java SDK](https://github.com/solidfire/solidfire-sdk-java)
@@ -265,7 +265,7 @@
 
 #### VMware vRealize Log Insight
 
-- Log Insight [can serve (v8.1)](https://docs.vmware.com/en/vRealize-Log-Insight/8.1/com.vmware.log-insight.administration.doc/GUID-848E4804-3837-4D5E-956E-2216B17376AD.html) as the destination for SolidFire logs
+- Log Insight [can serve (v8.1)](https://docs.vmware.com/en/vRealize-Log-Insight/8.1/com.vmware.log-insight.administration.doc/GUID-848E4804-3837-4D5E-956E-2216B17376AD.html) as destination for SolidFire logs
 
 #### Graylog
 
@@ -273,16 +273,16 @@
 
 #### ELK
 
-- Redirect SolidFire to syslog-ng or LogStash or whatever, and from there to Elastic
+- Redirect SolidFire log to syslog-ng or LogStash or whatever, and from there to Elastic
 
 #### Grafana/Graphite - HCICollector
 
 - [HCICollector](https://github.com/scaleoutsean/hcicollector/) is a permissively-licensed monitoring and alerting for SolidFire and NetApp HCI systems. It gathers SolidFire and vSphere 6.x metrics, stores them in Graphite and lets you visualize them in Grafana
 
-#### Prometheus - solidfire-exporter
+#### Grafana/Prometheus - solidfire-exporter
 
 - [Solidfire Exporter](https://github.com/mjavier2k/solidfire-exporter/) fetches and serves SolidFire metrics in the Prometheus format
-- Should be able to work within Kubernetes without changes
+- Works within Kubernetes without changes
 
 #### Prometheus - NetApp Trident metrics
 
