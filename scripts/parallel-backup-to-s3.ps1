@@ -21,15 +21,16 @@
 # License: the BSD License 3.0                                                #
 ###############################################################################
 
-# Install-Module SolidFire.Core # for PowerShell 7; just "SolidFire" for 5.1
+# Install-Module SolidFire.Core # for PowerShell 7; PowerShell 7.1.3+ required 
+
+Import-Module SolidFire.Core
+$null = Connect-SFCluster 192.168.1.30 -Username admin -Password admin
 
 $p           = 4
 $useLastSnap = $False
 $backup      = @(148,149,150,151,152,153,154,155,156,157,158,159,160,161,162,163,164,165,166,167)
 
 $backup | ForEach-Object -Parallel {
-    Import-Module SolidFire.Core
-    $null   = Connect-SFCluster 192.168.1.30 -Username admin -Password admin
     $prefix =  ((Get-SFClusterInfo).Name) + "-" + ((Get-SFClusterInfo).UniqueID) + "/" + ((Get-SFVolume -VolumeID "$_").Name) + "-" + "$_"
     if ($useLastSnap -eq $True) { 
         Write-Host "Using last snapshot for Volume if any..."
