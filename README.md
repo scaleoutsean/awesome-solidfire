@@ -3,8 +3,8 @@
 - [Awesome SolidFire: An Unofficial Collection of NetApp SolidFire Resources](#awesome-solidfire-an-unofficial-collection-of-netapp-solidfire-resources)
   - [NetApp SolidFire-based Offerings](#netapp-solidfire-based-offerings)
     - [NetApp SolidFire All Flash Storage](#netapp-solidfire-all-flash-storage)
-    - [NetApp HCI](#netapp-hci)
     - [NetApp Enterprise Software-Defined Storage (eSDS)](#netapp-enterprise-software-defined-storage-esds)
+    - [NetApp HCI](#netapp-hci)
   - [Why SolidFire](#why-solidfire)
     - [Why NetApp HCI](#why-netapp-hci)
   - [Resources and Solutions](#resources-and-solutions)
@@ -21,7 +21,7 @@
       - [Red Hat OpenShift Container Platform](#red-hat-openshift-container-platform)
       - [Rancher](#rancher)
       - [Google Anthos](#google-anthos)
-      - [Docker](#docker)
+      - [Docker CE and Mirantis Kubernetes Engine (MKE)](#docker-ce-and-mirantis-kubernetes-engine-mke)
     - [File-sharing (NFS, SMB)](#file-sharing-nfs-smb)
     - [CLI, API, SDK Resources](#cli-api-sdk-resources)
       - [API](#api)
@@ -37,7 +37,7 @@
       - [Graylog](#graylog)
       - [ELK](#elk)
       - [Grafana/Graphite - HCICollector](#grafanagraphite---hcicollector)
-      - [Prometheus - solidfire-exporter](#prometheus---solidfire-exporter)
+      - [Grafana/Prometheus - solidfire-exporter](#grafanaprometheus---solidfire-exporter)
       - [Prometheus - NetApp Trident metrics](#prometheus---netapp-trident-metrics)
       - [Icinga and Nagios](#icinga-and-nagios)
       - [SNMP MIBs](#snmp-mibs)
@@ -55,9 +55,10 @@
     - [Generic](#generic)
     - [VMware](#vmware)
     - [Windows](#windows)
-    - [SolidFire Objects](#solidfire-objects)
-    - [Unique Object Names](#unique-object-names)
-    - [Date and Time in SolidFire API](#date-and-time-in-solidfire-api)
+    - [SolidFire API-related details](#solidfire-api-related-details)
+      - [SolidFire Objects](#solidfire-objects)
+      - [Unique Object Names](#unique-object-names)
+      - [Date and Time in SolidFire API](#date-and-time-in-solidfire-api)
   - [Questions and Answers](#questions-and-answers)
     - [Meta](#meta)
     - [SolidFire / Element Demo VM](#solidfire--element-demo-vm)
@@ -278,10 +279,12 @@
 #### Grafana/Graphite - HCICollector
 
 - [HCICollector](https://github.com/scaleoutsean/hcicollector/) is a permissively-licensed monitoring and alerting for SolidFire and NetApp HCI systems. It gathers SolidFire and vSphere 6.x metrics, stores them in Graphite and lets you visualize them in Grafana
+- Recommended for NetApp HCI with VMware
 
 #### Grafana/Prometheus - solidfire-exporter
 
 - [Solidfire Exporter](https://github.com/mjavier2k/solidfire-exporter/) fetches and serves SolidFire metrics in the Prometheus format
+- Recommended for stand-alone SolidFire and Kubernetes
 - Works within Kubernetes without changes
 
 #### Prometheus - NetApp Trident metrics
@@ -387,11 +390,13 @@
 Find them in the `scripts` directory in this repo:
 
 - `Set-SFQosException` - set "temporary" Storage Policy on a SolidFire volume
-  - When Storage QoS Policy ID is passed to this cmdlet, it takes Volume's current Storage QoS Policy ID value, stores it in Volume Attributes, and sets Volume to user-provided "temporary" Storage QoS Policy ID 
+  - When Storage QoS Policy ID is passed to this cmdlet, it takes Volume's current Storage QoS Policy ID value, stores it in Volume Attributes, and sets Volume to user-provided "temporary" Storage QoS Policy ID
   - If Storage QoS Policy ID is not provided, it resets Volume to value stored in Volume Attributes
   - Can be used for any task that can benefit from short-lived change in volume performance settings. Written with SolidFire PowerShell Tools 1.6 and PowerShell 7 on Linux, but should work with PowerShell 6 or newer on Windows 10 or Windows Server 2016 or newer
 - `Get-SFVolEff` - simple PowerShell script to list all volumes with storage efficiency below certain cut-off level (default: `2`, i.e. 2x)
 - SolidFire-native Backup to S3 - run `$p` parallel jobs to backup a list of volumes identified by Volume ID (`$backup`) to S3-compatible object store. The same script can be changed to restore in the same, parallel, fashion
+
+Volume-cloning and backup-to-S3 scripts related to my SolidBackup concept can be found in the [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup).
 
 ### VMware
 
@@ -401,10 +406,12 @@ Find them in the `scripts` directory in this repo:
 
 ### Windows
 
-- PowerShell [scripts for Hyper-V 2012 R2](https://github.com/solidfire/PowerShell/tree/master/Microsoft) (need a refresh for Windows Server 2016 and 2019)
+- PowerShell [scripts for Hyper-V 2012 R2](https://github.com/solidfire/PowerShell/tree/master/Microsoft) (need a refresh for Windows Server 2016+)
 - See the SolidFire Windows repo for some newer PowerShell scripts specific to SolidFire with Windows
 
-### SolidFire Objects
+### SolidFire API-related details
+
+#### SolidFire Objects
 
 - Many SolidFire objects - such as Volumes and Snapshots - can have custom attributes in the form of KV pairs
 - We can employ attributes to tag a new volume like this:
@@ -446,14 +453,14 @@ Timestamp        : 1970-01-01T00:00:00Z
 - In Kubernetes, Docker and other orchestrated environments, pay attention to avoid the use of the same volume attribute keys used by NetApp Trident or other software that touches storage (such as Ansible, which stuffs KV pairs with keys such as "config-mgmt" and "event-source" into Attributes)
 - NetApp ElementSW (SolidFire) modules for Ansible also set volume attributes since at least v20.10.0 (key names: `confg-mgmt` and `event-source`) so don't use those if you use Ansible with SolidFire and keep an eye on other objects
 
-### Unique Object Names
+#### Unique Object Names
 
 - SolidFire uses unique integer IDs to distinguish among most objects. While some Objects must have unique names, it is not the case for all Objects
 - Main Object Names that can be non-unique: Volume, Volume Access Group, QoS Policy, Snapshot, Group Snapshot, Snapshot Schedule
   - It is strongly recommended to adopt a naming convention and avoid duplicate object names. Just because they're possible, it doesn't mean you should do it, especially if your management processes do not rely on Volume IDs 
 - While it is a best practice to pick different names, SolidFire won't force you to do that, so either rely on Object IDs or stick to naming conventions for your environment or rely on Object IDs to distinguish among Objects. Note, however, that in the latter case any monitoring or other systems that use and display Names may malfunction or display confusing information
 
-### Date and Time in SolidFire API
+#### Date and Time in SolidFire API
 
 - The SolidFire and HCC (Hybrid Cloud Control) APIs use [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) formatted UTC time.
 
@@ -474,6 +481,10 @@ A: Please join [the NetApp community Slack](https://join.slack.com/t/netapppub/s
 Q: Is Element Demo VM a simulator?
 
 A: No. It's a fully functional single-node SolidFire cluster. Due to the fact that it's a VM that runs on modest hardware resources, it has some limitations (no encryption, etc) which are documented at the download page. It is not supported for production.
+
+Q: Does Element Demo VM work on Virtualbox?
+
+A: It's not supported, but version 12.3 works on Virtualbox 6.1 (find a demo on YouTube).
 
 Q: Can Element Demo VM be used to estimate efficiency from compression and deduplication?
 
