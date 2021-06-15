@@ -394,9 +394,10 @@ Find them in the `scripts` directory in this repo:
   - If Storage QoS Policy ID is not provided, it resets Volume to value stored in Volume Attributes
   - Can be used for any task that can benefit from short-lived change in volume performance settings. Written with SolidFire PowerShell Tools 1.6 and PowerShell 7 on Linux, but should work with PowerShell 6 or newer on Windows 10 or Windows Server 2016 or newer
 - `Get-SFVolEff` - simple PowerShell script to list all volumes with storage efficiency below certain cut-off level (default: `2`, i.e. 2x)
-- SolidFire-native Backup to S3 - run `$p` parallel jobs to backup a list of volumes identified by Volume ID (`$backup`) to S3-compatible object store. The same script can be changed to restore in the same, parallel, fashion
+- `parallel-backup-to-s3` - SolidFire-native Backup to S3 - runs `$p` parallel jobs to back up list of volumes identified by Volume ID (`$backup`) to an S3-compatible object store. The same script can be changed to restore in the same, parallel, fashion. Parallelization is over entire cluster - the script is not aware of per-node job maximums so aggressive parallelization may result in failed jobs that need to be resubmitted
+- `sfvid2nid` - SolidFire volume ID to node ID mapping script (PowerShell). This information can be used to drive the maximum per-node number of bulk volume jobs (such as built-in backup) and sync jobs (such as copy and clone volume jobs)
 
-Volume-cloning and backup-to-S3 scripts related to my SolidBackup concept can be found in the [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup).
+Some volume-cloning and backup-to-S3 scripts related to my SolidBackup concept can be found in the [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup).
 
 ### VMware
 
