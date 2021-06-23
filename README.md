@@ -82,9 +82,9 @@
 
 - SolidFire Enterprise SDS (eSDS) - containerized enterprise Software Defined Storage for certified 3rd party hardware appliances
   - Apart from h/w monitoring and the OS (Red Hat, in this case), most features are nearly identical to SolidFire and NetApp HCI
-  - The first system supported by eSDS is HPE Proliant DL360
+  - Supports various 3rd party x86_64 servers
   - [Documentation](https://docs.netapp.com/us-en/element-software/index.html)
-  - Ansible deployment scripts: `nar_solidfire*` scripts [such as this one](https://github.com/NetApp/ansible/tree/master/nar_solidfire_sds_install)
+  - Ansible deployment scripts for eSDS: `nar_solidfire*` scripts [such as this one](https://github.com/NetApp/ansible/tree/master/nar_solidfire_sds_install). For non-eSDS (SolidFire appliances), you can use standard Element SW modules
 
 ### NetApp HCI
 
@@ -181,7 +181,7 @@
 
 #### Red Hat OpenShift Container Platform
 
-- You can run it two ways: VM-based OCP VMs on vSphere, Red Hat Virtualization or OpenStack, and bare metal-based OCP on RHEL. See the official NetApp HCI solutions page for additional details
+- You can run it two ways: VM-based OCP VMs on vSphere, Red Hat Virtualization or OpenStack, and bare metal-based OCP on RHEL. See the [official solution page](https://docs.netapp.com/us-en/netapp-solutions/containers/rh-os-n_solution_overview.html#netapp-trident) for additional details
 
 #### Rancher
 
@@ -238,7 +238,7 @@
 
 #### Automation and Configuration Tools and Frameworks
 
-- [Ansible modules](https://galaxy.ansible.com/netapp/elementsw?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW) for Element Software (`ansible-galaxy collection install netapp.elementsw`)
+- [Ansible modules](https://galaxy.ansible.com/netapp/elementsw?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW) for Element Software (`ansible-galaxy collection install netapp.elementsw`) or visit the [Github repo](https://github.com/ansible-collections/netapp.elementsw)
 - [SolidFire Puppet plugin](https://github.com/solidfire/solidfire-puppet)
 - [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw) - supports resources IQN, VAG, account, volume
   - Install it directly from [Terraform registry](https://registry.terraform.io/providers/NetApp/netapp-elementsw/latest)
@@ -394,7 +394,9 @@ Find them in the `scripts` directory in this repo:
   - If Storage QoS Policy ID is not provided, it resets Volume to value stored in Volume Attributes
   - Can be used for any task that can benefit from short-lived change in volume performance settings. Written with SolidFire PowerShell Tools 1.6 and PowerShell 7 on Linux, but should work with PowerShell 6 or newer on Windows 10 or Windows Server 2016 or newer
 - `Get-SFVolEff` - simple PowerShell script to list all volumes with storage efficiency below certain cut-off level (default: `2`, i.e. 2x)
-- `parallel-backup-to-s3` - SolidFire-native Backup to S3 - runs `$p` parallel jobs to back up list of volumes identified by Volume ID (`$backup`) to an S3-compatible object store. The same script can be changed to restore in the same, parallel, fashion. Parallelization is over entire cluster - the script is not aware of per-node job maximums so aggressive parallelization may result in failed jobs that need to be resubmitted
+- `parallel-backup-to-s3` - SolidFire-native Backup to S3
+  - v1: runs `$p` parallel jobs to back up list of volumes identified by Volume ID (`$backup`) to an S3-compatible object store. The same script can be changed to restore in the same, parallel, fashion. Parallelization is over entire cluster - the script is not aware of per-node job maximums so aggressive parallelization may result in failed jobs that need to be resubmitted
+  - v2: runs `$p` parallel jobs *per each node*, where $p is an integer between 0 and the maximum number of bulk jobs per node (8). It's made possible by `sfvid2nid` (below). You can read more about it [here](https://scaleoutsean.github.io/2021/06/22/solidfire-backup-and-cloning-with-per-storage-node-queues.html)
 - `sfvid2nid` - SolidFire volume ID to node ID mapping script (PowerShell). This information can be used to drive the maximum per-node number of bulk volume jobs (such as built-in backup) and sync jobs (such as copy and clone volume jobs)
 
 Some volume-cloning and backup-to-S3 scripts related to my SolidBackup concept can be found in the [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup).
