@@ -606,6 +606,10 @@ Q: Can I connect my FC SAN clients to SolidFire?
 
 A: SolidFire and later NetApp used to sell SolidFire Fibre Channel gateway node, but it's no longer sold. I don't know what the official reason was, but I suspect fewer and fewer people use Fibre Channel in VI and now container environments. It's complex, hard to manage, expensive, and frankly unnecessary (not that FC itself is unnecessary for everyone, but in my opinion it's unnecessary for 95% of workloads people run in containers and virtual machines). The other reason is iSCSI works well and is also cheaper. Almost no one can work without Ethernet, but most people can work without FC, so if two links will do, why use four... If you haven't considered iSCSI yet take a look at [TR-4367](https://www.netapp.com/us/media/tr-4367.pdf) created by ONTAP specialists, which provides a fairly recent comparison between NFS, iSCSI and FC.
 
+Q: Can the H600S series nodes enable LLDP on the management interface?
+
+A: You can try to enable LLDP with `ipmitool raw 0x30 0xD1 0x0a` (starts within 10 seconds or so). To disable: `ipmitool raw 0x30 0xD1 0x00`.
+
 ## License and Trademarks
 
 awesome-solidfire by scaleoutSean is licensed under the Do What The F*ck You Want To Public License (see [LICENSE](LICENSE))
