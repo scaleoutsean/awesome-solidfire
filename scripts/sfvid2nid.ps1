@@ -29,15 +29,15 @@ foreach ($p2n in $res.services) {$service.Add($p2n.serviceID,$p2n.nodeID)}
 
 foreach ($v in $res.slices) {
     foreach ($k in $service.Keys) { 
-	$vn = @{}
+    $vn = @{}
         if ($v.primary -eq $k) {
             $v.nodeID    = $service[$k]            
             [PSCustomObject]$vn = @{
                 volumeID = $v.volumeID
                 nodeID   = $v.nodeID
             }
-	    $vid2nid.Add($v.volumeID,$v.nodeID)
-	    }
+        $vid2nid.Add($v.volumeID,$v.nodeID)
+        }
     }
 }
 
