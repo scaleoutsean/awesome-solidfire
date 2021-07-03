@@ -1,7 +1,7 @@
 #!/usr/bin/env pwsh
 ###############################################################################
 # Script name:                                                                #
-# sfvid2pid.ps1                                                               #
+# sfvid2nid.ps1                                                               #
 #                                                                             #
 # Synopsis:                                                                   #
 # Maps SolidFire volume IDs to storage node IDs                               #
