@@ -1,0 +1,3127 @@
+{
+  "components": {
+    "schemas": {
+      "About": {
+        "properties": {
+          "authorize_url": {
+            "type": "string"
+          },
+          "docker_version": {
+            "type": "string"
+          },
+          "mnode_bundle_version": {
+            "type": "string"
+          },
+          "mnode_host_ip": {
+            "type": "string"
+          },
+          "os_version": {
+            "type": "string"
+          },
+          "token_url": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "SSH": {
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "asset": {
+        "properties": {
+          "config": {
+            "description": "Configuration JSON for the sub-asset.",
+            "type": "object"
+          },
+          "name": {
+            "description": "Name",
+            "minLength": 1,
+            "type": "string"
+          },
+          "telemetry_active": {
+            "description": "Indicates that HCI telemetry is activated.",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "asset_put": {
+        "properties": {
+          "config": {
+            "description": "Configuration JSON for the sub-asset.",
+            "type": "object"
+          },
+          "name": {
+            "description": "Name",
+            "minLength": 1,
+            "type": "string"
+          },
+          "telemetry_active": {
+            "description": "Indicates that HCI telemetry is activated.",
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "compute": {
+        "properties": {
+          "config": {
+            "description": "Configuration JSON for the sub-asset.",
+            "type": "object"
+          },
+          "hardware_tag": {
+            "description": "The BIOS ID that pairs this compute sub-asset with a hardware sub-asset.",
+            "type": "string"
+          },
+          "host_name": {
+            "description": "The host name for the compute sub-asset.",
+            "type": "string"
+          },
+          "ip": {
+            "description": "ip",
+            "format": "ipv4",
+            "type": "string"
+          },
+          "password": {
+            "description": "Password",
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "description": "Valid values are: ESXi Host.",
+            "enum": [
+              "ESXi Host"
+            ],
+            "example": "ESXi Host",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "ip",
+          "password",
+          "type",
+          "username"
+        ],
+        "type": "object"
+      },
+      "compute_put": {
+        "properties": {
+          "config": {
+            "description": "Configuration JSON for the sub-asset.",
+            "type": "object"
+          },
+          "hardware_tag": {
+            "description": "The BIOS ID that pairs this compute sub-asset with a hardware sub-asset.",
+            "type": "string"
+          },
+          "host_name": {
+            "description": "The host name for the compute sub-asset.",
+            "type": "string"
+          },
+          "ip": {
+            "description": "ip",
+            "format": "ipv4",
+            "type": "string"
+          },
+          "password": {
+            "description": "Password",
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "description": "Valid values are Valid values are: ESXi Host.",
+            "enum": [
+              "ESXi Host"
+            ],
+            "example": "ESXi Host",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "controller": {
+        "properties": {
+          "config": {
+            "description": "Configuration JSON for the sub-asset.",
+            "type": "object"
+          },
+          "host_name": {
+            "description": "The host name for the controller sub-asset.",
+            "type": "string"
+          },
+          "ip": {
+            "description": "ip",
+            "format": "ipv4",
+            "type": "string"
+          },
+          "password": {
+            "description": "Password",
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "description": "Valid values are Valid values are: vCenter, or Openstack.",
+            "enum": [
+              "vCenter",
+              "Openstack"
+            ],
+            "example": "vCenter",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "ip",
+          "password",
+          "type",
+          "username"
+        ],
+        "type": "object"
+      },
+      "controller_put": {
+        "properties": {
+          "config": {
+            "description": "Configuration JSON for the sub-asset.",
+            "type": "object"
+          },
+          "host_name": {
+            "description": "The host name for the controller sub-asset.",
+            "type": "string"
+          },
+          "ip": {
+            "description": "ip",
+            "format": "ipv4",
+            "type": "string"
+          },
+          "password": {
+            "description": "Password",
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "description": "Valid values are Valid values are: vCenter, or Openstack.",
+            "enum": [
+              "vCenter",
+              "Openstack"
+            ],
+            "example": "vCenter",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "hardware": {
+        "properties": {
+          "config": {
+            "description": "Configuration JSON for the sub-asset.",
+            "type": "object"
+          },
+          "hardware_tag": {
+            "description": "The BIOS ID that pairs this hardware sub-asset with a compute sub-asset.",
+            "type": "string"
+          },
+          "host_name": {
+            "description": "The host name for the hardware sub-asset.",
+            "type": "string"
+          },
+          "ip": {
+            "description": "ip",
+            "format": "ipv4",
+            "type": "string"
+          },
+          "password": {
+            "description": "Password",
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "description": "Valid values are Valid values are: BMC.",
+            "enum": [
+              "BMC"
+            ],
+            "example": "BMC",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "ip",
+          "password",
+          "type",
+          "username"
+        ],
+        "type": "object"
+      },
+      "hardware_put": {
+        "properties": {
+          "config": {
+            "description": "Configuration JSON for the sub-asset.",
+            "type": "object"
+          },
+          "hardware_tag": {
+            "description": "The BIOS ID that pairs this hardware sub-asset with a compute sub-asset.",
+            "type": "string"
+          },
+          "host_name": {
+            "description": "The host name for the compute sub-asset.",
+            "type": "string"
+          },
+          "ip": {
+            "description": "ip",
+            "format": "ipv4",
+            "type": "string"
+          },
+          "password": {
+            "description": "Password",
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": {
+            "description": "Valid values are Valid values are: BMC.",
+            "enum": [
+              "BMC"
+            ],
+            "example": "BMC",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ots": {
+        "properties": {
+          "config": {
+            "description": "Configuration JSON for the sub-asset.",
+            "type": "object"
+          },
+          "host_name": {
+            "description": "The host name for the ots sub-asset.",
+            "type": "string"
+          },
+          "ip": {
+            "description": "ip",
+            "format": "ipv4",
+            "type": "string"
+          },
+          "password": {
+            "description": "Password",
+            "minLength": 1,
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "ip",
+          "password",
+          "username"
+        ],
+        "type": "object"
+      },
+      "ots_put": {
+        "properties": {
+          "config": {
+            "description": "Configuration JSON for the sub-asset.",
+            "type": "object"
+          },
+          "host_name": {
+            "description": "The host name for the ots sub-asset.",
+            "type": "string"
+          },
+          "ip": {
+            "description": "ip",
+            "format": "ipv4",
+            "type": "string"
+          },
+          "password": {
+            "description": "Password",
+            "minLength": 1,
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "settings": {
+        "properties": {
+          "mnode_fqdn": {
+            "description": "The FQDN that may be used to access the mnode",
+            "type": "string"
+          },
+          "proxy_ip_or_hostname": {
+            "description": "The IP address or hostname of the proxy server",
+            "type": "string"
+          },
+          "proxy_password": {
+            "description": "The proxy authentication password",
+            "type": "string"
+          },
+          "proxy_port": {
+            "description": "The port the proxy server is listening on",
+            "type": "integer"
+          },
+          "proxy_ssh_port": {
+            "description": "The port to use for the ssh tunnel when using a proxy (default: 443)",
+            "type": "integer"
+          },
+          "proxy_username": {
+            "description": "The proxy authentication user name",
+            "type": "string"
+          },
+          "use_proxy": {
+            "default": false,
+            "description": "Enable or disable the proxy",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "use_proxy"
+        ],
+        "type": "object"
+      },
+      "storage": {
+        "properties": {
+          "config": {
+            "description": "Configuration JSON for the sub-asset.",
+            "type": "object"
+          },
+          "host_name": {
+            "description": "The host name for the storage sub-asset.",
+            "type": "string"
+          },
+          "ip": {
+            "description": "ip",
+            "format": "ipv4",
+            "type": "string"
+          },
+          "password": {
+            "description": "The password to log in to the storage cluster with the username. Mandatory for both `solidfire/eSDS` storage clusters.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "ssl_certificate": {
+            "description": "The SSL certificate for the storage sub-asset.",
+            "type": "string"
+          },
+          "username": {
+            "description": "The username to log in to the storage cluster. Mandatory for both `solidfire/eSDS` storage clusters.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "ip",
+          "password",
+          "username"
+        ],
+        "type": "object"
+      },
+      "storage_put": {
+        "properties": {
+          "config": {
+            "description": "Configuration JSON for the sub-asset.",
+            "type": "object"
+          },
+          "host_name": {
+            "description": "The host name for the storage sub-asset.",
+            "type": "string"
+          },
+          "ip": {
+            "description": "ip",
+            "format": "ipv4",
+            "type": "string"
+          },
+          "password": {
+            "description": "The password to log in to the storage cluster with the username. Mandatory for both `solidfire/eSDS` storage clusters.",
+            "minLength": 1,
+            "type": "string"
+          },
+          "ssl_certificate": {
+            "description": "The SSL certificate for the storage sub-asset.",
+            "type": "string"
+          },
+          "username": {
+            "description": "The username to log in to the storage cluster. Mandatory for both `solidfire/eSDS` storage clusters.",
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "type": "object"
+      }
+    },
+    "securitySchemes": {
+      "elementOAuth": {
+        "flows": {
+          "password": {
+            "tokenUrl": "/token"
+          }
+        },
+        "type": "oauth2",
+        "x-tokenInfoFunc": "app.authorization.validate_token"
+      }
+    }
+  },
+  "info": {
+    "contact": {
+      "email": "ng-hci-sig-services@netapp.com",
+      "name": "NetApp",
+      "url": "http://netapp.com"
+    },
+    "description": "The configuration REST service for MANAGEMENT SERVICES",
+    "license": {
+      "name": "NetApp Commercial Software License",
+      "url": "http://netapp.com"
+    },
+    "title": "MANAGEMENT SERVICES API",
+    "version": "2.3"
+  },
+  "openapi": "3.0.0",
+  "paths": {
+    "/about": {
+      "get": {
+        "description": "This endpoint returns the version of MNode-Api-Service.",
+        "operationId": "routes.v1.about.get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/About"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "summary": "Get information about this API",
+        "tags": [
+          "about"
+        ]
+      }
+    },
+    "/assets": {
+      "get": {
+        "operationId": "routes.v1.assets_api.get_assets",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get all assets",
+        "tags": [
+          "assets"
+        ]
+      },
+      "post": {
+        "operationId": "routes.v1.assets_api.post_assets",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/asset"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Add a new asset",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/assets/compute-nodes": {
+      "get": {
+        "operationId": "routes.v1.assets_api.get_compute_nodes",
+        "parameters": [
+          {
+            "description": "Hardware Tag for Sub assets",
+            "in": "query",
+            "name": "hardwareTag",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get all compute nodes",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/assets/compute-nodes/{compute_node_id}": {
+      "get": {
+        "operationId": "routes.v1.assets_api.get_compute_nodes_select_id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get a specific compute node by ID",
+        "tags": [
+          "assets"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "compute_node_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/assets/controllers": {
+      "get": {
+        "operationId": "routes.v1.assets_api.get_controllers",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get all controllers",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/assets/controllers/{controller_id}": {
+      "get": {
+        "operationId": "routes.v1.assets_api.get_controllers_select_id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get a specific controller by ID",
+        "tags": [
+          "assets"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "controller_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/assets/hardware-nodes": {
+      "get": {
+        "operationId": "routes.v1.assets_api.get_hardware_nodes",
+        "parameters": [
+          {
+            "description": "Hardware Tag for Sub assets",
+            "in": "query",
+            "name": "hardwareTag",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get all hardware nodes",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/assets/hardware-nodes/{hardware_node_id}": {
+      "get": {
+        "operationId": "routes.v1.assets_api.get_hardware_nodes_select_id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get a specific hardware node by ID",
+        "tags": [
+          "assets"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "hardware_node_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/assets/storage-clusters": {
+      "get": {
+        "operationId": "routes.v1.assets_api.get_storage_clusters",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get all storage clusters",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/assets/storage-clusters/{storage_cluster_id}": {
+      "get": {
+        "operationId": "routes.v1.assets_api.get_storage_clusters_select_id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get a specific storage cluster by ID",
+        "tags": [
+          "assets"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "storage_cluster_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/assets/{asset_id}": {
+      "delete": {
+        "operationId": "routes.v1.assets_api.delete_asset",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Delete an asset with a specific ID",
+        "tags": [
+          "assets"
+        ]
+      },
+      "get": {
+        "operationId": "routes.v1.assets_api.get_asset",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "ip",
+            "schema": {
+              "format": "ipv4",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get an asset by it's ID",
+        "tags": [
+          "assets"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "asset_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "put": {
+        "operationId": "routes.v1.assets_api.put_asset",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/asset_put"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Modify an asset with a specific ID",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/assets/{asset_id}/compute-nodes": {
+      "get": {
+        "operationId": "routes.v1.assets_api.get_assets_compute",
+        "parameters": [
+          {
+            "description": "Type of compute assets to retrieve. Valid values are: ESXi Host.",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "enum": [
+                "ESXi Host"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "IP of assets to retrieve",
+            "in": "query",
+            "name": "ip",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Hardware Tag for Sub assets",
+            "in": "query",
+            "name": "hardwareTag",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get compute assets",
+        "tags": [
+          "assets"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The parent asset ID",
+          "in": "path",
+          "name": "asset_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "operationId": "routes.v1.assets_api.post_assets_compute",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/compute"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Add a compute asset",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/assets/{asset_id}/compute-nodes/{compute_id}": {
+      "delete": {
+        "operationId": "routes.v1.assets_api.delete_assets_compute_id",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Delete a specific compute node asset",
+        "tags": [
+          "assets"
+        ]
+      },
+      "get": {
+        "operationId": "routes.v1.assets_api.get_assets_compute_id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get a specific compute node asset",
+        "tags": [
+          "assets"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The parent asset ID",
+          "in": "path",
+          "name": "asset_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "description": "The compute node asset ID",
+          "in": "path",
+          "name": "compute_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "put": {
+        "operationId": "routes.v1.assets_api.put_assets_compute_id",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/compute_put"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Update a specific compute node asset",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/assets/{asset_id}/controllers": {
+      "get": {
+        "operationId": "routes.v1.assets_api.get_assets_controllers",
+        "parameters": [
+          {
+            "description": "Type of hypervisor or system controller to retrieve. Valid values are: vCenter, or Openstack.",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "enum": [
+                "vCenter",
+                "Openstack"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "IP of assets to retrieve",
+            "in": "query",
+            "name": "ip",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get controller assets",
+        "tags": [
+          "assets"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The parent asset ID",
+          "in": "path",
+          "name": "asset_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "operationId": "routes.v1.assets_api.post_assets_controller",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/controller"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Add a controller asset.",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/assets/{asset_id}/controllers/{controller_id}": {
+      "delete": {
+        "operationId": "routes.v1.assets_api.delete_assets_controller_id",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Delete a specific controller asset.",
+        "tags": [
+          "assets"
+        ]
+      },
+      "get": {
+        "operationId": "routes.v1.assets_api.get_assets_controller_id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get a specific controller asset",
+        "tags": [
+          "assets"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The parent asset ID",
+          "in": "path",
+          "name": "asset_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "description": "The controller asset ID",
+          "in": "path",
+          "name": "controller_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "put": {
+        "operationId": "routes.v1.assets_api.put_assets_controller_id",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/controller_put"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Update a controller asset",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/assets/{asset_id}/hardware-nodes": {
+      "get": {
+        "operationId": "routes.v1.assets_api.get_assets_hardware",
+        "parameters": [
+          {
+            "description": "Type of hardware assets to retrieve. Valid values are: BMC.",
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "enum": [
+                "BMC"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "IP of assets to retrieve",
+            "in": "query",
+            "name": "ip",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Hardware Tag for Sub assets",
+            "in": "query",
+            "name": "hardwareTag",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get hardware assets",
+        "tags": [
+          "assets"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "asset_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "operationId": "routes.v1.assets_api.post_assets_hardware",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/hardware"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Add a hardware asset",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/assets/{asset_id}/hardware-nodes/{hardware_id}": {
+      "delete": {
+        "operationId": "routes.v1.assets_api.delete_assets_hardware_id",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Delete a specific hardware node asset",
+        "tags": [
+          "assets"
+        ]
+      },
+      "get": {
+        "operationId": "routes.v1.assets_api.get_assets_hardware_id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get a specific hardware node asset",
+        "tags": [
+          "assets"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "asset_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "hardware_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "put": {
+        "operationId": "routes.v1.assets_api.put_assets_hardware_id",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/hardware_put"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Update a specific hardware node asset",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/assets/{asset_id}/ots": {
+      "get": {
+        "operationId": "routes.v1.assets_api.get_assets_ontap_select",
+        "parameters": [
+          {
+            "description": "IP of assets to retrieve",
+            "in": "query",
+            "name": "ip",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get ONTAPSelect assets",
+        "tags": [
+          "assets"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The parent asset ID",
+          "in": "path",
+          "name": "asset_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "operationId": "routes.v1.assets_api.post_assets_ontap_select",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ots"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Add a ONTAPSelect asset",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/assets/{asset_id}/ots/{ots_id}": {
+      "delete": {
+        "operationId": "routes.v1.assets_api.delete_assets_ontap_select_id",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Delete a specific ONTAPSelect asset",
+        "tags": [
+          "assets"
+        ]
+      },
+      "get": {
+        "operationId": "routes.v1.assets_api.get_assets_ontap_select_id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get a specific ONTAPSelect asset",
+        "tags": [
+          "assets"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The parent asset ID",
+          "in": "path",
+          "name": "asset_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "description": "The OTS asset ID",
+          "in": "path",
+          "name": "ots_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "put": {
+        "operationId": "routes.v1.assets_api.put_assets_ontap_select_id",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ots_put"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Update a ONTAPSelect asset",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/assets/{asset_id}/storage-clusters": {
+      "get": {
+        "operationId": "routes.v1.assets_api.get_assets_storage",
+        "parameters": [
+          {
+            "description": "IP of assets to retrieve",
+            "in": "query",
+            "name": "ip",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get storage assets",
+        "tags": [
+          "assets"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The parent asset ID",
+          "in": "path",
+          "name": "asset_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "operationId": "routes.v1.assets_api.post_assets_storage",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/storage"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Add a storage asset",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/assets/{asset_id}/storage-clusters/{storage_id}": {
+      "delete": {
+        "operationId": "routes.v1.assets_api.delete_assets_storage_id",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Delete a specific storage asset",
+        "tags": [
+          "assets"
+        ]
+      },
+      "get": {
+        "operationId": "routes.v1.assets_api.get_assets_storage_id",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get a specific storage asset",
+        "tags": [
+          "assets"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The parent asset ID",
+          "in": "path",
+          "name": "asset_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "in": "path",
+          "name": "storage_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "put": {
+        "operationId": "routes.v1.assets_api.put_assets_storage_id",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/storage_put"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Update a storage asset",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/assets/{asset_id}/storage-clusters/{storage_id}/register": {
+      "delete": {
+        "operationId": "routes.v1.assets_api.delete_assets_storage_register",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          },
+          "502": {
+            "description": "Bad Gateway"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Deregister a storage asset with this MNode",
+        "tags": [
+          "assets"
+        ]
+      },
+      "parameters": [
+        {
+          "description": "The parent asset ID",
+          "in": "path",
+          "name": "asset_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "description": "The storage cluster asset ID",
+          "in": "path",
+          "name": "storage_id",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "post": {
+        "operationId": "routes.v1.assets_api.post_assets_storage_register",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "502": {
+            "description": "Bad Gateway"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Register a storage asset with this MNode",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/bintray": {
+      "get": {
+        "description": "Download a file from bintray",
+        "operationId": "routes.v1.bintray_api.download_bintray_file",
+        "parameters": [
+          {
+            "description": "Repository to download file from",
+            "in": "query",
+            "name": "repo",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Path of the file to download",
+            "in": "query",
+            "name": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "tags": [
+          "bintray"
+        ]
+      }
+    },
+    "/logs": {
+      "get": {
+        "description": "The logs endpoint is used to get logs from the services.",
+        "operationId": "routes.v3.log_api.get_logs",
+        "parameters": [
+          {
+            "description": "Number of lines to retrieve from the logs.",
+            "in": "query",
+            "name": "lines",
+            "schema": {
+              "default": 1000,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "ISO-8601 timestamp for the service logs starting point. Example: '2019-04-01T18:34:36Z'.",
+            "in": "query",
+            "name": "since",
+            "schema": {
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Name of the service",
+            "in": "query",
+            "name": "service-name",
+            "schema": {
+              "default": "",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Retrieve logs from stopped services.",
+            "in": "query",
+            "name": "stopped",
+            "schema": {
+              "default": true,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get logs from the MNODE service(s)",
+        "tags": [
+          "logs"
+        ]
+      }
+    },
+    "/services": {
+      "get": {
+        "description": "The services endpoint is to list services on the MNode along with supporting filter criteria.",
+        "operationId": "routes.v1.services_api.get_services",
+        "parameters": [
+          {
+            "description": "Status of services to list. Valid values are: running, stopped, or all.",
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "default": "running",
+              "enum": [
+                "running",
+                "stopped",
+                "all"
+              ],
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get a list of services on the MNode",
+        "tags": [
+          "services"
+        ]
+      }
+    },
+    "/services/archive": {
+      "post": {
+        "operationId": "routes.v1.services_api.post_service_update_archive",
+        "parameters": [
+          {
+            "description": "Archive even if updates are in progress.",
+            "in": "query",
+            "name": "force",
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Archive latest update",
+        "tags": [
+          "services"
+        ]
+      }
+    },
+    "/services/deploy": {
+      "put": {
+        "operationId": "routes.v1.services_api.put_service_deploy",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "428": {
+            "description": "Precondition Required"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Deploy services with uploaded package of images",
+        "tags": [
+          "services"
+        ]
+      }
+    },
+    "/services/reconfigure-auth": {
+      "post": {
+        "operationId": "routes.v1.services_api.post_reconfigure_auth",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "load_images",
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "tags": [
+          "services"
+        ]
+      },
+      "put": {
+        "operationId": "routes.v1.services_api.put_reconfigure_auth",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "load_images",
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "tags": [
+          "services"
+        ]
+      }
+    },
+    "/services/update/latest": {
+      "put": {
+        "operationId": "routes.v1.services_api.put_service_update",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          },
+          "428": {
+            "description": "Precondition Required"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Update to the latest version of mNode",
+        "tags": [
+          "services"
+        ]
+      }
+    },
+    "/services/update/status": {
+      "delete": {
+        "operationId": "routes.v1.services_api.delete_service_update_status",
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Clear the update status",
+        "tags": [
+          "services"
+        ]
+      },
+      "get": {
+        "operationId": "routes.v1.services_api.get_service_update_status",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Retrieve status about mnode update",
+        "tags": [
+          "services"
+        ]
+      }
+    },
+    "/services/update/{version}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "version",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "put": {
+        "operationId": "routes.v1.services_api.put_service_update_version",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          },
+          "428": {
+            "description": "Precondition Required"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Download from bintray, and update to a specified version of mNode",
+        "tags": [
+          "services"
+        ]
+      }
+    },
+    "/services/upload": {
+      "delete": {
+        "operationId": "routes.v1.services_api.delete_service_upload",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Delete uploads directory",
+        "tags": [
+          "services"
+        ]
+      },
+      "put": {
+        "operationId": "routes.v1.services_api.put_service_upload",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "properties": {
+                  "fat_tar": {
+                    "description": "Tar of images",
+                    "format": "binary",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "fat_tar"
+                ],
+                "type": "object"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Upload a package of images to the mNode",
+        "tags": [
+          "services"
+        ]
+      }
+    },
+    "/services/versions": {
+      "get": {
+        "operationId": "routes.v1.services_api.get_service_versions",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get get a list of mNode versions",
+        "tags": [
+          "services"
+        ]
+      }
+    },
+    "/services/versions/latest": {
+      "get": {
+        "operationId": "routes.v1.services_api.get_service_latest_version",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get the latest version of the mNode bundle from the distribution platform - 01",
+        "tags": [
+          "services"
+        ]
+      }
+    },
+    "/services/versions/{version}": {
+      "get": {
+        "operationId": "routes.v1.services_api.get_service_version",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Retrieve a version of mNode from bintray",
+        "tags": [
+          "services"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "version",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/services/versions/{version}/info": {
+      "get": {
+        "operationId": "routes.v1.services_api.get_service_version_info",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          },
+          "503": {
+            "description": "Service Unavailable"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get information about a version of mNode",
+        "tags": [
+          "services"
+        ]
+      },
+      "parameters": [
+        {
+          "in": "path",
+          "name": "version",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/settings": {
+      "get": {
+        "operationId": "routes.v2.settings_api.get_settings",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "summary": "Get applicable Config settings",
+        "tags": [
+          "settings"
+        ]
+      },
+      "put": {
+        "operationId": "routes.v2.settings_api.put_settings",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/settings"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "summary": "Sets applicable Config settings from a json body",
+        "tags": [
+          "settings"
+        ]
+      }
+    },
+    "/settings/ssh": {
+      "get": {
+        "description": "Get SSH state from the MNode host",
+        "operationId": "routes.v1.ssh_api.get_ssh_state",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SSH"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:r"
+            ]
+          }
+        ],
+        "tags": [
+          "settings"
+        ],
+        "x-operationAlias": "getSSH"
+      },
+      "put": {
+        "description": "Enable or disable SSH on the MNode host",
+        "operationId": "routes.v1.ssh_api.put_ssh_enabled",
+        "parameters": [
+          {
+            "description": "Indicates if SSH should be enabled",
+            "in": "query",
+            "name": "enabled",
+            "schema": {
+              "default": false,
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SSH"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "424": {
+            "description": "Failed Dependency"
+          }
+        },
+        "security": [
+          {
+            "elementOAuth": [
+              "mnode_api:w"
+            ]
+          }
+        ],
+        "tags": [
+          "settings"
+        ],
+        "x-operationAlias": "putSSH"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "/mnode"
+    }
+  ],
+  "tags": [
+    {
+      "description": "Log service",
+      "name": "logs"
+    },
+    {
+      "description": "Asset service",
+      "name": "assets"
+    },
+    {
+      "description": "Services",
+      "name": "services"
+    },
+    {
+      "description": "Settings service",
+      "name": "settings"
+    },
+    {
+      "description": "About this service",
+      "name": "about"
+    },
+    {
+      "description": "Bintray Operations",
+      "name": "bintray"
+    }
+  ]
+}
