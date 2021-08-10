@@ -301,7 +301,8 @@
 - SolidFire MIBs may be downloaded from the SolidFire/Element Web UI. You can download the MIB files and open them to see what events and stats are gathered and sent by it
 - SolidFire OID is 1.3.6.1.4.1.38091 (`.iso.org.dod.internet.private.enterprises.solidFire`)
 - SNMP is disabled by default. If you enable it, you may choose v2 or v3
-- Element API also lets you access essential hardware status information via API methods `GetIpmiInfo` and `GetIpmiConfig`
+- Check SolidFire Postman collection for SNMP-related API methods (there's 10 or so of them). For example, `SnmpSendTestTraps` lets us send test SNMP Trap from MVIP once SNMP is enabled and configured
+- Deep dive into SolidFire SNMP can be found [here](https://scaleoutsean.github.io/2021/07/19/solidfire-mib-snmp-monitoring)
 
 #### Splunk
 
