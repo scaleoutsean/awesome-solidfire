@@ -1,74 +1,78 @@
 # Awesome SolidFire: An Unofficial Collection of NetApp SolidFire Resources
 
+<!-- TOC -->
+
 - [Awesome SolidFire: An Unofficial Collection of NetApp SolidFire Resources](#awesome-solidfire-an-unofficial-collection-of-netapp-solidfire-resources)
-  - [NetApp SolidFire-based Offerings](#netapp-solidfire-based-offerings)
-    - [NetApp SolidFire All Flash Storage](#netapp-solidfire-all-flash-storage)
-    - [NetApp Enterprise Software-Defined Storage (eSDS)](#netapp-enterprise-software-defined-storage-esds)
-    - [NetApp HCI](#netapp-hci)
-  - [Why SolidFire](#why-solidfire)
-    - [Why NetApp HCI](#why-netapp-hci)
-  - [Resources and Solutions](#resources-and-solutions)
-    - [Cloud](#cloud)
-    - [Virtualization](#virtualization)
-      - [VMware vSphere](#vmware-vsphere)
-      - [Microsoft Hyper-V](#microsoft-hyper-v)
-      - [Red Hat Virtualization (RHEV)](#red-hat-virtualization-rhev)
-      - [Citrix Hypervisor](#citrix-hypervisor)
-      - [Linux-related (OpenStack, KVM, Oracle VM)](#linux-related-openstack-kvm-oracle-vm)
-      - [Oracle VirtualBox](#oracle-virtualbox)
-      - [Virtual Desktop Infrastructure and End User Computing (VDI & EUC)](#virtual-desktop-infrastructure-and-end-user-computing-vdi--euc)
-    - [Kubernetes and Containers](#kubernetes-and-containers)
-      - [Red Hat OpenShift Container Platform](#red-hat-openshift-container-platform)
-      - [Rancher](#rancher)
-      - [Google Anthos](#google-anthos)
-      - [Docker CE and Mirantis Kubernetes Engine (MKE)](#docker-ce-and-mirantis-kubernetes-engine-mke)
-    - [File-sharing (NFS, SMB)](#file-sharing-nfs-smb)
-    - [CLI, API, SDK Resources](#cli-api-sdk-resources)
-      - [API](#api)
-      - [CLI](#cli)
-      - [SolidFire/Element Software Development Kits (SDKs)](#solidfireelement-software-development-kits-sdks)
-    - [Automation](#automation)
-      - [Automation and Configuration Tools and Frameworks](#automation-and-configuration-tools-and-frameworks)
-    - [Alerting, Monitoring, Telemetry](#alerting-monitoring-telemetry)
-      - [ActiveIQ](#activeiq)
-      - [NetApp Cloud Insights](#netapp-cloud-insights)
-      - [VMware / Blue Medora True Visibility for VMware vRealize Operations](#vmware--blue-medora-true-visibility-for-vmware-vrealize-operations)
-      - [VMware vRealize Log Insight](#vmware-vrealize-log-insight)
-      - [Graylog](#graylog)
-      - [ELK](#elk)
-      - [Grafana/Graphite - HCICollector](#grafanagraphite---hcicollector)
-      - [Grafana/Prometheus - solidfire-exporter](#grafanaprometheus---solidfire-exporter)
-      - [Prometheus - NetApp Trident metrics](#prometheus---netapp-trident-metrics)
-      - [Icinga and Nagios](#icinga-and-nagios)
-      - [SNMP MIBs](#snmp-mibs)
-      - [Splunk](#splunk)
-      - [Syslog Forwarding](#syslog-forwarding)
-      - [Security and General Auditing](#security-and-general-auditing)
-      - [Event Notifications](#event-notifications)
-    - [Backup, Restore, DR and BC (Site Failover)](#backup-restore-dr-and-bc-site-failover)
-    - [Security](#security)
-    - [Encryption](#encryption)
-  - [Demo VM, Tools and Utilities](#demo-vm-tools-and-utilities)
-    - [SolidFire/Element Demo VM](#solidfireelement-demo-vm)
-    - [Recorded Demos](#recorded-demos)
-  - [Scripts and How-To Articles](#scripts-and-how-to-articles)
-    - [Generic](#generic)
-    - [VMware](#vmware)
-    - [Windows](#windows)
-    - [SolidFire API-related details](#solidfire-api-related-details)
-      - [SolidFire Objects](#solidfire-objects)
-      - [Unique Object Names](#unique-object-names)
-      - [Date and Time in SolidFire API](#date-and-time-in-solidfire-api)
-  - [Questions and Answers](#questions-and-answers)
-    - [Meta](#meta)
-    - [SolidFire / Element Demo VM](#solidfire--element-demo-vm)
-    - [Logging and Monitoring](#logging-and-monitoring)
-    - [Hypervisors and Containers](#hypervisors-and-containers)
-    - [Workloads](#workloads)
-    - [Storage Services](#storage-services)
-    - [DevOps](#devops)
-    - [Networking](#networking)
-  - [License and Trademarks](#license-and-trademarks)
+    - [NetApp SolidFire-based Offerings](#netapp-solidfire-based-offerings)
+        - [NetApp SolidFire All Flash Storage](#netapp-solidfire-all-flash-storage)
+        - [NetApp Enterprise Software-Defined Storage eSDS](#netapp-enterprise-software-defined-storage-esds)
+        - [NetApp HCI](#netapp-hci)
+    - [Why SolidFire](#why-solidfire)
+        - [Why NetApp HCI](#why-netapp-hci)
+    - [Resources and Solutions](#resources-and-solutions)
+        - [Cloud](#cloud)
+        - [Virtualization](#virtualization)
+            - [VMware vSphere](#vmware-vsphere)
+            - [Microsoft Hyper-V](#microsoft-hyper-v)
+            - [Red Hat Virtualization RHEV](#red-hat-virtualization-rhev)
+            - [Citrix Hypervisor](#citrix-hypervisor)
+            - [Linux-related OpenStack, KVM, Oracle VM](#linux-related-openstack-kvm-oracle-vm)
+            - [Oracle VirtualBox](#oracle-virtualbox)
+            - [Virtual Desktop Infrastructure and End User Computing VDI & EUC](#virtual-desktop-infrastructure-and-end-user-computing-vdi--euc)
+        - [Kubernetes and Containers](#kubernetes-and-containers)
+            - [Red Hat OpenShift Container Platform](#red-hat-openshift-container-platform)
+            - [Rancher](#rancher)
+            - [Google Anthos](#google-anthos)
+            - [Docker CE and Mirantis Kubernetes Engine MKE](#docker-ce-and-mirantis-kubernetes-engine-mke)
+        - [File-sharing NFS, SMB](#file-sharing-nfs-smb)
+        - [CLI, API, SDK Resources](#cli-api-sdk-resources)
+            - [API](#api)
+            - [CLI](#cli)
+            - [SolidFire/Element Software Development Kits SDKs](#solidfireelement-software-development-kits-sdks)
+        - [Automation](#automation)
+            - [Automation and Configuration Tools and Frameworks](#automation-and-configuration-tools-and-frameworks)
+        - [Alerting, Monitoring, Telemetry](#alerting-monitoring-telemetry)
+            - [ActiveIQ](#activeiq)
+            - [NetApp Cloud Insights](#netapp-cloud-insights)
+            - [VMware / Blue Medora True Visibility for VMware vRealize Operations](#vmware--blue-medora-true-visibility-for-vmware-vrealize-operations)
+            - [VMware vRealize Log Insight](#vmware-vrealize-log-insight)
+            - [Graylog](#graylog)
+            - [ELK](#elk)
+            - [Grafana/Graphite - HCICollector](#grafanagraphite---hcicollector)
+            - [Grafana/Prometheus - solidfire-exporter](#grafanaprometheus---solidfire-exporter)
+            - [Prometheus - NetApp Trident metrics](#prometheus---netapp-trident-metrics)
+            - [Icinga and Nagios](#icinga-and-nagios)
+            - [SNMP and SolidFire MIBs](#snmp-and-solidfire-mibs)
+            - [Splunk](#splunk)
+            - [Syslog Forwarding](#syslog-forwarding)
+            - [Security and General Auditing](#security-and-general-auditing)
+            - [Event Notifications](#event-notifications)
+        - [Backup, Restore, DR and BC Site Failover](#backup-restore-dr-and-bc-site-failover)
+        - [Security](#security)
+        - [Encryption](#encryption)
+    - [Demo VM, Tools and Utilities](#demo-vm-tools-and-utilities)
+        - [SolidFire/Element Demo VM](#solidfireelement-demo-vm)
+        - [Recorded Demos](#recorded-demos)
+    - [Scripts and How-To Articles](#scripts-and-how-to-articles)
+        - [Generic](#generic)
+        - [VMware](#vmware)
+        - [Windows](#windows)
+        - [SolidFire API-related details](#solidfire-api-related-details)
+            - [SolidFire Objects](#solidfire-objects)
+            - [Unique Object Names](#unique-object-names)
+            - [Date and Time in SolidFire API](#date-and-time-in-solidfire-api)
+    - [Questions and Answers](#questions-and-answers)
+        - [Meta](#meta)
+        - [SolidFire / Element Demo VM](#solidfire--element-demo-vm)
+        - [Logging and Monitoring](#logging-and-monitoring)
+        - [Hypervisors and Containers](#hypervisors-and-containers)
+        - [Workloads](#workloads)
+        - [Storage Services](#storage-services)
+        - [DevOps](#devops)
+        - [Networking](#networking)
+    - [License and Trademarks](#license-and-trademarks)
+
+<!-- /TOC -->
 
 ## NetApp SolidFire-based Offerings
 
@@ -98,6 +102,7 @@
 - Always-on storage efficiency with zero-performance impact. Compression and deduplication cannot be disabled
 - Granular storage capacity and performance management - Minimum, Maximum and Burst storage policies may be assigned on a per-volume basis
 - General purpose scale-out storage clusters that are easy to provision, manage, refresh, and scale
+- Availability Zone-like data partitioning for rack, floor, campus environments
 - Can be merged into or serve as a base for NetApp HCI - add two or more NetApp HCI compute nodes and convert your SolidFire cluster into NetApp HCI
 
 ### Why NetApp HCI
@@ -195,7 +200,7 @@
 #### Docker CE and Mirantis Kubernetes Engine (MKE)
 
 - Docker and other [container orchestrators supported](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) by NetApp Trident
-- Docker Swarm is not supported with SolidFire and Trident, but Mirantis Kubernetes Engine is. More [here](https://scaleoutsean.github.io/2021/05/02/mirantis-mke-netapp-trident-solidfire.html)
+- Docker Swarm is not supported with SolidFire and Trident, but Mirantis Kubernetes Engine is. More [here](https://scaleoutsean.github.io/2021/05/02/mirantis-mke-netapp-trident-solidfire)
 
 ### File-sharing (NFS, SMB)
 
@@ -211,7 +216,7 @@
 #### API
 
 - SolidFire has versioned API which means you can run your "old" automation scripts against an older API endpoint of your choosing (e.g. API endpoint version 8.0 is still available and works (as of 12.2) despite SolidFire 8 no longer being supported)
-- SolidFire / Element Software API Reference Guide: 
+- SolidFire / Element Software API Reference Guide:
   - HTML: [v12.3](https://docs.netapp.com/us-en/element-software/api/index.html)
 
 #### CLI
@@ -230,7 +235,7 @@
   - [SolidFire Microsoft .NET SDK](https://github.com/solidfire/sdk-dotnet)
   - [SolidFire Java SDK](https://github.com/solidfire/solidfire-sdk-java)
   - [SolidFire Ruby SDK](https://github.com/solidfire/solidfire-sdk-ruby)
-  - [(Unofficial) SolidFire Go SDK](https://github.com/solidfire/solidfire-sdk-golang) and its cousin [solidfire-go](https://github.com/j-griffith/solidfire-go) with a convenient wrapper for common volume operations
+  - [(Unofficial) SolidFire Go SDK](https://github.com/solidfire/solidfire-sdk-golang) and its cousin [solidfire-go](https://github.com/j-griffith/solidfire-go) with a convenient wrapper for common volume operations.
 
 ### Automation
 
@@ -284,25 +289,31 @@
 #### Grafana/Prometheus - solidfire-exporter
 
 - [Solidfire Exporter](https://github.com/mjavier2k/solidfire-exporter/) fetches and serves SolidFire metrics in the Prometheus format
-- Recommended for stand-alone SolidFire and Kubernetes
-- Works within Kubernetes without changes
+  - Recommended for stand-alone SolidFire and Kubernetes
+  - Works within Kubernetes without changes
 
 #### Prometheus - NetApp Trident metrics
 
-- In v20.01 NetApp Trident delivered support for Prometheus metrics. A how-to is available [here](https://netapp.io/2020/02/20/prometheus-and-trident/)
+- SolidFire
+  - see SolidFire Exporter (above)
+  - another options is SolidFire SNMP-to-Telegraf-to-Prometheus (example [configuration files](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana))
+- NetApp Trident
+  - In v20.01 NetApp Trident delivered support for Prometheus metrics. A how-to is available [here](https://netapp.io/2020/02/20/prometheus-and-trident/)
 
 #### Icinga and Nagios
 
 - [ElementOS-Monitoring](https://github.com/aleex42/elementOS-monitoring) - more [here](https://blog.krogloth.de/nagios-icinga-monitoring-for-netapp-solidfire/)
 - [nagfire](https://github.com/scaleoutsean/nagfire/) - supports status check of both SolidFire clusters and individual nodes (Python 3)
 
-#### SNMP MIBs
+#### SNMP and SolidFire MIBs
 
 - SolidFire MIBs may be downloaded from the SolidFire/Element Web UI. You can download the MIB files and open them to see what events and stats are gathered and sent by it
 - SolidFire OID is 1.3.6.1.4.1.38091 (`.iso.org.dod.internet.private.enterprises.solidFire`)
+  - For v3, EngineID's are unique per node; find them with `snmpwalk -DALL -v3 -l AuthNoPriv -u netapp -a MD5 -A "NetApp123$" -x DES -X "NetApp123$" $MIP 2>&1 | grep "probe found engineID"` (h/t Mike Henry) or Wireshark dump of `snmpwalk -v3` against each MIP
 - SNMP is disabled by default. If you enable it, you may choose v2 or v3
 - Check SolidFire Postman collection for SNMP-related API methods (there's 10 or so of them). For example, `SnmpSendTestTraps` lets us send test SNMP Trap from MVIP once SNMP is enabled and configured
 - Deep dive into SolidFire SNMP can be found [here](https://scaleoutsean.github.io/2021/07/19/solidfire-mib-snmp-monitoring)
+- Telegraf SNMP plugin can be used to extract SolidFire SNMP data (see link to a how-to under Prometheus, above)
 
 #### Splunk
 
@@ -328,7 +339,8 @@
 
 #### Event Notifications
 
-- Users with existing notification solution: use Syslog forwarding or SNMP. You may also [integrate](https://youtu.be/aiwkKQaz7AQ) NetApp ActiveIQ with your existing monitoring application
+- Users with existing notification solution: use Syslog forwarding or SNMP (see deep dive linked from under SNMP & SolidFire MIBs above)
+- You may also [integrate](https://youtu.be/aiwkKQaz7AQ) NetApp ActiveIQ with your existing monitoring application
 - Users without an existing solution may consider one of these:
   - NetApp ActiveIQ: mobile app notifications (faster), email notifications (slower; enable them in the ActiveIQ Web UI)
   - Grafana: [HCICollector](https://github.com/scaleoutsean/hcicollector) and (Grafana in general) can send email notifications
@@ -341,10 +353,11 @@
   - Commvault
   - Rubrik
   - Veeam BR
-- E/EF-Series (with iSCSI host interface) attached to NetApp HCI is ideal fast Tier 1 backup pool/storage (gigabytes per second). You can find indicators of backup and restore performance in [this blog post](https://scaleoutsean.github.io/2020/12/30/netapp-hci-ef280-diskspd-for-backup.html)
+- E/EF-Series (with iSCSI host interface) attached to NetApp HCI is ideal fast Tier 1 backup pool/storage (gigabytes per second). You can find indicators of backup and restore performance in [this blog post](https://scaleoutsean.github.io/2020/12/30/netapp-hci-ef280-diskspd-for-backup)
 - Open-source integrations for non-CSI environments (Borg, Duplicati, Restic, Borg, etc.)
   - Snapshot, clone and mount SolidFire volumes, then use a backup utility to replicate clone to backup storage (E-Series, etc.) or S3 (NetApp StorageGRID, AWS S3, etc.)
-  - Video demo with [Duplicati](https://youtu.be/wP8nAgFo8og)
+    - Video demo with [Duplicati](https://youtu.be/wP8nAgFo8og)
+    - An implementation with Restic written in PowerShell can be found in my [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup); with extremely simple modifications I was able to [apply the concept to backup SolidFire clones to Minio](https://scaleoutsean.github.io/2021/06/18/solidbackup-with-alternative-backup-clients)
   - Kubernetes users can use Velero (see below)
 - You can also replicate to, and then backup from ONTAP, which becomes attractive with large backup jobs: set up SolidFire SnapMirror to an ONTAP system with NL-SAS disks and backup the volume on ONTAP. When you have to backup a 20TB database on HCI, you're better off backing it up with NetApp HCI replicated to ONTAP than directly from HCI (either NetApp or any other)
 - DR for Virtual Infrastructure
