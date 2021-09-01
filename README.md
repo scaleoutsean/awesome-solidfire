@@ -311,6 +311,7 @@
 - SolidFire OID is 1.3.6.1.4.1.38091 (`.iso.org.dod.internet.private.enterprises.solidFire`)
   - For v3, EngineID's are unique per node; find them with `snmpwalk -DALL -v3 -l AuthNoPriv -u netapp -a MD5 -A "NetApp123$" -x DES -X "NetApp123$" $MIP 2>&1 | grep "probe found engineID"` (h/t Mike Henry) or Wireshark dump of `snmpwalk -v3` against each MIP
 - SNMP is disabled by default. If you enable it, you may choose v2 or v3
+  - SNMP Traps are sent out as v2. If SNMP v3 is required, you can set up an SNMP v2 to v3 trap forwarder (see [here](https://github.com/scaleoutsean/solidtrapper); there are commercial products that can do this)
 - Check SolidFire Postman collection for SNMP-related API methods (there's 10 or so of them). For example, `SnmpSendTestTraps` lets us send test SNMP Trap from MVIP once SNMP is enabled and configured
 - Deep dive into SolidFire SNMP can be found [here](https://scaleoutsean.github.io/2021/07/19/solidfire-mib-snmp-monitoring)
 - Telegraf SNMP plugin can be used to extract SolidFire SNMP data (see link to a how-to under Prometheus, above)
