@@ -114,6 +114,14 @@ This animation shows some key (storage-, not performance-related) concepts:
 
 ![SolidFire scale out, rebalancing and h/w refresh](/images/solidfire-scale-out-refresh.svg)
 
+Volume placement considers both performance and capacity utilization:
+
+- Volume placement depends on storage QoS settings, performance utilization, volume fullness and other factors
+- Volume rebalancing happens transparently as these settings and conditions change
+- As new hosts and volumes come online, they are placed optimally considering volume QoS settings and capacity and performance utilization of volumes
+
+![SolidFire performance and metadata rebalancing](/images/solidfire-perf-and-md-rebalancing.svg)
+
 ### Why NetApp HCI
 
 - Open architecture
