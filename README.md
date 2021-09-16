@@ -102,8 +102,17 @@
 - Always-on storage efficiency with zero-performance impact. Compression and deduplication cannot be disabled
 - Granular storage capacity and performance management - Minimum, Maximum and Burst storage policies may be assigned on a per-volume basis
 - General purpose scale-out storage clusters that are easy to provision, manage, refresh, and scale
-- Availability Zone-like data partitioning for rack, floor, campus environments
+- Availability Zone-like data partitioning for rack, floor, campus environments (SolidFire Protection Domains)
 - Can be merged into or serve as a base for NetApp HCI - add two or more NetApp HCI compute nodes and convert your SolidFire cluster into NetApp HCI
+
+This animation shows some key (storage-, not performance-related) concepts:
+
+- start with 4 or more nodes and expand with 1 or or more at once
+- shrink the cluster by removing old nodes
+- with Protection Domains (PDs), the failure of Rack 3 doesn't cause downtime
+- the way PDs, and SolidFire in general, works there are no RAID groups and all blocks are spread across the cluster (balanced among multiple nodes and PDs, if the latter are available)
+
+![SolidFire scale out, rebalancing and h/w refresh](/images/solidfire-scale-out-refresh.svg)
 
 ### Why NetApp HCI
 
@@ -134,6 +143,7 @@
 
 - Check out VMware related material on the NetApp web site (Private cloud, VDI/EUC, GPU computing and more)
 - vCenter Plugin for Element Software (used to be called "VCP") is built into NetApp HCI and may be installed in other vCenter servers you want to connect to separate NetApp HCI volumes. SolidFire users may get it from NetApp downloads for Element Software
+- [VMware Storage/SAN Compatibility Page](https://www.vmware.com/resources/compatibility/search.php?deviceCategory=san&details=1&partner=439&arrayTypes=1&isSVA=0&page=1&display_interval=10&sortColumn=Partner&sortOrder=Asc) for SolidFire iSCSI storage
 - [Element SRA](https://www.vmware.com/resources/compatibility/search.php?deviceCategory=sra&details=1&partner=64,439&keyword=solidfire&page=1&display_interval=10&sortColumn=Partner&sortOrder=Asc) for VMware SRM 8.3
 - [vRealize Orchestrator Plugin for Element Software](https://github.com/solidfire/vrealize-orchestrator-plugin)
 - [vRealize Automation for NetApp HCI and SolidFire](https://bluemedora.com/resource/vmware-vrealize-operations-management-pack-for-netapp-hci-solidfire/)
