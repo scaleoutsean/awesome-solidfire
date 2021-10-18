@@ -117,7 +117,7 @@ This animation shows some key (storage-, not performance-related) concepts:
 Volume placement considers both performance and capacity utilization:
 
 - Volume placement depends on storage QoS settings, performance utilization, volume fullness and other factors
-- Volume rebalancing happens transparently as these settings and conditions change
+- Volume rebalancing happens transparently as these settings and conditions change - volumes get fuller or emptier, storage QoS settings get adjusted up or down, etc.
 - As new hosts and volumes come online, they are placed optimally considering volume QoS settings and capacity and performance utilization of volumes
 
 ![SolidFire performance and metadata rebalancing](/images/solidfire-perf-and-md-rebalancing.svg)
@@ -180,10 +180,10 @@ Volume placement considers both performance and capacity utilization:
 
 #### Linux-related (OpenStack, KVM, Oracle VM)
 
-- Cinder driver for OpenStack (in-tree, does not need to be installed, it only needs to be configured - see NetApp TR-6420 or [this video](https://youtu.be/rW5ZTlyhm7U))
+- NetApp's [OpenStack resources and docs](https://netapp-openstack-dev.github.io/openstack-docs/draft/cinder/configuration/cinder_config_files/section_solidfire-conf.html) for SolidFire
+- Cinder driver for OpenStack (in-tree, does not need to be installed, it only needs to be configured - see [this video](https://youtu.be/rW5ZTlyhm7U))
   - RHOSP16 certification: https://catalog.redhat.com/software/openstack/detail/2257111
 - [Juju charm](https://github.com/solidfire/charm-cinder-solidfire) for Cinder to use Element cluster back-end (may need to be updated)
-- NetApp's [OpenStack resources and docs](https://netapp.io/openstack/)
 - [Oracle VM](https://linux.oracle.com/pls/apex/f?p=117:3::::::) (look under Storage Systems > NetApp)
 - Additional details about SolidFire in Linux environments: [solidfire-linux](https://github.com/scaleoutsean/solidfire-linux/)
 
@@ -263,8 +263,8 @@ Volume placement considers both performance and capacity utilization:
 
 - [Ansible modules](https://galaxy.ansible.com/netapp/elementsw?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW) for Element Software (`ansible-galaxy collection install netapp.elementsw`) or visit the [Github repo](https://github.com/ansible-collections/netapp.elementsw)
 - [SolidFire Puppet plugin](https://github.com/solidfire/solidfire-puppet)
-- [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw) - supports resources IQN, VAG, account, volume
-  - Install it directly from [Terraform registry](https://registry.terraform.io/providers/NetApp/netapp-elementsw/latest)
+- [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw) - supports resources IQN, VAG, account, volume (find a working example in examples directory)
+  - Install it directly from [Terraform registry](https://registry.terraform.io/providers/NetApp/netapp-elementsw/latest) but check out that Github repo example if you need help
 
 ### Alerting, Monitoring, Telemetry
 
@@ -294,10 +294,12 @@ Volume placement considers both performance and capacity utilization:
 #### Graylog
 
 - Redirect SolidFire log directly or indirectly (for example first to syslog-ng and from there forward to Graylog in the GELF format)
+- For structured search see the Logstash how-to linked below, maybe it will help you
 
 #### ELK
 
 - Redirect SolidFire log to syslog-ng or LogStash or whatever, and from there to Elastic
+- A how-to article for Filebeat/Logstash as well as SolidFire API-based queries can be found [here](https://scaleoutsean.github.io/2021/10/18/solidfire-syslog-filebeat-logstash-elk-stack.html)
 
 #### Grafana/Graphite - HCICollector
 
