@@ -512,7 +512,7 @@ A: Absolutely not. For official information please visit the NetApp Web sites (s
 
 Q: I have a quick question about ...
 
-A: Please join [the NetApp community Slack](https://join.slack.com/t/netapppub/shared_invite/zt-jdnzc1o7-Up1AIoNzZ4fEtONPG0_6Fw) and ask your question in the `#netapp-hci` channel. If you need more eyes on the question or already have an account at the  [NetApp Community Forum](https://community.netapp.com/t5/AFF-NVMe-EF-Series-and-SolidFire-Discussions/bd-p/flash-storage-systems-discussions) please ask there and tag your question with 'solidfire'.
+A: Please join [the NetApp community Slack](https://join.slack.com/t/netapppub/shared_invite/zt-jdnzc1o7-Up1AIoNzZ4fEtONPG0_6Fw) and ask your question in the `#netapp-hci` channel. If you need more eyes on the question or already have an account at the  [NetApp Community Forum](https://community.netapp.com/t5/SolidFire-and-HCI/bd-p/solidfire_hci) please ask there and tag your question with 'solidfire'.
 
 ### SolidFire / Element Demo VM
 
