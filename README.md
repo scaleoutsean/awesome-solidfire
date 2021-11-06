@@ -240,14 +240,11 @@ Volume placement considers both performance and capacity utilization:
 #### CLI
 
 - SolidFire has two fully functional CLI's - PowerShell & Python
-- Current releases: download with `pip` (Python 3) and `Install-Module` (PowerShell), or Github, or (for registered users) from [https://mysupport.netapp.com/site/tools](https://mysupport.netapp.com/site/tools) (search for 'element' in Tools)
-- Older releases (work fine with latest Element, but connect to older API endpoints and use older API version):
-  - SolidFire [PowerShell Tools (Win/Lin)](https://github.com/solidfire/PowerShell) for the x86_64 architecture. It's not officially supported, but module `SolidFire.Core` has been field-tested and found to work on ARM64 (PowerShell 6)
-  - SolidFire [Python CLI (Win/Lin/OS X)](https://github.com/solidfire/solidfire-cli)
+- Download with `pip3 install solidfire-cli` and `Install-Module SolidFire.Core` (PS 7 on x64; `SolidFire.Core` has been field-tested and found to work on ARM64)
 
 #### SolidFire/Element Software Development Kits (SDKs)
 
-- Current releases: free download for registered users from [https://mysupport.netapp.com/site/tools](https://mysupport.netapp.com/site/tools) (search for 'element' in Tools); Python SDK can be installed from pip
+- Current releases: free download for registered users from [https://mysupport.netapp.com/site/tools](https://mysupport.netapp.com/site/tools) (search for 'element' in Tools); Python SDK can be installed with pip (e.g. `pip3 install solidfire-sdk-python`)
 - Releases:
   - [SolidFire Python SDK](https://github.com/solidfire/solidfire-sdk-python)
   - [SolidFire Microsoft .NET SDK](https://github.com/solidfire/sdk-dotnet)
