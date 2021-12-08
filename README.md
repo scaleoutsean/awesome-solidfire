@@ -186,6 +186,7 @@ Volume placement considers both performance and capacity utilization:
 - [Juju charm](https://github.com/solidfire/charm-cinder-solidfire) for Cinder to use Element cluster back-end (may need to be updated)
 - [Oracle VM](https://linux.oracle.com/pls/apex/f?p=117:3::::::) (look under Storage Systems > NetApp)
 - Additional details about SolidFire in Linux environments: [solidfire-linux](https://github.com/scaleoutsean/solidfire-linux/)
+- Flatcar Container Linux notes can be found [here](https://scaleoutsean.github.io/2021/12/07/flatcar-linux-with-solidfire-iscsi.html). CoreOS users may find them useful, too
 
 #### Oracle VirtualBox
 
