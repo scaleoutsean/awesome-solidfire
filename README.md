@@ -46,6 +46,7 @@
             - [Splunk](#splunk)
             - [Syslog Forwarding](#syslog-forwarding)
             - [Security and General Auditing](#security-and-general-auditing)
+            - [ServiceNow integration](#servicenow-integration)
             - [Event Notifications](#event-notifications)
         - [Backup, Restore, DR and BC Site Failover](#backup-restore-dr-and-bc-site-failover)
         - [Security](#security)
@@ -183,6 +184,7 @@ Volume placement considers both performance and capacity utilization:
 - NetApp's [OpenStack resources and docs](https://netapp-openstack-dev.github.io/openstack-docs/draft/cinder/configuration/cinder_config_files/section_solidfire-conf.html) for SolidFire
 - Cinder driver for OpenStack (in-tree, does not need to be installed, it only needs to be configured - see [this video](https://youtu.be/rW5ZTlyhm7U))
   - RHOSP16 certification: https://catalog.redhat.com/software/openstack/detail/2257111
+  - Cinder Active-Active [enabled](https://docs.openstack.org/cinder/ussuri/reference/support-matrix.html#operation_active_active_ha)
 - [Juju charm](https://github.com/solidfire/charm-cinder-solidfire) for Cinder to use Element cluster back-end (may need to be updated)
 - [Oracle VM](https://linux.oracle.com/pls/apex/f?p=117:3::::::) (look under Storage Systems > NetApp)
 - Additional details about SolidFire in Linux environments: [solidfire-linux](https://github.com/scaleoutsean/solidfire-linux/)
@@ -355,6 +357,11 @@ Volume placement considers both performance and capacity utilization:
 - See [TR-4840](https://www.netapp.com/pdf.html?item=/media/19389-tr-4840.pdf) and SolidFire documentation for details on authentication and authorization (including MFA/2FA)
 - White paper on [PCI DSS](https://www.coalfire.com/resources/white-papers/netapp-hci-verified-architecture-for-pci-dss) contains information for users with PCI DSS compliance requirements
 - See the KMIP notes in this repo for practical notes on TLS certificates and KMIP
+
+#### ServiceNow integration
+
+- Not proven, but [looks doable](https://scaleoutsean.github.io/2021/12/14/integrate-solidfire-with-servicenow.html) indirectly through Elasticsearch-ServiceNow integration
+  - This would require SolidFire log redirection with structured logging and alerting in Elasticsearch (a recipe can be found [in this post](https://scaleoutsean.github.io/2021/10/18/solidfire-syslog-filebeat-logstash-elk-stack.html))
 
 #### Event Notifications
 
