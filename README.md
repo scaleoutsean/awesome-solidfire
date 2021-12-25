@@ -439,6 +439,7 @@ Find them in the `scripts` directory in this repo:
   - v1: runs `$p` parallel jobs to back up list of volumes identified by Volume ID (`$backup`) to an S3-compatible object store. The same script can be changed to restore in the same, parallel, fashion. Parallelization is over entire cluster - the script is not aware of per-node job maximums so aggressive parallelization may result in failed jobs that need to be resubmitted
   - v2: runs `$p` parallel jobs *per each node*, where $p is an integer between 0 and the maximum number of bulk jobs per node (8). It's made possible by `sfvid2nid` (below). You can read more about it [here](https://scaleoutsean.github.io/2021/06/22/solidfire-backup-and-cloning-with-per-storage-node-queues.html)
 - `sfvid2nid` - SolidFire volume ID to node ID mapping script (PowerShell). This information can be used to drive the maximum per-node number of bulk volume jobs (such as built-in backup) and sync jobs (such as copy and clone volume jobs)
+- `hcc-hybrid-cloud-control-get-assets.ps1` - use PowerShell to connect to the NetApp Hybrid Cloud Control (HCC) API to get list of compute (ESXi) nodes. With that you can use PowerCLI to do VMware-related operations. More [here](https://scaleoutsean.github.io/2021/12/21/netapp-solidfire-hci-hcc-powershell.html).
 
 Some volume-cloning and backup-to-S3 scripts related to my SolidBackup concept can be found in the [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup).
 
