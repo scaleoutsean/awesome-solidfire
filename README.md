@@ -507,7 +507,10 @@ Timestamp        : 1970-01-01T00:00:00Z
 
 #### Date and Time in SolidFire API
 
-- The SolidFire and HCC (Hybrid Cloud Control) APIs use [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) formatted UTC time.
+- The SolidFire and HCC (Hybrid Cloud Control) APIs return timestamp values in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) datetime format with extended time in UTC (no TZ offset)
+  - Example: `{'timestamp': '2021-12-31T05:24:54Z'}`
+  - Python 3: `print((datetime.datetime.utcnow()).strftime('%Y-%m-%dT%H:%M:%S%z')+"Z")` `->` `2021-12-31T05:27:33Z`
+  - PowerShell 7: `Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ" -AsUTC` `->` `2021-12-31T05:25:01Z`
 
 ## Questions and Answers
 
