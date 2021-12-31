@@ -20,6 +20,8 @@
             - [Oracle VirtualBox](#oracle-virtualbox)
             - [Virtual Desktop Infrastructure and End User Computing VDI & EUC](#virtual-desktop-infrastructure-and-end-user-computing-vdi--euc)
         - [Kubernetes and Containers](#kubernetes-and-containers)
+            - [Get started with SolidFire](#get-started-with-solidfire)
+            - [CSI Provisioners](#csi-provisioners)
             - [Red Hat OpenShift Container Platform](#red-hat-openshift-container-platform)
             - [Rancher](#rancher)
             - [Google Anthos](#google-anthos)
@@ -94,13 +96,13 @@
 ### NetApp HCI
 
 - NetApp HCI (NetApp HCI compute nodes connected via iSCSI to NetApp HCI storage nodes - some call it "disaggregated HCI" or dHCI)
-  - View all currently available models in 3D [here](https://apps.kaonadn.net/4817930843848704/index.html) (click on NetApp HCI))
+  - End of Sale sometime in Q1CY22 (check official NetApp announcements)
 
 ## Why SolidFire
 
-- Fully programmable storage - from the initial node configuration to automated storage provisioning for containers
+- Fully programmable storage - from initial node configuration to automated storage provisioning for containers
 - Public Cloud-like, set-and-forget iSCSI storage for clients ranging from bare metal x86-64 servers to hypervisors, VMs and containers
-- Always-on storage efficiency with zero-performance impact. Compression and deduplication cannot be disabled
+- Always-On storage efficiency with zero-performance impact. Compression and deduplication cannot be disabled
 - Granular storage capacity and performance management - Minimum, Maximum and Burst storage policies may be assigned on a per-volume basis
 - General purpose scale-out storage clusters that are easy to provision, manage, refresh, and scale
 - Availability Zone-like data partitioning for rack, floor, campus environments (SolidFire Protection Domains)
@@ -110,8 +112,8 @@ This animation shows some key (storage-, not performance-related) concepts:
 
 - start with 4 or more nodes and expand with 1 or or more at once
 - shrink the cluster by removing old nodes
-- with Protection Domains (PDs), the failure of Rack 3 doesn't cause downtime
-- the way PDs, and SolidFire in general, works there are no RAID groups and all blocks are spread across the cluster (balanced among multiple nodes and PDs, if the latter are available)
+- with Protection Domains (PDs), the failure of Rack 3 shown in animation doesn't cause downtime
+- the way PDs, and SolidFire in general, works there are no RAID groups and all blocks are spread across the cluster (replicated twice, and balanced among multiple nodes and PDs, if the latter are available)
 
 ![SolidFire scale out, rebalancing and h/w refresh](/images/solidfire-scale-out-refresh.svg)
 
@@ -203,7 +205,15 @@ Volume placement considers both performance and capacity utilization:
 
 ### Kubernetes and Containers
 
+#### Get started with SolidFire
+
+- Download and deploy SolidFire Demo VM (look for Element Demo VM or SolidFire Demo VM on this page). Estimated time: 30 min to download, 30 minutes to setup the first time you try.
+- To start using SolidFire from Kubernetes, head to my SolidFire-focused micro-site [Kuberntes with SolidFire](https://solidfire-kubernetes.pages.dev/) for a set of SolidFire-focused configuration steps. Estimated time: 15 minutes.
+
+#### CSI Provisioners
+
 - [NetApp Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Red Hat OpenShift, Rancher RKE and others)
+- OpenStack users may be able to [use SolidFire with Cinder CSI Plugin for Kubernetes](https://github.com/kubernetes/cloud-provider-openstack/blob/master/docs/cinder-csi-plugin/using-cinder-csi-plugin.md), but I haven't tried this myself
 
 #### Red Hat OpenShift Container Platform
 
@@ -211,26 +221,29 @@ Volume placement considers both performance and capacity utilization:
 
 #### Rancher
 
-- Rancher on NetApp HCI: See the official NetApp HCI solutions page for additional details. I have a personal site with notes on this solution from a SolidFire angle [here](https://scaleoutsean.github.io/solid-rancher)
+- Rancher on NetApp HCI: just configure it with Trident CSI. See the official NetApp HCI solutions page for additional details. In late 2020 I created a personal micro-site with notes on this solution from a NetApp HCI and SolidFire angle [here](https://scaleoutsean.github.io/solid-rancher), but I no longer maintain it because netApp HCI will end-of-sale soon, so maybe also check this newer SolidFire-focused micro-site [Kuberntes with SolidFire](https://solidfire-kubernetes.pages.dev/) instead.
 - Provision Rancher K8s to NetApp HCI vSphere clusters from the CLI with [ez-rancher](https://github.com/NetApp/ez-rancher/)
 
 #### Google Anthos
 
-- Anthos is supported on vSphere clusters. See the official NetApp HCI solutions page for additional details
+- Anthos with Trident CSI is supported on vSphere clusters. See the official NetApp HCI solutions page for additional details
 
 #### Docker CE and Mirantis Kubernetes Engine (MKE)
 
-- Docker and other [container orchestrators supported](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) by NetApp Trident
-- Docker Swarm is not supported with SolidFire and Trident, but Mirantis Kubernetes Engine is. More [here](https://scaleoutsean.github.io/2021/05/02/mirantis-mke-netapp-trident-solidfire)
+- Docker and other [container orchestrators supported](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) by NetApp Trident CSI
+- Docker Swarm is not supported with SolidFire and Trident, but Mirantis Kubernetes Engine is. More on Mirantis MKE with SolidFire can be found [here](https://scaleoutsean.github.io/2021/05/02/mirantis-mke-netapp-trident-solidfire)
 
 ### File-sharing (NFS, SMB)
 
-- NetApp ONTAP Select 9.8 (single node or HA, including Active-Active stretch clusters with one ONTAP Select VM and NetApp HCI cluster per each site ([Metrocluster SDS](https://docs.netapp.com/us-en/ontap-select/concept_ha_config.html))
-- Read-only and read-write caching:
-  - NFS (on-prem and hybrid cloud, read-only): NetApp ONTAP Select with [FlexCache](https://www.netapp.com/us/info/what-is-flex-cache.aspx)
-  - SMB (hybrid cloud, read-write):
-    - NetApp FlexCache (ONTAP Select 9.8+)
-    - [NetApp Global File Cache](https://cloud.netapp.com/global-file-cache) running as edge node in Microsoft Windows VM, with core file service running in public cloud (Cloud Volumes ONTAP or Cloud Volumes Service). As indicated, you don't need ONTAP Select on NetApp HCI for this one
+- SolidFire itself is iSCSI only, so for file sharing you'd need another layer (VM or appliance) to consume iSCSI and share it with SMB or NFS or S3 clients
+- Example 1: NetApp ONTAP Select 9.10 (single node or HA, including Active-Active stretch clusters with one ONTAP Select VM and NetApp HCI cluster per each site ([Metrocluster SDS](https://docs.netapp.com/us-en/ontap-select/concept_ha_config.html))
+  - Read-only and read-write caching:
+    - NFS (on-prem and hybrid cloud, read-only): NetApp ONTAP Select with [FlexCache](https://www.netapp.com/us/info/what-is-flex-cache.aspx)
+    - SMB (hybrid cloud, read-write):
+      - NetApp FlexCache (ONTAP Select 9.8+)
+      - [NetApp Global File Cache](https://cloud.netapp.com/global-file-cache) running as edge node in Microsoft Windows VM, with core file service running in public cloud (Cloud Volumes ONTAP or Cloud Volumes Service). As indicated, you don't need ONTAP Select on NetApp HCI for this one
+    - S3 - use ONTAP S3; this is recommended for small object stores (container registry, source code, etc.), use something like StorageGRID for large and uncompressible content
+- Example 2: any modern OS with NFS, SMB or S3 service
 
 ### CLI, API, SDK Resources
 
