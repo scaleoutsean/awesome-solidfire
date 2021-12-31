@@ -61,7 +61,7 @@
         - [SolidFire API-related details](#solidfire-api-related-details)
             - [SolidFire Objects](#solidfire-objects)
             - [Unique Object Names](#unique-object-names)
-            - [Date and Time in SolidFire API](#date-and-time-in-solidfire-api)
+            - [Date and Time Format in SolidFire API Responses](#date-and-time-format-in-solidfire-api-responses)
     - [Questions and Answers](#questions-and-answers)
         - [Meta](#meta)
         - [SolidFire / Element Demo VM](#solidfire--element-demo-vm)
@@ -81,7 +81,7 @@
 
 - SolidFire iSCSI storage clusters (available as storage-only clusters)
   - Shares storage nodes with the NetApp HCI product line
-  - View all currently available models in 3D [here](https://apps.kaonadn.net/4817930843848704/index.html) (click on NetApp HCI))
+  - View currently available SolidFire appliances [here](https://www.netapp.com/data-storage/solidfire/) or check which DellEMC, HPE or other servers are certified for [SolidFire eSDS](https://docs.netapp.com/us-en/element-software/esds/concept_get_started_esds.html)
 
 ### NetApp Enterprise Software-Defined Storage (eSDS)
 
@@ -398,7 +398,7 @@ Volume placement considers both performance and capacity utilization:
     - Commvault B&R: [documentation](https://documentation.commvault.com/11.21/essential/123637_system_requirements_for_kubernetes.html) and [demo](https://www.youtube.com/watch?v=kiMf9Fkhxd8). Metallic VM is another offering with this technology.
     - Kasten K10: [documentation](https://docs.kasten.io/latest/install/storage.html?highlight=netapp#netapp-trident) and [demo](https://www.youtube.com/watch?v=ShrSDwzQ0uU)
     - Velero: [documentation](https://github.com/vmware-tanzu/velero) and [demo](https://www.youtube.com/watch?v=6RrlK2rmk24). It can work both [with](https://github.com/vmware-tanzu/velero-plugin-for-csi) and without CSI. CSI support sort-of-works (CSI Plugin is currently beta quality, not yet production ready in Velero v1.5.3)
-  - Storage cluster failover for Kubernetes with Trident CSI and two SolidFire clusters: use NetApp Trident's Volume Import feature (a quick demo (2m55s) can be viewed [here](https://youtu.be/aSFxlGoHgdA) while a deep-dive walk-through with a ton of detail can be found [here](https://scaleoutsean.github.io/2021/03/20/kubernetes-solidfire-failover-failback.html))
+  - Storage cluster failover for one Kubernetes cluster with Trident CSI and two SolidFire clusters: use NetApp Trident's Volume Import feature (a quick demo (2m55s) can be viewed [here](https://youtu.be/aSFxlGoHgdA) while a deep-dive walk-through with a ton of detail can be found [here](https://scaleoutsean.github.io/2021/03/20/kubernetes-solidfire-failover-failback.html)). For two Kubernetes clusters, each with own SolidFire cluster, you'd simply setup replication between SolidFire clusters (use consistency groups where necessary) and push Trident PVC->PV mapping to the remote site where you'd swap PV from SolidFire Cluster A for replicate PVs from SolidFire Cluster B so that you can promote Cluster B and run Trident volume import before you start Kubernetes on that site.
 
 ### Security
 
@@ -415,9 +415,9 @@ Volume placement considers both performance and capacity utilization:
 
 ### SolidFire/Element Demo VM
 
-- Element Demo VM: partners and customers may [download](https://mysupport.netapp.com/tools/info/ECMLP2848232I.html?pcfContentID=ECMLP2848232&productID=62139&pcfContentID=ECMLP2848232) (NetApp partner or support login required) and use it at no cost. Data and configuration persist after a reboot. It works with Kubernetes (Trident), VMware ESXi and other iSCSI clients supported by SolidFire. 
-  - SolidFire Demo VM can't be upgraded and scaled, but if you want to keep its data, you can stand up another one, set up async replication to a new instance and remove the old instance once replication is done. 
-  - VMware users can simply Storage vMotion their data. I tend to Storage vMotion data to another DS (not new SolidFire Demo VM), remove VCP plugin from vCenter, remove Demo VM's iSCSI devices from any clients, delete the old Demo VM and deploy new VM in its place. Then I redeploy VCP (and register Demo VM in HCC, if I use it). The reason for doing things this way is I want to retain the same Storage and Management IP (which isn't easy to do if you use SolidFire replication to copy data from old to new Demo VM).
+- Element Demo VM (SolidFire Demo VM): partners and customers may [download](https://docs.netapp.com/us-en/element-software/try/task_use_demonode.html) (NetApp partner or support login required) and use it at no cost. Data and configuration persist after a reboot. It works with Kubernetes (Trident), VMware ESXi and other iSCSI clients supported by SolidFire.
+  - SolidFire Demo VM can't be upgraded and scaled out, but if you want to keep its data you can stand up another one, set up async replication to a new instance and remove the old instance once replication is done (that would require changes in Target on iSCSI nodes, if any, or import of new volumes with Trident)
+  - VMware users can simply Storage vMotion their data. I tend to Storage vMotion data to another DS (not new SolidFire Demo VM), remove SolidFire VCP plugin from vCenter, remove Demo VM's iSCSI devices from any clients, delete the old Demo VM and deploy new VM in its place. Then I redeploy VCP (and register Demo VM in HCC, if I use it). The reason for doing things this way is I want to retain the same Storage and Management IP (which isn't easy to do if you use SolidFire replication to copy data from old to new Demo VM).
 - NetApp OneCollect: this awesome and gratis multi-purpose utility that runs on Windows, Linux and in [Docker](https://hub.docker.com/r/netapp/onecollect/) containers is generally used for log data gathering but it can be used for configuration change tracking when set to run on schedule (watch [this video](https://www.youtube.com/watch?v=ksSs9wUi4sM) to get an idea - just don't run it on Element Management Node because that is not supported)
 
 ### Recorded Demos
@@ -505,12 +505,13 @@ Timestamp        : 1970-01-01T00:00:00Z
   - It is strongly recommended to adopt a naming convention and avoid duplicate object names. Just because they're possible, it doesn't mean you should do it, especially if your management processes do not rely on Volume IDs 
 - While it is a best practice to pick different names, SolidFire won't force you to do that, so either rely on Object IDs or stick to naming conventions for your environment or rely on Object IDs to distinguish among Objects. Note, however, that in the latter case any monitoring or other systems that use and display Names may malfunction or display confusing information
 
-#### Date and Time in SolidFire API
+#### Date and Time Format in SolidFire API Responses
 
-- The SolidFire and HCC (Hybrid Cloud Control) APIs return timestamp values in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) datetime format with extended time in UTC (no TZ offset)
-  - Example: `{'timestamp': '2021-12-31T05:24:54Z'}`
+- The SolidFire and mNode API returns timestamp value in [ISO8601](https://en.wikipedia.org/wiki/ISO_8601) datetime format with extended UTC time (no TZ offset, etc.)
+  - Sample: `{'timestamp': '2021-12-31T05:24:54Z'}`
   - Python 3: `print((datetime.datetime.utcnow()).strftime('%Y-%m-%dT%H:%M:%S%z')+"Z")` `->` `2021-12-31T05:27:33Z`
-  - PowerShell 7: `Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ" -AsUTC` `->` `2021-12-31T05:25:01Z`
+  - PowerShell 7: `Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ" -AsUTC` `->` `2021-12-31T05:27:01Z`
+- The containers inside of HCC are another story - it depends on service. Some examples can be found [here](https://scaleoutsean.github.io/2020/12/08/get-bearer-token-for-netapp-hci-hybrid-cloud-control-logs.html)
 
 ## Questions and Answers
 
@@ -522,7 +523,7 @@ A: Absolutely not. For official information please visit the NetApp Web sites (s
 
 Q: I have a quick question about ...
 
-A: Please join [the NetApp community Slack](https://join.slack.com/t/netapppub/shared_invite/zt-jdnzc1o7-Up1AIoNzZ4fEtONPG0_6Fw) and ask your question in the `#netapp-hci` channel. If you need more eyes on the question or already have an account at the  [NetApp Community Forum](https://community.netapp.com/t5/SolidFire-and-HCI/bd-p/solidfire_hci) please ask there and tag your question with 'solidfire'.
+A: Please join [the NetApp community Slack](https://join.slack.com/t/netapppub/shared_invite/zt-jdnzc1o7-Up1AIoNzZ4fEtONPG0_6Fw) and ask your question in the `#netapp-hci` channel. If you need more eyes on the question or already have an account at the [NetApp Community Forum](https://community.netapp.com/t5/SolidFire-and-HCI/bd-p/solidfire_hci) please ask there and tag your question with 'solidfire'.
 
 ### SolidFire / Element Demo VM
 
@@ -540,26 +541,32 @@ A: It does compress and deduplicate, but I haven't compared how it fares against
 
 Q: Can I throw couple of VMs on an Element Demo VM datastore to estimate how much I could save?
 
-A: I believe that should be fairly accurate, but I haven't tested it. Get a representative sample of 5-10 VMs (up to 400GB combined) and clone them to an Element Demo VM-based test datastore. Give it a couple of hours to churn through that data and take a look.
+A: I believe that should be fairly accurate, but I haven't tested it. Get a representative sample of 5-10 VMs (up to 400GB combined) and clone them to an Element Demo VM-based test datastore. Give it a couple extra hours to churn through that data and take a look.
+
+Q: Can I automate the provisioning of SolidFire Demo VM?
+
+A: Absolutely. Provision it as any other OVA, then find the Management IP, and run first node, and then  cluster configuration on it. With DHCP you may need to disconnect from DHCP-assigned Management IP after you set static IP on the node, then reconnect to Static IP and configure singleton cluster. You can also configure replicated clusters this way. With SSD backed hypervisors it takes about 10 minutes to setup two singleton clusters this way, or less if you clone VMs from a Demo VM template.
 
 ### Logging and Monitoring
 
 Q: I'd like to do something with SoliFire logs, how do SolidFire logs look like?
 
-A: The following lines were obtained by forwarding SolidFire cluster log to syslog-ng (from which we can forward it elsewhere): the second is an API call and therefore in the JSON format). Element Software creates log using the rsyslog format (RFC-5424 and RFC-3164 (source: [Wikipedia](https://en.wikipedia.org/wiki/Rsyslog#Protocol)) and timestamps (format: `MMM  d HH:mm:ss`; RFC-3339). To make archived SolidFire logs more useful we'd have to create several filters (to gather only useful content and convert it to a format that's easier to analyse) somewhere along our log forwarding path. For comparison, vRealize Log Insight accepts formats in RFC-6587, RFC-5424, and RFC-3164 - see the Log Insight [link above](#vmware--blue-medora-true-visibility-for-vmware-vrealize-operations).
+A: The following lines were obtained by forwarding SolidFire cluster log to syslog-ng (from which we can forward it elsewhere): the second is an API call and therefore in JSON format). Element Software creates log using the rsyslog format (RFC-5424 and RFC-3164 (source: [Wikipedia](https://en.wikipedia.org/wiki/Rsyslog#Protocol)) and timestamps (format: `MMM  d HH:mm:ss`; RFC-3339). To make archived SolidFire logs more useful we'd have to create several filters (to gather only useful content and [convert it to a format that's easier to analyze](https://scaleoutsean.github.io/2021/10/18/solidfire-syslog-filebeat-logstash-elk-stack.html)) somewhere along log forwarding path. For comparison, vRealize Log Insight accepts formats in RFC-6587, RFC-5424, and RFC-3164 - see the Log Insight [link above](#vmware--blue-medora-true-visibility-for-vmware-vrealize-operations).
 
 ```shell
 Jun  3 16:14:46 192.168.1.29 master-1[20395]: [APP-5] [API] 24018 DBCallback httpserver/RestAPIServer.cpp:408:operator()|Calling RestAPI::ListBulkVolumeJobs activeApiThreads=1 totalApiThreads=16 user=admin authMethod=Cluster sourceIP=192.168.1.12
 Jun  3 16:14:46 192.168.1.29 master-1[20395]: {"action":"ApiCall","idg":"1775127282990285","idx":294566,"system":"Cluster","utc":"2020-06-03T16:14:46.058806Z","ver":"1.1","xClusterApiCall":{"AuthMthd":"Cluster","Method":"ListSyncJobs","SourceIP":"192.168.1.12","Threads":1,"Time":3,"TotalThreads":16,"Username":"admin"}}
 ```
 
+The approach I took in the ELK post was to focus on ApiCall logs and use custom http_poller (see the post for more details). Timestamp inside of API responses is in ISO8601 extended UTC format (see other Q&A).
+
 Q: How can I get mNode and HCC logs?
 
-A: Simple answer: forward mNode VM syslog out, and use the mNode API to get HCC logs. The details can be found [here](https://scaleoutsean.github.io/2020/11/27/solidfire-mnode-hcc-log-forwarding.html).
+A: Simple answer: forward mNode VM syslog out, and for HCC logs use the mNode API (although the latter can be done better in an unsupported way - see [here](https://scaleoutsean.github.io/2020/11/27/solidfire-mnode-hcc-log-forwarding.html).
 
 ### Hypervisors and Containers
 
-Q: What hypervisor platforms work with SolidFire?
+Q: What hypervisor platforms work with SolidFire iSCSI target?
 
 A: To be clear, this is about iSCSI clients supported by SolidFire storage (which may or may not be different from hypervisors supported by NetApp HCI compute hardware). You can find the official NetApp info with the [NetApp Interoperability Matrix Tool (IMT)](https://mysupport.netapp.com/matrix/#welcome) (look under Element software, not NetApp HCI!). The simple answer is NetApp HCI ships with VMware, but SolidFire (that is, the iSCSI storage component of NetApp HCI) can work with other supported hypervisors (even at the same time). Some links to get you started with compatibility research:
 
@@ -569,9 +576,12 @@ A: To be clear, this is about iSCSI clients supported by SolidFire storage (whic
 - Citrix Hypervisor (formerly known as XenServer) - v8 is supported as per NetApp HCI VDI Solution with Citrix Hypervisor; for v7 refer to the HCLs for [storage](http://hcl.xenserver.org/storage/?vendor=56) and [servers](http://hcl.xenserver.org/servers/?vendor=56)
 - Oracle VM - go [here](https://linux.oracle.com/pls/apex/f?p=117:3::::::). Click on Storage Systems and in filter rop-down list select NetApp. Look for SolidFire models from the NetApp HCI Datasheet or Web site (for example, H610S)
 - Other Linux distributions validated (Cinder iSCSI) for SolidFire Element OS - Ubuntu, SuSE, etc. (the details can be found in the NetApp IMT)
-- Oracle Virtualbox - not suported (as it uses its own iSCSI client that isn't validated by NetApp) but it works and you may want to use it in lab environment
+- Newer container-focused Linux distributions (Flatcar Container Linux, CoreOS) with iSCSI initiator
+- Oracle Virtualbox - not suported (as it uses its own iSCSI client that isn't validated by NetApp) but it works and you may want to use it in a lab environment (it's not stable enough for production use)
 
-If unsure, contact NetApp with any questions or ask in the [NetApp Community Forum](https://community.netapp.com/t5/AFF-NVMe-EF-Series-and-SolidFire-Discussions/bd-p/flash-storage-systems-discussions) (free membership account required)
+What doesn't work so well is Virtualbox iSCSI client (unstable), and some microVMs OS (example: Firecracker) that have no iSCSI client those, however, could run on a hypervisor which connects to SolidFire and presents SolidFire volumes as block devices).
+
+If unsure, contact NetApp with any questions or ask in the [NetApp Community Forum](https://community.netapp.com/t5/SolidFire-and-HCI/bd-p/solidfire_hci) (free membership account is required).
 
 Q: Does SolidFire work with my Kubernetes?
 
