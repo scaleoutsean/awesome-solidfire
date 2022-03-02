@@ -60,3 +60,13 @@ ForEach ($k in $SfVolEff.keys) {
         }
     }
 }
+
+# This is directly related and doesn't deserve its own script, but just in case:
+#   list volume ID and fulness (in pct)
+
+foreach ($v in (Get-SFVolume)) { 
+    $volNZB     = ((Get-SFVolumeStats -VolumeID $v.volumeID).nonZeroBlocks)
+    $volZB      = ((Get-SFVolumeStats -VolumeID $v.volumeID).ZeroBlocks)
+    $volPctFull = ([MATH]::Round(($volNZB*100/($volZB+$volNZB)),3))
+    Write-Host "VolumeID:", $v.volumeID, "fullness (pct):", $volPctFull
+}

@@ -49,6 +49,7 @@
             - [Syslog Forwarding](#syslog-forwarding)
             - [Security and General Auditing](#security-and-general-auditing)
             - [ServiceNow integration](#servicenow-integration)
+            - [Zabbix](#zabbix)
             - [Event Notifications](#event-notifications)
         - [Backup, Restore, DR and BC Site Failover](#backup-restore-dr-and-bc-site-failover)
         - [Security](#security)
@@ -212,8 +213,8 @@ Volume placement considers both performance and capacity utilization:
 
 #### CSI Provisioners
 
-- [NetApp Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Red Hat OpenShift, Rancher RKE and others)
-- OpenStack users may be able to [use SolidFire with Cinder CSI Plugin for Kubernetes](https://github.com/kubernetes/cloud-provider-openstack/blob/master/docs/cinder-csi-plugin/using-cinder-csi-plugin.md), but I haven't tried this myself
+- [NetApp Astra Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Red Hat OpenShift, Rancher RKE and others)
+- OpenStack users may be able to [use SolidFire with Cinder CSI Plugin for Kubernetes](https://github.com/kubernetes/cloud-provider-openstack/blob/master/docs/cinder-csi-plugin/using-cinder-csi-plugin.md) - a demo and notes can be found [here](https://scaleoutsean.github.io/2022/03/02/openstack-solidfire-part-2.html)
 
 #### Red Hat OpenShift Container Platform
 
@@ -373,19 +374,26 @@ Volume placement considers both performance and capacity utilization:
 
 #### ServiceNow integration
 
-- [Official integration](https://docs.servicenow.com/bundle/rome-it-operations-management/page/product/service-mapping/reference/solidfire-storage-pattern.html)
-- Anothe way, not proven but [looks doable](https://scaleoutsean.github.io/2021/12/14/integrate-solidfire-with-servicenow.html), is indirectly through Elasticsearch-ServiceNow integration
+- See the [official integration](https://docs.servicenow.com/bundle/rome-it-operations-management/page/product/service-mapping/reference/solidfire-storage-pattern.html) by ServiceNow
+- Another way, not proven but [looks doable](https://scaleoutsean.github.io/2021/12/14/integrate-solidfire-with-servicenow.html), is indirectly through Elasticsearch-ServiceNow integration
   - This would require SolidFire log redirection with structured logging and alerting in Elasticsearch (a recipe can be found [in this post](https://scaleoutsean.github.io/2021/10/18/solidfire-syslog-filebeat-logstash-elk-stack.html))
   - Alternatively, and especially if you're interested in making use of SNMP traps - see under SNMP for more - there's a ["mega post" on all things SolidFire SNMP](https://scaleoutsean.github.io/2021/07/19/solidfire-mib-snmp-monitoring.html) which shows how SolidFire events can be filtered and used to create alerts. SNMP Traps can be sent to Elastic with Telegraph SNMP Trap plugin. There's no detailed how-to for that, but there's a post for SolidFire SNMP with Telegraph [here](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana.html). You'd have to use a different plugin (SNMP Traps for Telegraph) or [Logstash SNMP Trap plugin](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-snmptrap.html) or something similar.
+
+#### Zabbix
+
+- For SolidFire faults (failed disk, loose cable, etc.), it's probably easiest to enable SNMP Traps. See SNMP-related SolidFire information on this page and check out my mega blog post on SOlidFire and SNMP
+- For performance monitoring you can also use any of indirect methods. For example, use SolidFire Exporter to send metrics to Prometheus, and use Zabbix to scrape Prometheus. Similar approach can be used to monitor faults: redirect SolidFire syslog to Logstash or even Elasticsearch - Zabbix can work with both of these
 
 #### Event Notifications
 
 - Users with existing notification solution: use Syslog forwarding or SNMP (see deep dive linked from under SNMP & SolidFire MIBs above)
 - You may also [integrate](https://youtu.be/aiwkKQaz7AQ) NetApp ActiveIQ with your existing monitoring application
-- Users without an existing solution may consider one of these:
   - NetApp ActiveIQ: mobile app notifications (faster), email notifications (slower; enable them in the ActiveIQ Web UI)
-  - Grafana: [HCICollector](https://github.com/scaleoutsean/hcicollector) and (Grafana in general) can send email notifications
+  - Grafana: [HCICollector](https://github.com/scaleoutsean/hcicollector) and (Grafana in general, for example with SolidFire Exporter) can send email and other notifications
   - Icinga and Nagios (email)
+  - SolidFire syslog forwarding to ElasticSearch with support cases created in ServiceNow or other back-end
+  - Grafana or [Prometheus](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana.html) or any other sink which can receive SolidFire log or SNMP traps
+  - Solidire-to-Slack could work the same way: watch SolidFire (or Elastic or ActiveIQ, etc.) for events, use webhook to sent notifications to a Slack channel or user
 
 ### Backup, Restore, DR and BC (Site Failover)
 
@@ -396,7 +404,7 @@ Volume placement considers both performance and capacity utilization:
   - Veeam BR
 - E/EF-Series (with iSCSI host interface) attached to NetApp HCI is ideal fast Tier 1 backup pool/storage (gigabytes per second). You can find indicators of backup and restore performance in [this blog post](https://scaleoutsean.github.io/2020/12/30/netapp-hci-ef280-diskspd-for-backup)
 - Open-source integrations for non-CSI environments (Borg, Duplicati, Restic, Borg, etc.)
-  - Snapshot, clone and mount SolidFire volumes, then use a backup utility to replicate clone to backup storage (E-Series, etc.) or S3 (NetApp StorageGRID, AWS S3, etc.)
+  - Snapshot, clone and mount SolidFire volumes, then use a backup utility to replicate clone to backup storage (E-Series, etc.) or S3 (NetApp StorageGRID, AWS S3, Minio, Wasabi, etc.)
     - Video demo with [Duplicati](https://youtu.be/wP8nAgFo8og)
     - An implementation with Restic written in PowerShell can be found in my [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup); with extremely simple modifications I was able to [apply the concept to backup SolidFire clones to Minio](https://scaleoutsean.github.io/2021/06/18/solidbackup-with-alternative-backup-clients)
   - Kubernetes users can use Velero (see below)
@@ -406,13 +414,16 @@ Volume placement considers both performance and capacity utilization:
   - Site failover
     - SolidFire SRA for VMware SRM
     - Some of the backup offerings mentioned above provide functionality similar to VMware SRM
-- CSI Trident with `solidfire-san` back-end
+- Trident CSI with `solidfire-san` back-end
   - Can be backed up by creating thin clones and presenting them to a VM or container running a backup software agent (example with [Duplicacy](https://youtu.be/bvI7pgXKh6w))
   - Enterprise backup software can also backup Trident volumes. Examples in alphabetical order:
     - Commvault B&R: [documentation](https://documentation.commvault.com/11.21/essential/123637_system_requirements_for_kubernetes.html) and [demo](https://www.youtube.com/watch?v=kiMf9Fkhxd8). Metallic VM is another offering with this technology.
     - Kasten K10: [documentation](https://docs.kasten.io/latest/install/storage.html?highlight=netapp#netapp-trident) and [demo](https://www.youtube.com/watch?v=ShrSDwzQ0uU)
     - Velero: [documentation](https://github.com/vmware-tanzu/velero) and [demo](https://www.youtube.com/watch?v=6RrlK2rmk24). It can work both [with](https://github.com/vmware-tanzu/velero-plugin-for-csi) and [without](https://scaleoutsean.github.io/2021/02/02/use-velero-with-netapp-storagegrid.html) Trident CSI. CSI support sort-of-works (CSI Plugin is currently beta quality, not yet production ready in Velero v1.7)
   - Storage cluster failover for one Kubernetes cluster with Trident CSI and two SolidFire clusters: use NetApp Trident's Volume Import feature (a quick demo (2m55s) can be viewed [here](https://youtu.be/aSFxlGoHgdA) while a deep-dive walk-through with a ton of detail can be found [here](https://scaleoutsean.github.io/2021/03/20/kubernetes-solidfire-failover-failback.html)). For two Kubernetes clusters, each with own SolidFire cluster, you'd simply setup replication between SolidFire clusters (use consistency groups where necessary) and push Trident PVC->PV mapping to the remote site where you'd swap PV from SolidFire Cluster A for PVs replicated from SolidFire Cluster B so that you can promote Cluster B volume replicas to readWrite mode and run Trident volume import before you start Kubernetes on that site.
+- Cinder CSI with SolidFire Cinder driver
+  - See [this post](https://scaleoutsean.github.io/2022/03/02/openstack-solidfire-part-2.html) on how to deploy Cinder CSI with Openstack & SolidFire Cinder driver
+  - VM-level and native Kubernetes backup (Velero, etc.) wasn't tested, but crash-consistent Cinder snapshots from outside of Kubernetes work as usual
 
 ### Security
 
@@ -450,10 +461,11 @@ Find them in the `scripts` directory in this repo:
   - Can be used for any task that can benefit from short-lived change in volume performance settings. Written with SolidFire PowerShell Tools 1.6 and PowerShell 7 on Linux, but should work with PowerShell 6 or newer on Windows 10 or Windows Server 2016 or newer
 - `Get-SFVolEff` - simple PowerShell script to list all volumes with storage efficiency below certain cut-off level (default: `2`, i.e. 2x)
 - `parallel-backup-to-s3` - SolidFire-native Backup to S3
-  - v1: runs `$p` parallel jobs to back up list of volumes identified by Volume ID (`$backup`) to an S3-compatible object store. The same script can be changed to restore in the same, parallel, fashion. Parallelization is over entire cluster - the script is not aware of per-node job maximums so aggressive parallelization may result in failed jobs that need to be resubmitted
-  - v2: runs `$p` parallel jobs *per each node*, where $p is an integer between 0 and the maximum number of bulk jobs per node (8). It's made possible by `sfvid2nid` (below). You can read more about it [here](https://scaleoutsean.github.io/2021/06/22/solidfire-backup-and-cloning-with-per-storage-node-queues.html)
+  - v1: runs `$p` parallel jobs to back up list of volumes identified by Volume ID (`$backup`) to an S3-compatible object store. The same script can be changed to restore in the same, parallel, fashion. Parallelization is over the entire cluster - the script is not aware of per-node job maximums so aggressive parallelization may result in backup jobs failing to get scheduled (but they can be resubmitted)
+  - v2: executes up to `$p` parallel jobs *per each node*, where $p is an integer between 0 and the maximum number of bulk jobs per node (8). It's made possible by `sfvid2nid` (below). You can read more about it [here](https://scaleoutsean.github.io/2021/06/22/solidfire-backup-and-cloning-with-per-storage-node-queues.html)
 - `sfvid2nid` - SolidFire volume ID to node ID mapping script (PowerShell). This information can be used to drive the maximum per-node number of bulk volume jobs (such as built-in backup) and sync jobs (such as copy and clone volume jobs)
 - `hcc-hybrid-cloud-control-get-assets.ps1` - use PowerShell to connect to the NetApp Hybrid Cloud Control (HCC) API to get list of compute (ESXi) nodes. With that you can use PowerCLI to do VMware-related operations. More [here](https://scaleoutsean.github.io/2021/12/21/netapp-solidfire-hci-hcc-powershell.html).
+- `disk-to-slot-to-node-assignment.py` - simple example of how to use SolidFire Python SDK to get disk-to-slot-to-node mapping from SolidFire
 
 Some volume-cloning and backup-to-S3 scripts related to my SolidBackup concept can be found in the [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup).
 
@@ -547,7 +559,7 @@ A: No. It's a fully functional single-node SolidFire cluster. Due to the fact th
 
 Q: Does Element Demo VM work on Virtualbox?
 
-A: It's not supported, but version 12.3 works on Virtualbox 6.1 (find a demo on YouTube).
+A: It's not supported, but version 12.3 works on Virtualbox 6.1 (find a demo on YouTube) on both Linux and Windows.
 
 Q: Can Element Demo VM be used to estimate efficiency from compression and deduplication?
 
@@ -559,7 +571,7 @@ A: I believe that should be fairly accurate, but I haven't tested it. Get a repr
 
 Q: Can I automate the provisioning of SolidFire Demo VM?
 
-A: Absolutely. Provision it as any other OVA, then find the Management IP, and run first node, and then  cluster configuration on it. With DHCP you may need to disconnect from DHCP-assigned Management IP after you set static IP on the node, then reconnect to Static IP and configure singleton cluster. You can also configure replicated clusters this way. With SSD backed hypervisors it takes about 10 minutes to setup two singleton clusters this way, or less if you clone VMs from a Demo VM template.
+A: Absolutely. Provision it as any other OVA, then find the Management IP, and first configuration the node, and then create cluster. With DHCP on Management Network you may need to disconnect PowerShell Tools (or Python CLI/SDK) from the DHCP-assigned Management IP after you set static IP on the node, then reconnect to Static IP and configure your singleton cluster. You can also configure replicated clusters this way. With SSD backed hypervisors it takes about 10 minutes to setup two singleton clusters this way, or less if you clone VMs from a Demo VM template.
 
 ### Logging and Monitoring
 
@@ -599,7 +611,7 @@ If unsure, contact NetApp with any questions or ask in the [NetApp Community For
 
 Q: Does SolidFire work with my Kubernetes?
 
-A: If Trident works with it, SolidFire can too. Some K8s distributions known to work are listed [here](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) but other CSI-compatible distros should work as well. I recommend to check out Trident [issues](https://github.com/NetApp/trident/issues) as well to see if there's anything that you care about. Note that issues and requirements change between releases, so sometimes you may be better off with an older release in which case you shuold check supported requirements for older Trident releases.
+A: If Trident works with it, SolidFire can too. Some K8s distributions known to work are listed in the Trident documentation, but other CSI-compatible distros should work as well. I recommend to check out Trident [issues](https://github.com/NetApp/trident/issues) as well to see if there's anything that you care about. Note that issues and requirements change between releases, so sometimes you may be better off with an older release in which case you shuold check supported requirements for older Trident releases.
 
 ### Workloads
 
