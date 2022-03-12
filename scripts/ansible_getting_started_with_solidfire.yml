@@ -4,9 +4,12 @@
 # $ export ANSIBLE_PYTHON_INTERPRETER=/usr/bin/python3
 # $ pip3 install --user solidfire-sdk-python
 # fix and refresh $PATH if necessary
-# change vars if you want them hardcoded, and run
-# in order to re-run the script, remove created volume 
-#   (because you can't shrink it after it's been enlarged)
+# purposes of this demo is to show basic volume ops and remind that 
+#  Ansible users must ensure uniqueness of Volume Names
+# also see:
+#  https://docs.ansible.com/ansible/latest/reference_appendices/faq.html#keep-secret-data
+# a better approach is to work with Volume IDs - see SolidFire Provider for Terraform
+#  or just use PowerShell or Python SDK 
 
 - name: Create new volume and change properties of existing volume
   hosts: localhost 
@@ -22,9 +25,11 @@
     elementsw_password: admin
     storage_tenant_account_id: 1
     volume_name: "just-use-powershell"
+    volume_size_gib: 2
+    sf_url: "https://192.168.1.34/json-rpc/12.0"
 
   tasks:
-    - name: Create Volume
+    - name: Create volume
       na_elementsw_volume:
         hostname: "{{ elementsw_hostname }}"
         username: "{{ elementsw_username }}"
@@ -34,9 +39,9 @@
         qos: {minIOPS: 100, maxIOPS: 200, burstIOPS: 300}
         account_id: "{{ storage_tenant_account_id }}"
         enable512e: True
-        size: 2
+        size: "{{ volume_size_gib }}"
         size_unit: gb
-    - name: Modify Volume
+    - name: Modify volume
       na_elementsw_volume:
         hostname: "{{ elementsw_hostname }}"
         username: "{{ elementsw_username }}"
@@ -46,5 +51,30 @@
         qos: {minIOPS: 200, maxIOPS: 300, burstIOPS: 400}
         account_id: "{{ storage_tenant_account_id }}"
         enable512e: True
-        size: 3
+        size: 4
         size_unit: gb
+    - name: Get volume details via API
+      uri:
+        url: "{{ sf_url }}"
+        method: POST
+        validate_certs: False
+        force_basic_auth: True
+        user: "{{ elementsw_username }}"
+        password: "{{ elementsw_password }}"
+        body: '{"method": "ListVolumes","params": {"volumeName": "{{ volume_name }}" },"id":1}'
+        status_code: 200
+        body_format: json
+        return_content: yes
+      register: result
+    - name: Output volume details
+      ansible.builtin.debug: 
+        msg: "Volumes are deleted and immediately purged by Volume Name, not Volume ID!!!"
+      loop: "{{ result.json.result.volumes }}"
+    - name: Delete and purge volume
+      na_elementsw_volume:
+        hostname: "{{ elementsw_hostname }}"
+        username: "{{ elementsw_username }}"
+        password: "{{ elementsw_password }}"
+        state: absent
+        name: "{{ volume_name }}"
+        account_id: "{{ storage_tenant_account_id }}"
