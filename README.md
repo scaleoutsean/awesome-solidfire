@@ -359,7 +359,7 @@ Volume placement considers both performance and capacity utilization:
 #### Splunk
 
 - Redirect SolidFire log to a TCP port on Universal Forwarder or Indexer
-- Send SNMP events to UF or Indexer. The MIB files can be downloaded from the SolidFire Web UI. If you redirect SolidFire syslog, you probably don't want to also send SNMP traps to Splunk
+- Send SNMP events to UF or Indexer. The SolidFire MIB files can be downloaded from the SolidFire Web UI. If you redirect SolidFire syslog, you probably don't want to also send SNMP traps to Splunk
 
 #### Syslog Forwarding
 
@@ -647,6 +647,8 @@ ONTAP Select running on NetApp HCI compute nodes can store its data either (or b
 
 - NetApp [TR-4669](https://www.netapp.com/us/media/tr-4669.pdf): HCI File Services Powered by ONTAP Select
 - NetApp ONTAP Select [documentation](https://docs.netapp.com/us-en/ontap-select/)
+
+NetApp HCI users who got the free ONTAP Select with their system can also use S3 protocol with it, especially for small requests. [This post](https://scaleoutsean.github.io/2022/03/17/ontap-s3-performance-test.html) shows performance of a minimal OTS 9.10 on NetApp HCI Gen 1 hardware (H300 Series nodes).
 
 ### DevOps
 
