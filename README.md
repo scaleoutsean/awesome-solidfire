@@ -27,6 +27,7 @@
       - [Google Anthos](#google-anthos)
       - [Docker CE and Mirantis Kubernetes Engine (MKE)](#docker-ce-and-mirantis-kubernetes-engine-mke)
       - [VMware Photon 4.0](#vmware-photon-40)
+      - [HashiCorp Nomad](#hashicorp-nomad)
     - [File-sharing (NFS, SMB)](#file-sharing-nfs-smb)
     - [CLI, API, SDK Resources](#cli-api-sdk-resources)
       - [API](#api)
@@ -192,6 +193,7 @@ Volume placement considers both performance and capacity utilization:
 - [Juju charm](https://github.com/solidfire/charm-cinder-solidfire) for Cinder to use Element cluster back-end (may need to be updated)
 - [Oracle VM](https://linux.oracle.com/pls/apex/f?p=117:3::::::) (look under Storage Systems > NetApp)
 - Additional details about SolidFire in Linux environments: [solidfire-linux](https://github.com/scaleoutsean/solidfire-linux/)
+- HashiCorp Nomad can schedule QEMU VMs on static SolidFire-backed volumes
 - Flatcar Container Linux notes can be found [here](https://scaleoutsean.github.io/2021/12/07/flatcar-linux-with-solidfire-iscsi.html). CoreOS users may find them useful, too
 
 #### Oracle VirtualBox
@@ -238,6 +240,12 @@ Volume placement considers both performance and capacity utilization:
 #### VMware Photon 4.0
 
 - Photon comes with iSCSI SRPMs which can be built and made to [work with SolidFire](https://scaleoutsean.github.io/2022/03/11/vmware-photon-iscsi-solidfire.html)
+
+#### HashiCorp Nomad 
+
+- Nomad can schedule services with Docker using static host volumes backed by SolidFire. I also got it to work with Trident Docker Volume Plugin. If the VM gets its HA from hypervisor, this may be a way to get HA for these Docker workloads. See [this](https://scaleoutsean.github.io/2022/03/23/nomad-solidfire-hostpath-volumes.html) for additional details
+- LXC-style containers may be able to work on host volumes (static provisioning) as well
+- Trident CSI is unlikely to work with Nomad CSI, but Cinder CSI might (needs testing)
 
 ### File-sharing (NFS, SMB)
 
