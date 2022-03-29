@@ -291,7 +291,9 @@ Volume placement considers both performance and capacity utilization:
 - [Ansible modules](https://galaxy.ansible.com/netapp/elementsw?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW) for Element Software (`ansible-galaxy collection install netapp.elementsw`) or visit the [Github repo](https://github.com/ansible-collections/netapp.elementsw)
 - [SolidFire Puppet plugin](https://github.com/solidfire/solidfire-puppet)
 - [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw) - supports resources IQN, VAG, account, volume (find a working example in examples directory)
-  - Install it directly from [Terraform registry](https://registry.terraform.io/providers/NetApp/netapp-elementsw/latest) but check out that Github repo example if you need help
+  - Install it directly from [Terraform registry](https://registry.terraform.io/providers/NetApp/netapp-elementsw/latest) but check out 
+  that Github repo example if you need help
+- Any application or tool that can consume JSON-RPC or one of SolidFire CLIs or SDKs can be used to automate. Fringe examples: backup SolidFire to S3 with [Kestra](https://scaleoutsean.github.io/2022/03/22/solidfire-storagegrid-data-workflows-kestra.html), [PowerShell in .NET notebook](https://scaleoutsean.github.io/2022/03/29/manage-solidfire-jupyter-powershell.html)
 
 ### Alerting, Monitoring, Telemetry
 
@@ -481,6 +483,7 @@ Find them in the `scripts` directory in this repo:
 - `hcc-hybrid-cloud-control-get-assets.ps1` - use PowerShell to connect to the NetApp Hybrid Cloud Control (HCC) API to get list of compute (ESXi) nodes. With that you can use PowerCLI to do VMware-related operations. More [here](https://scaleoutsean.github.io/2021/12/21/netapp-solidfire-hci-hcc-powershell.html).
 - `disk-to-slot-to-node-assignment.py` - simple example of how to use SolidFire Python SDK to get disk-to-slot-to-node mapping from SolidFire
 - `ansible_getting_started_with_solidfire.yml` - basic example for Ansible and SolidFire - creates a volume, changes its size and QoS properties, gets its details via the SolidFire API and then deletes/purges it
+- `Manage-SolidFire.ipynb` - .NET notebook with simple examples for interactive SolidFire management in Jupyter
 
 Some volume-cloning and backup-to-S3 scripts related to my SolidBackup concept can be found in the [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup).
 
