@@ -190,7 +190,7 @@ $report = New-PWFPage -Title "SolidFire Capacity and Utilization Report for $($c
                 }
                 New-PWFColumn -Content {
                     New-PWFCard -BackgroundColor '#4f99f9' -Content {
-                        New-PWFTitles -Size 3 -TitleText "Raw Capacity, TB (TiB)" -Center
+                        New-PWFTitles -Size 3 -TitleText "Raw capacity, TB (TiB)" -Center
                         New-PWFText -YourText "Raw Capacity: $sumTotalClusterBytes ($($sumTotalClusterBytes*0.9094947))"
                         New-PWFText -YourText "Raw Capacity Error Level: $errorThresholdTB ($($errorThresholdTB*0.9094947))"
                         New-PWFText -YourText "Raw Capacity Used: $sumUsed ($($sumUsed*0.9094947))"
@@ -212,7 +212,7 @@ $report = New-PWFPage -Title "SolidFire Capacity and Utilization Report for $($c
             New-PWFRow -Content {
                 New-PWFColumn -Content {
                     New-PWFCard -BackgroundColor '#19314f' -Content {
-                        New-PWFTitles -Size 3 -TitleText 'Top Volumes by Size' -Center -LightMode
+                        New-PWFTitles -Size 3 -TitleText 'Top volumes by size' -Center -LightMode
                         $Chart2Dataset = Get-SFVolume | `
                           Select-Object -Property @{Name = 'TotalSize'; expression = { [math]::Round($_.TotalSize / (1024 * 1024 * 1024),2) } }, Name | `
                           Sort-Object Size -Descending | Select-Object -First 10
