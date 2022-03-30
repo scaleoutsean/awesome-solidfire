@@ -3,7 +3,7 @@
 # Synopsis:                                                                   #
 # ./solidfire-capacity-report.ps1                                             #
 #                                                                             #
-# Version: 0.11                                                               #
+# Version: 0.12                                                               #
 #                                                                             #
 # Blog post:                                                                  #
 # scaleoutsean.github.io/2022/03/30/solidfire-capacity-report-html5.html      #
@@ -223,7 +223,7 @@ $report = New-PWFPage -Title "SolidFire Capacity and Utilization Report for $($c
             New-PWFRow -Content {
                 New-PWFColumn -Content {
                     New-PWFCard -BackgroundColor '#19314f' -Content {
-                        New-PWFTitles -Size 3 -TitleText 'Top volumes by size' -Center -LightMode
+                        New-PWFTitles -Size 3 -TitleText 'Top volumes by size (GiB)' -Center -LightMode
                         if ($noName -eq $False) {
                             $resourceProperty = 'Name'
                         }
@@ -238,7 +238,7 @@ $report = New-PWFPage -Title "SolidFire Capacity and Utilization Report for $($c
                 }
                 New-PWFColumn -Content {
                     New-PWFCard -BackgroundColor '#a43465' -Content {
-                        New-PWFTitles -Size 3 -TitleText 'Low efficiency volumes' -Center -LightMode
+                        New-PWFTitles -Size 3 -TitleText 'Low efficiency volumes (GiB)' -Center -LightMode
                         New-PWFTable -ToTable ($SfVolEff | Sort-Object -Property Efficiency) -SortByColumn -Small
                     }
                 }
