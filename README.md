@@ -484,6 +484,7 @@ Find them in the `scripts` directory in this repo:
 - `disk-to-slot-to-node-assignment.py` - simple example of how to use SolidFire Python SDK to get disk-to-slot-to-node mapping from SolidFire
 - `ansible_getting_started_with_solidfire.yml` - basic example for Ansible and SolidFire - creates a volume, changes its size and QoS properties, gets its details via the SolidFire API and then deletes/purges it
 - `Manage-SolidFire.ipynb` - .NET notebook with simple examples for interactive SolidFire management in Jupyter
+- `solidfire-capacity-report.ps1` - PowerShell-driven capacity and efficiency report script - creates single page HTML5 cluster capacity and efficiency report (you may view a sample HTML file to see what it does)
 
 Some volume-cloning and backup-to-S3 scripts related to my SolidBackup concept can be found in the [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup).
 
