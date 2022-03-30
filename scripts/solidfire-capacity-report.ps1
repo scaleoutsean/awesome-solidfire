@@ -3,6 +3,8 @@
 # Synopsis:                                                                   #
 # ./solidfire-capacity-report.ps1                                             #
 #                                                                             #
+# Version: 0.11                                                               #
+#                                                                             #
 # Blog post:                                                                  #
 # scaleoutsean.github.io/2022/03/30/solidfire-capacity-report-html5.html      #
 #                                                                             #
@@ -28,13 +30,17 @@ Import-Module SolidFire.Core
 Import-Module POSHTML5 -RequiredVersion 0.0.7
 
 # If on Windows, use a Windows path instead
-$outFile   = '/tmp/report.html' # Linux
+$outFile = '/tmp/report.html' # Linux
 # $outFile = "C:\Windows\Temp\report.html" # Windows
 
 # Security-wise it's better to not hard-code credentials
 # Connect-SFCluster 192.168.1.34 -Username admin -Password admin 
-$creds     = Get-Credential
-$conn      = Connect-SFCluster -Credential $creds
+$creds = Get-Credential
+$conn = Connect-SFCluster -Credential $creds
+
+# If you want to hide Volume and Account Names in the browser, set this to $True
+# Casual inspection (cat report.html | grep string) shows no volume or account names with $True
+$noName = $False
 
 # You probably don't need to edit anything below
 
@@ -42,7 +48,7 @@ $conn      = Connect-SFCluster -Credential $creds
 # https://github.com/kpapreck/test-plan/blob/master/sf-efficiency.ps1
 
 #GET CLUSTER NAME
-$cluster_cap  = Get-SFClusterCapacity
+$cluster_cap = Get-SFClusterCapacity
 $cluster_info = Get-SFClusterInfo
 
 # REQUIRED INPUTS
@@ -152,45 +158,50 @@ Write-Host '--------------------------------------------------------------------
 $CutOff = $args[0]
 $SfVolEff = @()
 $vs = (Get-SFVolume -ExcludeVVOLs)
+if ($noName -eq $False) {
+    $resourceProperty = 'Name'
+}
+else {
+    $resourceProperty = 'VolumeID'
+}
 ForEach ($v in $vs) {
     $vol = @()
     $SfVolName = $v.Name; $SfVolId = $v.VolumeID
-    $r = (Get-SFVolumeEfficiency -VolumeID $SfVolId | Select-Object -Property Compression,Deduplication)
-    $SfVolC = ([MATH]::Round($r.Compression,2)) ; $SfVolD = ([MATH]::Round($r.Deduplication,2))
-    $SfVolT = ([MATH]::Round(($SfVolC * $SfVolD),2))
-    $vol = ($SfVolName,$SfVolT)
-    # $SfVolEff += $vol
+    $r = (Get-SFVolumeEfficiency -VolumeID $SfVolId | Select-Object -Property Compression, Deduplication)
+    $SfVolC = ([MATH]::Round($r.Compression, 2)) ; $SfVolD = ([MATH]::Round($r.Deduplication, 2))
+    $SfVolT = ([MATH]::Round(($SfVolC * $SfVolD), 2))
+    $vol = ($SfVolName, $SfVolT)
     $VolEff = [PSCustomObject]@{
-        "Name"=$v.Name
-        "Size"=$([MATH]::Round($v.TotalSize / (1024*1024*1024),2))
-        "Efficiency"=$SfVolT
+        'Name'       = $v.$resourceProperty
+        'Size'       = $([MATH]::Round($v.TotalSize / (1024 * 1024 * 1024), 2))
+        'Efficiency' = $SfVolT
     }
     $SfVolEff += $VolEff
 }
 
 
-# this is 
+# this section is from @kpapreck
 
 $report = New-PWFPage -Title "SolidFire Capacity and Utilization Report for $($cluster_info.Name) (Cluster Unique ID: $($cluster_info.UniqueID))" -Content {
     New-PWFTabContainer -Tabs {
         New-PWFTab -Name 'Cluster Information' -Content {
-            New-PWFCardHeader -BackgroundColor "#fff" -Center -Content {
+            New-PWFCardHeader -BackgroundColor '#fff' -Center -Content {
                 New-PWFTitles -TitleText "Cluster $($cluster_info.Name)-$($cluster_info.UniqueID)" -Size 1 -Center
             }
             New-PWFRow -Content {
                 New-PWFColumn -Content {
                     New-PWFCard -BackgroundColor '#4f99f9' -Content {
-                        New-PWFTitles -Size 3 -TitleText "Effective capacity, TB (TiB)" -Center
+                        New-PWFTitles -Size 3 -TitleText 'Effective capacity, TB (TiB)' -Center
                         New-PWFText -YourText "Dedup/Comp @ 100% Full: $sumClusterFulldc ($($sumClusterFulldc*0.9094947))"
                         New-PWFText -YourText "Dedup/Comp/Thin @ 100% Full: $sumClusterFulldct ($($sumClusterFulldct*0.9094947))"
                         New-PWFText -YourText "Dedup/Comp Cap until 100% Full: $effectiveCapacityRemaining100 ($($effectiveCapacityRemaining100*0.9094947))"
                         New-PWFText -YourText "Dedup/Comp Cap until Error: $effectiveCapacityRemaining ($($effectiveCapacityRemaining*0.9094947))"
                         New-PWFText -YourText "Dedup/Comp/Thin until Error: $effectiveFullCapacityRemaining ($($effectiveFullCapacityRemaining*0.9094947))"
-                        }
+                    }
                 }
                 New-PWFColumn -Content {
                     New-PWFCard -BackgroundColor '#4f99f9' -Content {
-                        New-PWFTitles -Size 3 -TitleText "Raw capacity, TB (TiB)" -Center
+                        New-PWFTitles -Size 3 -TitleText 'Raw capacity, TB (TiB)' -Center
                         New-PWFText -YourText "Raw Capacity: $sumTotalClusterBytes ($($sumTotalClusterBytes*0.9094947))"
                         New-PWFText -YourText "Raw Capacity Error Level: $errorThresholdTB ($($errorThresholdTB*0.9094947))"
                         New-PWFText -YourText "Raw Capacity Used: $sumUsed ($($sumUsed*0.9094947))"
@@ -200,23 +211,29 @@ $report = New-PWFPage -Title "SolidFire Capacity and Utilization Report for $($c
                 }
                 New-PWFColumn -Content {
                     New-PWFCard -BackgroundColor '#4f99f9' -Content {
-                        New-PWFTitles -Size 3 -TitleText "Efficiency" -Center
+                        New-PWFTitles -Size 3 -TitleText 'Efficiency' -Center
                         New-PWFText -YourText "Thin Provisioning: $thinProvisioningFactor x"
                         New-PWFText -YourText "Deduplication: $deDuplicationFactor x"
                         New-PWFText -YourText "Compression: $compressionFactor x"
                         New-PWFText -YourText "Dedupe/Compr: $efficiencyFactor x"
                         New-PWFText -YourText "Dedupe/Compr/Thin: $efficiencyFullFactor x"
-                        }
+                    }
                 }
             }
             New-PWFRow -Content {
                 New-PWFColumn -Content {
                     New-PWFCard -BackgroundColor '#19314f' -Content {
                         New-PWFTitles -Size 3 -TitleText 'Top volumes by size' -Center -LightMode
+                        if ($noName -eq $False) {
+                            $resourceProperty = 'Name'
+                        }
+                        else {
+                            $resourceProperty = 'VolumeID'
+                        }
                         $Chart2Dataset = Get-SFVolume | `
-                          Select-Object -Property @{Name = 'TotalSize'; expression = { [math]::Round($_.TotalSize / (1024 * 1024 * 1024),2) } }, Name | `
-                          Sort-Object Size -Descending | Select-Object -First 10
-                        New-PWFChart -ChartTitle 'Volume Size (GiB)' -ChartType 'bar' -ChartLabels $Chart2Dataset.Name -ChartValues ($Chart2Dataset | Select-Object -ExpandProperty TotalSize) -LightMode
+                            Select-Object -Property @{Name = 'TotalSize'; expression = { [math]::Round($_.TotalSize / (1024 * 1024 * 1024), 2) } }, $resourceProperty | `
+                            Sort-Object Size -Descending | Select-Object -First 10
+                        New-PWFChart -ChartTitle 'Volume Size (GiB)' -ChartType 'bar' -ChartLabels $($Chart2Dataset.$resourceProperty) -ChartValues ($Chart2Dataset | Select-Object -ExpandProperty TotalSize) -LightMode
                     }
                 }
                 New-PWFColumn -Content {
@@ -233,21 +250,34 @@ $report = New-PWFPage -Title "SolidFire Capacity and Utilization Report for $($c
                     New-PWFCard -BackgroundColor '#4f99f9' -Content {
                         New-PWFTitles -Size 3 -TitleText 'Storage (Tenant) Accounts'
                         New-PWFText -YourText 'View, filter, search and export accounts.'
-                        New-PWFTable -ToTable (Get-SFAccount | `
-                          Select-Object -Property AccountID, Username, @{Name = 'Volumes'; expression = { ($_.Volumes.Count) } } | `
-                          Sort-Object -Property Username -Stable) `
-                          -Pagination -DetailsOnClick -SortByColumn -ShowTooltip -EnableSearch -Exportbuttons -ContextualColor dark -Striped
-                        # New-PWFList -List (Get-SFAccount | Select-Object -Property Username, @{Name = 'Volumes'; expression = { ($_.Volumes.Count) } } | Select-Object -Property Username, Volumes)
-                        # $Chart2Dataset = Get-SFVolume | Select-Object -Property @{Name="TotalSize";expression={$_.TotalSize/(1024*1024)}},Name | Sort-Object Size -Descending | Select-Object -First 10
+                        if ($noName -eq $False) {
+                            New-PWFTable -ToTable (Get-SFAccount | `
+                                    Select-Object -Property AccountID, Username, @{Name = 'Volumes'; expression = { ($_.Volumes.Count) } } | `
+                                    Sort-Object -Property Username -Stable) `
+                                -Pagination -DetailsOnClick -SortByColumn -ShowTooltip -EnableSearch -Exportbuttons -ContextualColor dark -Striped
+                        }
+                        else {
+                            New-PWFTable -ToTable (Get-SFAccount | `
+                                    Select-Object -Property AccountID, @{Name = 'Volumes'; expression = { ($_.Volumes.Count) } } | `
+                                    Sort-Object -Property AccountID -Stable) `
+                                -Pagination -DetailsOnClick -SortByColumn -ShowTooltip -EnableSearch -Exportbuttons -ContextualColor dark -Striped                            
+                        }
                     }
                 }
                 New-PWFColumn -Content {
                     New-PWFCard -BackgroundColor '#4f99f9' -Content {
                         New-PWFTitles -Size 3 -TitleText 'Volumes' -Center
                         New-PWFText -YourText 'View, filter, search and export volumes. vVols are not listed. Size unit: GiB.'
-                        New-PWFTable -ToTable (Get-SFVolume -ExcludeVVOLs | Select-Object -Property VolumeID, Name, @{Name = 'TotalSize'; expression = { [math]::Round($_.TotalSize / (1024 * 1024 * 1024),2) } }, `
-                          AccountID | Sort-Object -Property Name -Stable) `
-                          -Pagination -DetailsOnClick -SortByColumn -ShowTooltip -EnableSearch -Exportbuttons -ContextualColor dark -Striped
+                        if ($noName -eq $False) {
+                            New-PWFTable -ToTable (Get-SFVolume -ExcludeVVOLs | Select-Object -Property VolumeID, Name, @{Name = 'TotalSize'; expression = { [math]::Round($_.TotalSize / (1024 * 1024 * 1024), 2) } }, `
+                                    AccountID | Sort-Object -Property Name -Stable) `
+                                -Pagination -DetailsOnClick -SortByColumn -ShowTooltip -EnableSearch -Exportbuttons -ContextualColor dark -Striped
+                        }
+                        else {
+                            New-PWFTable -ToTable (Get-SFVolume -ExcludeVVOLs | Select-Object -Property VolumeID, @{Name = 'TotalSize'; expression = { [math]::Round($_.TotalSize / (1024 * 1024 * 1024), 2) } }, `
+                                    AccountID | Sort-Object -Property VolumeID -Stable) `
+                                -Pagination -DetailsOnClick -SortByColumn -ShowTooltip -EnableSearch -Exportbuttons -ContextualColor dark -Striped
+                        }
                     }
                 }
             }
