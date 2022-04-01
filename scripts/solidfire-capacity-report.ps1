@@ -183,7 +183,7 @@ ForEach ($v in $vs) {
 # added in 0.2 for node info in tab 3
 $SFNode = Get-SFActiveNode
 if ($SFNode.Count -le 3) {
-    Write-Host 'Skipping'
+    Write-Host 'Skipping - Nodes tab will be empty'
 } else {
     $SFClusterDetails = @()
     for ($n = 0 ; $n -le $($SFNode.Count - 1); $n++) {
@@ -269,7 +269,7 @@ $report = New-PWFPage -Title "SolidFire Capacity and Utilization Report for $($c
             New-PWFRow -Content {
                 New-PWFColumn -Content {
                     New-PWFCard -BackgroundColor '#4f99f9' -Content {
-                        New-PWFTitles -Size 3 -TitleText 'Storage (Tenant) Accounts'
+                        New-PWFTitles -Size 3 -TitleText 'Storage (Tenant) Accounts' -Center
                         New-PWFText -YourText 'View, filter, search and export accounts.'
                         if ($noName -eq $False) {
                             New-PWFTable -ToTable (Get-SFAccount | `
