@@ -3,7 +3,7 @@
 # Synopsis:                                                                   #
 # ./solidfire-capacity-report.ps1                                             #
 #                                                                             #
-# Version: 0.14                                                               #
+# Version: 0.2                                                                #
 #                                                                             #
 # Blog post:                                                                  #
 # scaleoutsean.github.io/2022/03/30/solidfire-capacity-report-html5.html      #
@@ -34,12 +34,14 @@ $outFile = '/tmp/report.html' # Linux
 # $outFile = "C:\Windows\Temp\report.html" # Windows
 
 # Security-wise it's better to not hard-code credentials
-# Connect-SFCluster 192.168.1.34 -Username admin -Password admin 
+# Connect-SFCluster 192.168.1.34 -Username admin -Password admin
 $creds = Get-Credential
 $conn = Connect-SFCluster -Credential $creds
 
 # If you want to hide Volume and Account Names in the browser, set this to $True
 # Casual inspection (cat report.html | grep string) shows no volume or account names with $True
+# Note that $True does not remove ChassiName ("serial") and Slot: 
+#    - to achieve that remove these properties from last line that mentions them, at the bottom
 $noName = $False
 
 # You probably don't need to edit anything below
@@ -160,8 +162,7 @@ $SfVolEff = @()
 $vs = (Get-SFVolume -ExcludeVVOLs)
 if ($noName -eq $False) {
     $resourceProperty = 'Name'
-}
-else {
+} else {
     $resourceProperty = 'VolumeID'
 }
 ForEach ($v in $vs) {
@@ -179,14 +180,35 @@ ForEach ($v in $vs) {
     $SfVolEff += $VolEff
 }
 
-
-# this section is from @kpapreck
+# added in 0.2 for node info in tab 3
+$SFNode = Get-SFActiveNode
+if ($SFNode.Count -le 3) {
+    Write-Host 'Skipping'
+} else {
+    $SFClusterDetails = @()
+    for ($n = 0 ; $n -le $($SFNode.Count - 1); $n++) {
+        if ($SFNode[$n].CustomProtectionDomainName -eq '__default__') {
+            $SFProDomName = 'default'
+        } else {
+        }
+        $SFNodeDetails = [PSCustomObject]@{
+            'NodeID'      = $SFNode[$n].NodeID
+            'Name'        = $SFNode[$n].Name
+            'Model'       = $SFNode[$n].PlatformInfo.NodeType
+            'Slot'        = $SFNode[$n].NodeSlot
+            'ChassisName' = $SFNode[$n].ChassisName
+            'ProDomName'  = $SFProDomName
+        }
+        $SFClusterDetails += $SFNodeDetails
+    }
+}
 
 $report = New-PWFPage -Title "SolidFire Capacity and Utilization Report for $($cluster_info.Name) (Cluster Unique ID: $($cluster_info.UniqueID))" -Content {
     New-PWFTabContainer -Tabs {
         New-PWFTab -Name 'Cluster Information' -Content {
             New-PWFCardHeader -BackgroundColor '#fff' -Center -Content {
                 New-PWFTitles -TitleText "Cluster $($cluster_info.Name)-$($cluster_info.UniqueID)" -Size 1 -Center
+                New-PWFTitles -TitleText "Generated (UTC): $(Get-Date -AsUTC)" -Size 5 -Center
             }
             New-PWFRow -Content {
                 New-PWFColumn -Content {
@@ -226,8 +248,7 @@ $report = New-PWFPage -Title "SolidFire Capacity and Utilization Report for $($c
                         New-PWFTitles -Size 3 -TitleText 'Top volumes by size' -Center -LightMode
                         if ($noName -eq $False) {
                             $resourceProperty = 'Name'
-                        }
-                        else {
+                        } else {
                             $resourceProperty = 'VolumeID'
                         }
                         $Chart2Dataset = Get-SFVolume | `
@@ -252,14 +273,14 @@ $report = New-PWFPage -Title "SolidFire Capacity and Utilization Report for $($c
                         New-PWFText -YourText 'View, filter, search and export accounts.'
                         if ($noName -eq $False) {
                             New-PWFTable -ToTable (Get-SFAccount | `
-                                    Select-Object -Property AccountID, Username, @{Name = 'Volumes'; expression = { ($_.Volumes.Count) } } | `
-                                    Sort-Object -Property Username -Stable) `
+                                Select-Object -Property AccountID, Username, @{Name = 'Volumes'; expression = { ($_.Volumes.Count) } } | `
+                                Sort-Object -Property Username -Stable) `
                                 -Pagination -DetailsOnClick -SortByColumn -ShowTooltip -EnableSearch -Exportbuttons -ContextualColor dark -Striped
                         }
                         else {
                             New-PWFTable -ToTable (Get-SFAccount | `
-                                    Select-Object -Property AccountID, @{Name = 'Volumes'; expression = { ($_.Volumes.Count) } } | `
-                                    Sort-Object -Property AccountID -Stable) `
+                                Select-Object -Property AccountID, @{Name = 'Volumes'; expression = { ($_.Volumes.Count) } } | `
+                                Sort-Object -Property AccountID -Stable) `
                                 -Pagination -DetailsOnClick -SortByColumn -ShowTooltip -EnableSearch -Exportbuttons -ContextualColor dark -Striped                            
                         }
                     }
@@ -270,14 +291,29 @@ $report = New-PWFPage -Title "SolidFire Capacity and Utilization Report for $($c
                         New-PWFText -YourText 'View, filter, search and export volumes. vVols are not listed. Size unit: GiB.'
                         if ($noName -eq $False) {
                             New-PWFTable -ToTable (Get-SFVolume -ExcludeVVOLs | Select-Object -Property VolumeID, Name, @{Name = 'TotalSize'; expression = { [math]::Round($_.TotalSize / (1024 * 1024 * 1024), 2) } }, `
-                                    AccountID | Sort-Object -Property Name -Stable) `
+                                AccountID | Sort-Object -Property Name -Stable) `
                                 -Pagination -DetailsOnClick -SortByColumn -ShowTooltip -EnableSearch -Exportbuttons -ContextualColor dark -Striped
                         }
                         else {
                             New-PWFTable -ToTable (Get-SFVolume -ExcludeVVOLs | Select-Object -Property VolumeID, @{Name = 'TotalSize'; expression = { [math]::Round($_.TotalSize / (1024 * 1024 * 1024), 2) } }, `
-                                    AccountID | Sort-Object -Property VolumeID -Stable) `
+                                AccountID | Sort-Object -Property VolumeID -Stable) `
                                 -Pagination -DetailsOnClick -SortByColumn -ShowTooltip -EnableSearch -Exportbuttons -ContextualColor dark -Striped
                         }
+                    }
+                }
+            }
+        }
+        New-PWFTab -Name 'Nodes' -Content {
+            New-PWFRow -Content {
+                New-PWFCard -BackgroundColor '#4f99f9' -Content {
+                    New-PWFTitles -Size 3 -TitleText 'Volumes' -Center
+                    if ($noName -eq $False) {
+                        New-PWFTable -ToTable ($SFClusterDetails | Select-Object -Property NodeID, Name, Model, Slot, ChassisName, ProDomName | Sort-Object -Property Username -Stable) `
+                            -Pagination -DetailsOnClick -SortByColumn -ShowTooltip -EnableSearch -Exportbuttons -ContextualColor dark -Striped
+                    }
+                    else {
+                        New-PWFTable -ToTable ($SFClusterDetails | Select-Object -Property NodeID, Model, ChassisName, Slot | Sort-Object -Property NodeID -Stable) `
+                            -Pagination -DetailsOnClick -SortByColumn -ShowTooltip -EnableSearch -Exportbuttons -ContextualColor dark -Striped
                     }
                 }
             }
