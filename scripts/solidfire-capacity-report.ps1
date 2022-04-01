@@ -306,7 +306,7 @@ $report = New-PWFPage -Title "SolidFire Capacity and Utilization Report for $($c
         New-PWFTab -Name 'Nodes' -Content {
             New-PWFRow -Content {
                 New-PWFCard -BackgroundColor '#4f99f9' -Content {
-                    New-PWFTitles -Size 3 -TitleText 'Volumes' -Center
+                    New-PWFTitles -Size 3 -TitleText 'Nodes' -Center
                     if ($noName -eq $False) {
                         New-PWFTable -ToTable ($SFClusterDetails | Select-Object -Property NodeID, Name, Model, Slot, ChassisName, ProDomName | Sort-Object -Property Username -Stable) `
                             -Pagination -DetailsOnClick -SortByColumn -ShowTooltip -EnableSearch -Exportbuttons -ContextualColor dark -Striped
