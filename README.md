@@ -16,6 +16,7 @@
       - [Microsoft Hyper-V](#microsoft-hyper-v)
       - [Red Hat Virtualization (RHEV)](#red-hat-virtualization-rhev)
       - [Citrix Hypervisor](#citrix-hypervisor)
+      - [Proxmox](#proxmox)
       - [Linux-related (OpenStack, KVM, Oracle VM)](#linux-related-openstack-kvm-oracle-vm)
       - [Oracle VirtualBox](#oracle-virtualbox)
       - [Virtual Desktop Infrastructure and End User Computing (VDI & EUC)](#virtual-desktop-infrastructure-and-end-user-computing-vdi--euc)
@@ -183,6 +184,12 @@ Volume placement considers both performance and capacity utilization:
 #### Citrix Hypervisor
 
 - NetApp HCI with Citrix Hypervisor ([solution summary](https://docs.netapp.com/us-en/hci-solutions/citrix_executive_summary.html))
+
+#### Proxmox
+
+- Proxmox 7.1 (Debian-based) [with SolidFire 12.3](https://scaleoutsean.github.io/2022/04/05/proxmox-solidfire.html)
+  - QEMU/KVM virtualization
+  - LXC containers
 
 #### Linux-related (OpenStack, KVM, Oracle VM)
 
