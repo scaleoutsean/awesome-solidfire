@@ -27,6 +27,7 @@
       - [Rancher](#rancher)
       - [Google Anthos](#google-anthos)
       - [Docker CE and Mirantis Kubernetes Engine (MKE)](#docker-ce-and-mirantis-kubernetes-engine-mke)
+      - [Platform9 Managed Kubernetes (PMK)](#platform9-managed-kubernetes-pmk)
       - [VMware Photon 4.0](#vmware-photon-40)
       - [HashiCorp Nomad](#hashicorp-nomad)
     - [File-sharing (NFS, SMB)](#file-sharing-nfs-smb)
@@ -232,7 +233,7 @@ Volume placement considers both performance and capacity utilization:
 
 #### Rancher
 
-- Rancher on NetApp HCI: just configure it with Trident CSI. See the official NetApp HCI solutions page for additional details. In late 2020 I created a personal micro-site with notes on this solution from a NetApp HCI and SolidFire angle [here](https://scaleoutsean.github.io/solid-rancher), but I no longer maintain it because netApp HCI will end-of-sale soon, so maybe also check this newer SolidFire-focused micro-site [Kuberntes with SolidFire](https://solidfire-kubernetes.pages.dev/) instead.
+- Rancher on NetApp HCI: just configure it with Trident CSI. See the official NetApp HCI solutions page for additional details. In late 2020 I created a personal micro-site with notes on this solution from a NetApp HCI and SolidFire angle [here](https://scaleoutsean.github.io/solid-rancher), but I no longer maintain it because NetApp HCI is no longer sold, so maybe also check this newer SolidFire-focused micro-site [Kubernetes with SolidFire](https://solidfire-kubernetes.pages.dev/) instead.
 - Provision Rancher K8s to NetApp HCI vSphere clusters from the CLI with [ez-rancher](https://github.com/NetApp/ez-rancher/)
 
 #### Google Anthos
@@ -243,6 +244,10 @@ Volume placement considers both performance and capacity utilization:
 
 - Docker and other [container orchestrators supported](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) by NetApp Trident CSI
 - Docker Swarm is not supported with SolidFire and Trident, but Mirantis Kubernetes Engine is. More on Mirantis MKE with SolidFire can be found [here](https://scaleoutsean.github.io/2021/05/02/mirantis-mke-netapp-trident-solidfire)
+
+#### Platform9 Managed Kubernetes (PMK)
+
+- See [here](https://scaleoutsean.github.io/2022/03/31/platform-managed-kubernetes-pmk-on-prem-solidfire.html) with Trident v22.01, for example
 
 #### VMware Photon 4.0
 
