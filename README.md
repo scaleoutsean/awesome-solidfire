@@ -8,7 +8,6 @@
     - [NetApp Enterprise Software-Defined Storage (eSDS)](#netapp-enterprise-software-defined-storage-esds)
     - [NetApp HCI](#netapp-hci)
   - [Why SolidFire](#why-solidfire)
-    - [Why NetApp HCI](#why-netapp-hci)
   - [Resources and Solutions](#resources-and-solutions)
     - [Cloud](#cloud)
     - [Virtualization](#virtualization)
@@ -23,6 +22,7 @@
     - [Kubernetes and Containers](#kubernetes-and-containers)
       - [Get started with SolidFire](#get-started-with-solidfire)
       - [CSI Provisioners](#csi-provisioners)
+      - [SolidFire Operator for Kubernetes](#solidfire-operator-for-kubernetes)
       - [Red Hat OpenShift Container Platform](#red-hat-openshift-container-platform)
       - [Rancher](#rancher)
       - [Google Anthos](#google-anthos)
@@ -87,13 +87,13 @@
 ### NetApp SolidFire All Flash Storage
 
 - SolidFire iSCSI storage clusters (available as storage-only clusters)
-  - Shares storage nodes with the NetApp HCI product line
-  - View currently available SolidFire appliances [here](https://www.netapp.com/data-storage/solidfire/) or check which DellEMC, HPE or other servers are certified for [SolidFire eSDS](https://docs.netapp.com/us-en/element-software/esds/concept_get_started_esds.html)
+  - In NetApp HCI, SoliFire shares storage nodes with the NetApp HCI compute nodes and non-NetApp HCI compute nodes
+  - You may view currently available SolidFire appliances [here](https://www.netapp.com/data-storage/solidfire/) or check which DellEMC, HPE or other servers are certified for [SolidFire eSDS](https://docs.netapp.com/us-en/element-software/esds/concept_get_started_esds.html)
 
 ### NetApp Enterprise Software-Defined Storage (eSDS)
 
 - SolidFire Enterprise SDS (eSDS) - containerized enterprise Software Defined Storage for certified 3rd party hardware appliances
-  - Apart from h/w monitoring and the OS (Red Hat, in this case), most features are nearly identical to SolidFire and NetApp HCI
+  - Apart from h/w monitoring and the OS (Red Hat, in this case), most features are nearly identical to SolidFire
   - Supports various 3rd party x86_64 servers
   - [Documentation](https://docs.netapp.com/us-en/element-software/index.html)
   - Ansible deployment scripts for eSDS: `nar_solidfire*` scripts [such as this one](https://github.com/NetApp/ansible/tree/master/nar_solidfire_sds_install). For non-eSDS (SolidFire appliances), you can use standard Element SW modules
@@ -101,7 +101,8 @@
 ### NetApp HCI
 
 - NetApp HCI (NetApp HCI compute nodes connected via iSCSI to NetApp HCI storage nodes - some call it "disaggregated HCI" or dHCI)
-  - End of Sale sometime in Q1CY22 (check official NetApp announcements)
+  - End of Sale was announced in Q1/CY21 and happened in Q2/CY22
+  - Support continues to be available until EOS + 5Y - please refer to the official NetApp Support site
 
 ## Why SolidFire
 
@@ -130,23 +131,10 @@ Volume placement considers both performance and capacity utilization:
 
 ![SolidFire performance and metadata rebalancing](/images/solidfire-perf-and-md-rebalancing.svg)
 
-### Why NetApp HCI
-
-- Open architecture
-  - Connect 3rd party compute nodes to NetApp HCI storage (iSCSI). Get more out of your existing VMware, Linux, and Windows servers by connecting them to NetApp HCI storage over dedicated VLAN. For example you can attach your sandbox cluster to dedicated NetApp HCI iSCSI volumes and get all the benefits of SolidFire
-  - Connect NetApp HCI compute nodes to NetApp or 3rd party storage (NFS or iSCSI). This way you can run very heavy workloads on NetApp HCI compute while offloading the heavy I/O to NetApp ONTAP or E-Series arrays
-- Hybrid Cloud and Data Fabric integrations for a multi-cloud (including on-premises Private Cloud) world. Supports NetApp ONTAP Select, Cloud Volumes on HCI, and major Kubernetes platforms
-- Easily and quickly onboard VM or container workloads with confidence. Control network and compute resources through hypervisor and container engine. Control storage capacity and QoS with SolidFire
-- Never buy storage, compute and software that you don't need (a norm with _shared core_ HCI clusters)
-- Probably the best HCI platform for easy migration of old vSphere clusters to a modern vSphere and container infrastructure, and keeping your options open (due to the ability to connect to external non-HCI storage, use 3rd party servers and use multiple hypervisors)
-- Netapp HCI lets you repurpose your HCI compute nodes. VMware to OpenStack or the other way around, for example
-
 ## Resources and Solutions
 
-- You may want to check out the official [catalog of NetApp HCI solutions](https://docs.netapp.com/us-en/hci/solutions/index.html). Even though some of the solutions may require NetApp HCI, a lot of that content also applies to SolidFire with 3rd party compute nodes (iSCSI clients) and networking
-- Where to find more:
-  - Products: look under NetApp HCI or (storage-only) SolidFire in the [list of NetApp storage products](https://www.netapp.com/us/products/a-z/index.aspx)
-  - Availability of products and support: for General Availability, End of Availability (EOA, also known as end of Sale), End of Support (EOS) info go to NetApp Support, search by model and filter results by "Product Communique"
+- Products: look under NetApp HCI or (storage-only) SolidFire in the [list of NetApp storage products](https://www.netapp.com/us/products/a-z/index.aspx)
+- Availability of products and support: for General Availability, End of Availability (EOA, also known as end of Sale), End of Support (EOS) info go to NetApp Support, search by model and filter results by "Product Communique"
 
 ### Cloud
 
@@ -162,7 +150,7 @@ Volume placement considers both performance and capacity utilization:
 - [VMware Storage/SAN Compatibility Page](https://www.vmware.com/resources/compatibility/search.php?deviceCategory=san&details=1&partner=439&arrayTypes=1&isSVA=0&page=1&display_interval=10&sortColumn=Partner&sortOrder=Asc) for SolidFire iSCSI storage
 - [Element SRA](https://www.vmware.com/resources/compatibility/search.php?deviceCategory=sra&details=1&partner=64,439&keyword=solidfire&page=1&display_interval=10&sortColumn=Partner&sortOrder=Asc) for VMware SRM 8.3
 - [vRealize Orchestrator Plugin for Element Software](https://github.com/solidfire/vrealize-orchestrator-plugin)
-- [vRealize Automation for NetApp HCI and SolidFire](https://bluemedora.com/resource/vmware-vrealize-operations-management-pack-for-netapp-hci-solidfire/)
+- vRealize Automation for NetApp HCI and SolidFire (former BlueMedora packages)
 - [pyNSXdeploy](https://github.com/solidfire/pyNSXdeploy) -  automate deployment of NSX on vSphere 6.x on NetApp HCI
 - Datastore naming conventions:
   - Best use VMware SDDC conventions and have workflows and procedures that eliminate the possibility of duplicate names (both on SolidFire and VMware side)
@@ -226,6 +214,11 @@ Volume placement considers both performance and capacity utilization:
 
 - [NetApp Astra Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Red Hat OpenShift, Rancher RKE and others)
 - OpenStack users may be able to [use SolidFire with Cinder CSI Plugin for Kubernetes](https://github.com/kubernetes/cloud-provider-openstack/blob/master/docs/cinder-csi-plugin/using-cinder-csi-plugin.md) - a demo and notes can be found [here](https://scaleoutsean.github.io/2022/03/02/openstack-solidfire-part-2.html)
+
+#### SolidFire Operator for Kubernetes
+
+- It hasn't been built, but it can be built. One such attempt can be found [here](https://github.com/scaleoutsean/solidfire-operator)
+- It is recommended to use it to automate configuration of things SolidFire that Trident CSI doesn't touch
 
 #### Red Hat OpenShift Container Platform
 
@@ -475,7 +468,8 @@ Volume placement considers both performance and capacity utilization:
 
 ### Recorded Demos
 
-- [Search YouTube for SolidFire](https://www.youtube.com/results?search_query=solidfire&sp=CAI%253D) and sort by most recent. Also check out [NetApp HCI](https://www.youtube.com/results?search_query=netapp+hci&sp=CAI%253D) video demos since NetApp HCI uses SolidFire storage
+- Videos created before 2022: [search YouTube for SolidFire](https://www.youtube.com/results?search_query=solidfire&sp=CAI%253D) and sort by most recent. Also check out [NetApp HCI](https://www.youtube.com/results?search_query=netapp+hci&sp=CAI%253D) video demos since NetApp HCI uses SolidFire storage
+- Newer videos (2022) are on [Rumble](https://rumble.com/search/video?q=solidfire)
 
 ## Scripts and How-To Articles
 
