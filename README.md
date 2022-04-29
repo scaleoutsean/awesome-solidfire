@@ -102,7 +102,7 @@
 
 - NetApp HCI (NetApp HCI compute nodes connected via iSCSI to NetApp HCI storage nodes - some call it "disaggregated HCI" or dHCI)
   - End of Sale was announced in Q1/CY21 and happened in Q2/CY22
-  - Support continues to be available until EOS + 5Y - please refer to the official NetApp Support site
+  - Support continues to be available until EOS + 5Y. Please refer to the official NetApp Support site for details
 
 ## Why SolidFire
 
@@ -387,10 +387,12 @@ Volume placement considers both performance and capacity utilization:
 
 #### Security and General Auditing
 
-- See Syslog Forwarding above
-- Due to space constraints within SolidFire storage nodes and mNode, if longer log retention is required it is suggested to forward logs to external destination
-- See [TR-4840](https://www.netapp.com/pdf.html?item=/media/19389-tr-4840.pdf) and SolidFire documentation for details on authentication and authorization (including MFA/2FA)
+
+- Common Criteria evaluation for SolidFire 12.2 can be found [here](https://www.commoncriteriaportal.org/files/epfiles/550-LSS%20ST%20v1.0.pdf)
 - White paper on [PCI DSS](https://www.coalfire.com/resources/white-papers/netapp-hci-verified-architecture-for-pci-dss) contains information for users with PCI DSS compliance requirements
+- Log handling: see Syslog Forwarding above
+  - Due to space constraints within SolidFire storage nodes and mNode, if longer log retention is required it is suggested to forward logs to external destination
+- See [TR-4840](https://www.netapp.com/pdf.html?item=/media/19389-tr-4840.pdf) and SolidFire documentation for details on authentication and authorization (including MFA/2FA)
 - See the KMIP notes in this repo for practical notes on TLS certificates and KMIP
 
 #### ServiceNow integration
