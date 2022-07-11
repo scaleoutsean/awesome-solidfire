@@ -46,6 +46,7 @@
       - [Elasticsearch (ELK stack)](#elasticsearch-elk-stack)
       - [Grafana/Graphite - HCICollector](#grafanagraphite---hcicollector)
       - [Grafana/Prometheus - solidfire-exporter](#grafanaprometheus---solidfire-exporter)
+      - [Telegram](#telegram)
       - [Prometheus - NetApp Trident metrics](#prometheus---netapp-trident-metrics)
       - [Icinga and Nagios](#icinga-and-nagios)
       - [SNMP and SolidFire MIBs](#snmp-and-solidfire-mibs)
@@ -172,6 +173,7 @@ Volume placement considers both performance and capacity utilization:
 
 #### Citrix Hypervisor
 
+- Open-source fork [XCP-ng with SolidFire 12](https://scaleoutsean.github.io/2022/07/10/xcp-ng-with-netapp-solidfire-iscsi.html) as well as XOA
 - NetApp HCI with Citrix Hypervisor ([solution summary](https://docs.netapp.com/us-en/hci-solutions/citrix_executive_summary.html))
 
 #### Proxmox
@@ -347,6 +349,11 @@ Volume placement considers both performance and capacity utilization:
   - Recommended for stand-alone SolidFire and Kubernetes
   - Works within Kubernetes without changes
 
+#### Telegram 
+
+- Collect SNMP or other metrics with [Telegraf](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana.html)
+  - Native SolidFire API metrics can be collected the same way using HTTP (JSON-RPC)
+
 #### Prometheus - NetApp Trident metrics
 
 - SolidFire
@@ -354,6 +361,7 @@ Volume placement considers both performance and capacity utilization:
   - another options is SolidFire SNMP-to-Telegraf-to-Prometheus (example [configuration files](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana))
 - NetApp Trident
   - In v20.01 NetApp Trident delivered support for Prometheus metrics. A how-to is available [here](https://netapp.io/2020/02/20/prometheus-and-trident/)
+  - [Example](/2021/05/25/external-access-to-netapp-trident-solidfire-metrics.html) for SolidFire
 
 #### Icinga and Nagios
 
@@ -385,8 +393,8 @@ Volume placement considers both performance and capacity utilization:
   - There are two components: mNode logs (rsyslog) and HCC (Docker service, in the current version). Both can be configured to forward logs to external syslog target (TCP or UDP). Only the former can forward to multiple destinations.
   - `GET /logs` from HCC may be used to obtain the logs of individual HCC services (containers), which Docker service currently does not forward. This could be coded into a "polling" script written in PowerShell or Python, for example. See the HCC API for more on using this API method or [this](https://scaleoutsean.github.io/2020/12/08/get-bearer-token-for-netapp-hci-hybrid-cloud-control-logs.html) article.
 
-#### Security and General Auditing
 
+#### Security and General Auditing
 
 - Common Criteria evaluation for SolidFire 12.2 can be found [here](https://www.commoncriteriaportal.org/files/epfiles/550-LSS%20ST%20v1.0.pdf)
 - White paper on [PCI DSS](https://www.coalfire.com/resources/white-papers/netapp-hci-verified-architecture-for-pci-dss) contains information for users with PCI DSS compliance requirements
