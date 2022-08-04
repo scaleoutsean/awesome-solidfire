@@ -46,7 +46,7 @@
       - [Elasticsearch (ELK stack)](#elasticsearch-elk-stack)
       - [Grafana/Graphite - HCICollector](#grafanagraphite---hcicollector)
       - [Grafana/Prometheus - solidfire-exporter](#grafanaprometheus---solidfire-exporter)
-      - [Telegram](#telegram)
+      - [Telegraf](#telegraf)
       - [Prometheus - NetApp Trident metrics](#prometheus---netapp-trident-metrics)
       - [Icinga and Nagios](#icinga-and-nagios)
       - [SNMP and SolidFire MIBs](#snmp-and-solidfire-mibs)
@@ -349,7 +349,7 @@ Volume placement considers both performance and capacity utilization:
   - Recommended for stand-alone SolidFire and Kubernetes
   - Works within Kubernetes without changes
 
-#### Telegram 
+#### Telegraf
 
 - Collect SNMP or other metrics with [Telegraf](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana.html)
   - Native SolidFire API metrics can be collected the same way using HTTP (JSON-RPC)
@@ -408,7 +408,7 @@ Volume placement considers both performance and capacity utilization:
 - See the [official integration](https://docs.servicenow.com/bundle/rome-it-operations-management/page/product/service-mapping/reference/solidfire-storage-pattern.html) by ServiceNow
 - Another way, not proven but [looks doable](https://scaleoutsean.github.io/2021/12/14/integrate-solidfire-with-servicenow.html), is indirectly through Elasticsearch-ServiceNow integration
   - This would require SolidFire log redirection with structured logging and alerting in Elasticsearch (a recipe can be found [in this post](https://scaleoutsean.github.io/2021/10/18/solidfire-syslog-filebeat-logstash-elk-stack.html))
-  - Alternatively, and especially if you're interested in making use of SNMP traps - see under SNMP for more - there's a ["mega post" on all things SolidFire SNMP](https://scaleoutsean.github.io/2021/07/19/solidfire-mib-snmp-monitoring.html) which shows how SolidFire events can be filtered and used to create alerts. SNMP Traps can be sent to Elastic with Telegraph SNMP Trap plugin. There's no detailed how-to for that, but there's a post for SolidFire SNMP with Telegraph [here](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana.html). You'd have to use a different plugin (SNMP Traps for Telegraph) or [Logstash SNMP Trap plugin](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-snmptrap.html) or something similar.
+  - Alternatively, and especially if you're interested in making use of SNMP traps - see under SNMP for more - there's a ["mega post" on all things SolidFire SNMP](https://scaleoutsean.github.io/2021/07/19/solidfire-mib-snmp-monitoring.html) which shows how SolidFire events can be filtered and used to create alerts. SNMP Traps can be sent to Elastic with Telegraf SNMP Trap plugin. There's no detailed how-to for that, but there's a post for SolidFire SNMP with Telegraf [here](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana.html). You'd have to use a different plugin (SNMP Traps for Telegraf) or [Logstash SNMP Trap plugin](https://www.elastic.co/guide/en/logstash/current/plugins-inputs-snmptrap.html) or something similar.
 
 #### Zabbix
 
