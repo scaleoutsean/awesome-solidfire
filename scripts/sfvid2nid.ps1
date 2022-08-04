@@ -25,25 +25,24 @@ $res = Invoke-SFApi -Method 'GetReport' -Params @{'reportName' = 'slices.json' }
 $vid2nid = @{}
 $service = @{}
 $nodeGuarantee = @{}
-$vMinSum = 0
 
 foreach ($p2n in $res.services) { $service.Add($p2n.serviceID, $p2n.nodeID) }
+
 foreach ($n in $service.Values) { $nodeGuarantee.Add($n, 0) }
 
 foreach ($v in $res.slices) {
-    foreach ($k in $service.Keys) { 
+    foreach ($k in $service.Keys) {
         $vn = @{}
         $vMin = 0
         if ($v.primary -eq $k) {
             $v.nodeID = $service[$k]
             $vMin = (Get-SFVolume -VolumeID $v.volumeID).Qos.MinIOPS
-            $vMinSum = $vMinSum + $vMin
             [PSCustomObject]$vn = @{
                 volumeID = $v.volumeID
                 nodeID   = $v.nodeID
             }
-            $nodeGuarantee[$v.nodeID] = $vMinSum + $vMin
-            $vid2nid.Add($v.volumeID, $v.nodeID)            
+            $nodeGuarantee[$v.nodeID] = $nodeGuarantee[$v.nodeID] + $vMin
+            $vid2nid.Add($v.volumeID, $v.nodeID)
         }
     }
 }
@@ -66,11 +65,11 @@ Min IOPS by node ID:
 
 Name                           Value
 ----                           -----
-13                             193650
-10                             241150
-4                              220850
-2                              227150
-1                              208750
+13                             43900
+10                             43900
+4                              43950
+2                              43900
+1                              51000
 
 Volume-Node pairings by volume ID:
 
