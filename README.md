@@ -584,7 +584,7 @@ A: Absolutely not. For official information please visit the NetApp Web sites (s
 
 Q: I have a quick question about ...
 
-A: Please visit the [NetApp Community Forum](https://community.netapp.com/t5/SolidFire-and-HCI/bd-p/solidfire_hci) please ask there and tag your question with 'solidfire'.
+A: Please visit the [NetApp Community Forum](https://community.netapp.com/t5/SolidFire-and-HCI/bd-p/solidfire_hci) and ask your question there.
 
 ### SolidFire / Element Demo VM
 
