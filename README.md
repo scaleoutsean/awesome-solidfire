@@ -170,6 +170,7 @@ Volume placement considers both performance and capacity utilization:
   - [NetApp Verfied Architecture 1133 (NVA-1133 DESIGN)](https://www.netapp.com/us/media/nva-1133-design.pdf) - design
   - [NetApp Verified Architecture 1133 (NVA_1133 DEPLOY)](https://www.netapp.com/us/media/nva-1133-deploy.pdf) - deployment
   - [Heat templates](https://github.com/NetApp/hci-solutions/tree/master/netapp-hci-heat-templates) for Redhat OpenStack
+- [Rocky Linux](https://rockylinux.org/) 8.6 and 9.0 and other downstream distributions should work the same way. Here's an example with [Trident Docker volume plugin](https://scaleoutsean.github.io/2022/08/21/rocky-linux-docker-netapp-trident-solidfire.html)
 
 #### Citrix Hypervisor
 
