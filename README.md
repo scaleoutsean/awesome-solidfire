@@ -4,9 +4,9 @@
 
 - [Awesome SolidFire: An Unofficial Collection of NetApp SolidFire Resources](#awesome-solidfire-an-unofficial-collection-of-netapp-solidfire-resources)
   - [NetApp SolidFire-based Offerings](#netapp-solidfire-based-offerings)
+    - [End-of-Availability announcements](#end-of-availability-announcements)
     - [NetApp SolidFire All Flash Storage](#netapp-solidfire-all-flash-storage)
     - [NetApp Enterprise Software-Defined Storage (eSDS)](#netapp-enterprise-software-defined-storage-esds)
-    - [NetApp HCI](#netapp-hci)
   - [Why SolidFire](#why-solidfire)
   - [Resources and Solutions](#resources-and-solutions)
     - [Cloud](#cloud)
@@ -85,10 +85,17 @@
 
 ## NetApp SolidFire-based Offerings
 
+### End-of-Availability announcements
+
+- SolidFire: End of Sale in 2028; see [CPC-00467](https://mysupport.netapp.com/info/communications/ECMLP2884466.html) for more (NetApp support portal login required)
+  - Support is available until EOS + 5Y (2028). Please refer to the official NetApp Support site for details
+- NetApp HCI: End of Sale was announced in Q1/CY21 and took effect in Q2/CY22
+  - Support is available until EOS + 5Y (2027). Please refer to the official NetApp Support site for details
+
 ### NetApp SolidFire All Flash Storage
 
 - SolidFire iSCSI storage clusters (available as storage-only clusters)
-  - In NetApp HCI, SoliFire shares storage nodes with the NetApp HCI compute nodes and non-NetApp HCI compute nodes
+  - In NetApp HCI, SolidFire shares storage nodes with the NetApp HCI compute nodes and non-NetApp HCI compute nodes
   - You may view currently available SolidFire appliances [here](https://www.netapp.com/data-storage/solidfire/) or check which DellEMC, HPE or other servers are certified for [SolidFire eSDS](https://docs.netapp.com/us-en/element-software/esds/concept_get_started_esds.html)
 
 ### NetApp Enterprise Software-Defined Storage (eSDS)
@@ -98,12 +105,6 @@
   - Supports various 3rd party x86_64 servers
   - [Documentation](https://docs.netapp.com/us-en/element-software/index.html)
   - Ansible deployment scripts for eSDS: `nar_solidfire*` scripts [such as this one](https://github.com/NetApp/ansible/tree/master/nar_solidfire_sds_install). For non-eSDS (SolidFire appliances), you can use standard Element SW modules
-
-### NetApp HCI
-
-- NetApp HCI (NetApp HCI compute nodes connected via iSCSI to NetApp HCI storage nodes - some call it "disaggregated HCI" or dHCI)
-  - End of Sale was announced in Q1/CY21 and happened in Q2/CY22
-  - Support continues to be available until EOS + 5Y. Please refer to the official NetApp Support site for details
 
 ## Why SolidFire
 
