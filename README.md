@@ -467,7 +467,9 @@ Volume placement considers both performance and capacity utilization:
 
 - Uses SED drives with cluster-managed keys
 - Supports KMIP-compatible external key managers (see the IMT for the current list of tested ISV solutions (HyTrust, [Thales SafeNet KeySecure](./encryption/kmip-thales-keysecure.md), etc.))
-- FIPS 140-2 Level 2 certified SSDs (NetApp HCI H610S-2F model only)
+- FIPS 140-2 
+  - Element version >=12.5 - with [NCSM](https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/4297) until 2026
+  - Element version <12.5 - NetApp HCI H610S-2F model only
 
 ## Demo VM, Tools and Utilities
 
