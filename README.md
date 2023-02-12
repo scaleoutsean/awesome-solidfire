@@ -194,7 +194,8 @@ Volume placement considers both performance and capacity utilization:
 - [Oracle VM](https://linux.oracle.com/pls/apex/f?p=117:3::::::) (look under Storage Systems > NetApp)
 - Additional details about SolidFire in Linux environments: [solidfire-linux](https://github.com/scaleoutsean/solidfire-linux/)
 - HashiCorp Nomad can schedule QEMU VMs on static SolidFire-backed volumes
-- Flatcar Container Linux notes can be found [here](https://scaleoutsean.github.io/2021/12/07/flatcar-linux-with-solidfire-iscsi.html). CoreOS users may find them useful, too
+- KubeVirt v0.59 works with SolidFire 12 and Trident v23.01, [see here](https://scaleoutsean.github.io/2023/02/12/backup-restore-kubevirt-vms-with-solidfire-kasten-kubernetes.html)
+
 
 #### Oracle VirtualBox
 
@@ -232,6 +233,10 @@ Volume placement considers both performance and capacity utilization:
 
 - Rancher on NetApp HCI: just configure it with Trident CSI. See the official NetApp HCI solutions page for additional details. In late 2020 I created a personal micro-site with notes on this solution from a NetApp HCI and SolidFire angle [here](https://scaleoutsean.github.io/solid-rancher), but I no longer maintain it because NetApp HCI is no longer sold, so maybe also check this newer SolidFire-focused micro-site [Kubernetes with SolidFire](https://solidfire-kubernetes.pages.dev/) instead.
 - Provision Rancher K8s to NetApp HCI vSphere clusters from the CLI with [ez-rancher](https://github.com/NetApp/ez-rancher/)
+
+#### Flatcar Container Linux
+
+- Flatcar Container Linux notes can be found [here](https://scaleoutsean.github.io/2021/12/07/flatcar-linux-with-solidfire-iscsi.html). CoreOS users may find them useful, too
 
 #### Google Anthos
 
