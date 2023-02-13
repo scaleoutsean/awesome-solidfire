@@ -194,8 +194,7 @@ Volume placement considers both performance and capacity utilization:
 - [Oracle VM](https://linux.oracle.com/pls/apex/f?p=117:3::::::) (look under Storage Systems > NetApp)
 - Additional details about SolidFire in Linux environments: [solidfire-linux](https://github.com/scaleoutsean/solidfire-linux/)
 - HashiCorp Nomad can schedule QEMU VMs on static SolidFire-backed volumes
-- KubeVirt v0.59 works with SolidFire 12 and Trident v23.01, [see here](https://scaleoutsean.github.io/2023/02/12/backup-restore-kubevirt-vms-with-solidfire-kasten-kubernetes.html)
-
+- KVM users should provision disks with "Discard mode: unmap" to ensure rethinning of VM disks/volumes (`<driver name='qemu' type='qcow2' discard='unmap' />`) for OS that support TRIM/UMAP
 
 #### Oracle VirtualBox
 
@@ -212,8 +211,8 @@ Volume placement considers both performance and capacity utilization:
 
 #### Get started with SolidFire
 
-- Download and deploy SolidFire Demo VM (look for Element Demo VM or SolidFire Demo VM on this page). Estimated time: 30 min to download, 30 minutes to setup the first time you try.
-- To start using SolidFire from Kubernetes, head to my SolidFire-focused micro-site [Kuberntes with SolidFire](https://solidfire-kubernetes.pages.dev/) for a set of SolidFire-focused configuration steps. Estimated time: 15 minutes.
+- Download and deploy SolidFire Demo VM (look for Element Demo VM or SolidFire Demo VM on this page). Estimated time: 30 min to download, 30 minutes to setup the first time you try
+- To start using SolidFire from Kubernetes, head to my SolidFire-focused micro-site [Kuberntes with SolidFire](https://solidfire-kubernetes.pages.dev/) for a set of SolidFire-focused configuration steps. Estimated time: 15 minutes
 
 #### CSI Provisioners
 
@@ -254,6 +253,10 @@ Volume placement considers both performance and capacity utilization:
 #### VMware Photon 4.0
 
 - Photon comes with iSCSI SRPMs which can be built and made to [work with SolidFire](https://scaleoutsean.github.io/2022/03/11/vmware-photon-iscsi-solidfire.html)
+
+#### KubeVirt
+
+- KubeVirt v0.59 isn't easy to use, but it works with SolidFire 12 and Trident v23.01, [see here](https://scaleoutsean.github.io/2023/02/12/backup-restore-kubevirt-vms-with-solidfire-kasten-kubernetes.html). Interestingly, it appears that regular SolidFire PVCs appear as block devices when attached to KubeVirt VMs (in theory one should use Block mode, but that doesn't appear necesary)
 
 #### HashiCorp Nomad 
 
