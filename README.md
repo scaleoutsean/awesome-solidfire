@@ -475,13 +475,13 @@ Volume placement considers both performance and capacity utilization:
   - Kasten K10: [documentation](https://docs.kasten.io/latest/install/storage.html?highlight=netapp#netapp-trident) and [demo](https://www.youtube.com/watch?v=ShrSDwzQ0uU). 
   - Velero: [documentation](https://github.com/vmware-tanzu/velero) and [demo](https://www.youtube.com/watch?v=6RrlK2rmk24). It can work both [with](https://github.com/vmware-tanzu/velero-plugin-for-csi) and [without](https://scaleoutsean.github.io/2021/02/02/use-velero-with-netapp-storagegrid.html) Trident CSI. CSI support sort-of-works (as of Velero V1.8.1 CSI Plugin is currently still beta quality, not yet production ready for use with generic CSI provisioners). See [this](https://scaleoutsean.github.io/2022/03/15/velero-18-with-restic-and-trident-2201.html) on how Velero and Restic could be used to backup non-Kubernetes volumes used by Linux, KVM and Docker
   - VolSync: consider [VolSync](https://scaleoutsean.github.io/2023/02/13/volume-replication-solidfire-kubernetes-volsync.html) when you need to backup to S3 or async-replicate SolidFire PVs to another Kubernetes cluster of any storage (e.g. E-Series with TopoLVM)
-- PVCs used by KubeVirt VMs can be backed as any other Kubernetes PVCs, see [here](https://scaleoutsean.github.io/2023/02/12/backup-restore-kubevirt-vms-with-solidfire-kasten-kubernetes.html)
+- PVCs used by KubeVirt VMs backed by SolidFire can be backed as any other Kubernetes PVCs, see [here](https://scaleoutsean.github.io/2023/02/12/backup-restore-kubevirt-vms-with-solidfire-kasten-kubernetes.html)
 - Storage cluster failover for one Kubernetes cluster with Trident CSI and two SolidFire clusters: use NetApp Trident's Volume Import feature (a quick demo (2m55s) can be viewed [here](https://youtu.be/aSFxlGoHgdA) while a deep-dive walk-through with a ton of detail can be found [here](https://scaleoutsean.github.io/2021/03/20/kubernetes-solidfire-failover-failback.html)). For two Kubernetes clusters, each with own SolidFire cluster, you'd simply setup replication between SolidFire clusters (use consistency groups where necessary) and push Trident PVC->PV mapping to the remote site where you'd swap PV from SolidFire Cluster A for PVs replicated from SolidFire Cluster B so that you can promote Cluster B volume replicas to readWrite mode and run Trident volume import before you start Kubernetes on that site.
-  - Cinder CSI with SolidFire Cinder driver
+- Cinder CSI with SolidFire Cinder driver
   - See [this post](https://scaleoutsean.github.io/2022/03/02/openstack-solidfire-part-2.html) on how to deploy Cinder CSI with Openstack & SolidFire Cinder driver
   - VM-level and native Kubernetes backup (Velero, etc.) wasn't tested, but crash-consistent Cinder snapshots from outside of Kubernetes work as usual
 - E/EF-Series (with iSCSI host interface) attached to NetApp HCI is ideal fast Tier 1 backup pool/storage (gigabytes per second). You can find indicators of backup and restore performance in [this blog post](https://scaleoutsean.github.io/2020/12/30/netapp-hci-ef280-diskspd-for-backup)
-  - Can act as replication target for Kubernetes environments with SolidFire can use [VolSync](https://scaleoutsean.github.io/2023/02/13/volume-replication-solidfire-kubernetes-volsync.html)
+  - Can act as replication target for Kubernetes environments with SolidFire. Consider evaluating [VolSync](https://scaleoutsean.github.io/2023/02/13/volume-replication-solidfire-kubernetes-volsync.html)
 
 ### Security
 
@@ -620,6 +620,10 @@ A: Please visit the [NetApp Community Forum](https://community.netapp.com/t5/Sol
 Q: Is Element Demo VM a simulator?
 
 A: No. It's a fully functional single-node SolidFire cluster. Due to the fact that it's a VM that runs on modest hardware resources, it has some limitations (no encryption, etc) which are documented at the download page. It is not supported for production.
+
+Q: I can't find SolidFire Demo VM 12.7, why?
+
+A: It's unlikely it will be released. It seems 12.5 is the last release.
 
 Q: Does Element Demo VM work on Virtualbox?
 
