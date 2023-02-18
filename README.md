@@ -18,17 +18,19 @@
       - [Proxmox](#proxmox)
       - [Linux-related (OpenStack, KVM, Oracle VM)](#linux-related-openstack-kvm-oracle-vm)
       - [Oracle VirtualBox](#oracle-virtualbox)
-      - [Virtual Desktop Infrastructure and End User Computing (VDI & EUC)](#virtual-desktop-infrastructure-and-end-user-computing-vdi--euc)
+      - [Virtual Desktop Infrastructure and End User Computing (VDI \& EUC)](#virtual-desktop-infrastructure-and-end-user-computing-vdi--euc)
     - [Kubernetes and Containers](#kubernetes-and-containers)
       - [Get started with SolidFire](#get-started-with-solidfire)
       - [CSI Provisioners](#csi-provisioners)
       - [SolidFire Operator for Kubernetes](#solidfire-operator-for-kubernetes)
       - [Red Hat OpenShift Container Platform](#red-hat-openshift-container-platform)
       - [Rancher](#rancher)
+      - [Flatcar Container Linux](#flatcar-container-linux)
       - [Google Anthos](#google-anthos)
       - [Docker CE and Mirantis Kubernetes Engine (MKE)](#docker-ce-and-mirantis-kubernetes-engine-mke)
       - [Platform9 Managed Kubernetes (PMK)](#platform9-managed-kubernetes-pmk)
       - [VMware Photon 4.0](#vmware-photon-40)
+      - [KubeVirt](#kubevirt)
       - [HashiCorp Nomad](#hashicorp-nomad)
     - [File-sharing (NFS, SMB)](#file-sharing-nfs-smb)
     - [CLI, API, SDK Resources](#cli-api-sdk-resources)
@@ -57,6 +59,9 @@
       - [Zabbix](#zabbix)
       - [Event Notifications](#event-notifications)
     - [Backup, Restore, DR and BC (Site Failover)](#backup-restore-dr-and-bc-site-failover)
+      - [Built-in backup to S3](#built-in-backup-to-s3)
+      - [VM and Bare Metal workloads](#vm-and-bare-metal-workloads)
+      - [Trident CSI with `solidfire-san` back-end](#trident-csi-with-solidfire-san-back-end)
     - [Security](#security)
     - [Encryption](#encryption)
   - [Demo VM, Tools and Utilities](#demo-vm-tools-and-utilities)
@@ -152,7 +157,7 @@ Volume placement considers both performance and capacity utilization:
 - [VMware Storage/SAN Compatibility Page](https://www.vmware.com/resources/compatibility/search.php?deviceCategory=san&details=1&partner=439&arrayTypes=1&isSVA=0&page=1&display_interval=10&sortColumn=Partner&sortOrder=Asc) for SolidFire iSCSI storage
 - [Element SRA](https://www.vmware.com/resources/compatibility/search.php?deviceCategory=sra&details=1&partner=64,439&keyword=solidfire&page=1&display_interval=10&sortColumn=Partner&sortOrder=Asc) for VMware SRM 8.3
 - [vRealize Orchestrator Plugin for Element Software](https://github.com/solidfire/vrealize-orchestrator-plugin)
-- vRealize Automation for NetApp HCI and SolidFire (former BlueMedora packages)
+- vRealize Automation for NetApp HCI and SolidFire (formerly BlueMedora packages)
 - [pyNSXdeploy](https://github.com/solidfire/pyNSXdeploy) -  automate deployment of NSX on vSphere 6.x on NetApp HCI
 - Datastore naming conventions:
   - Best use VMware SDDC conventions and have workflows and procedures that eliminate the possibility of duplicate names (both on SolidFire and VMware side)
@@ -194,7 +199,7 @@ Volume placement considers both performance and capacity utilization:
 - [Oracle VM](https://linux.oracle.com/pls/apex/f?p=117:3::::::) (look under Storage Systems > NetApp)
 - Additional details about SolidFire in Linux environments: [solidfire-linux](https://github.com/scaleoutsean/solidfire-linux/)
 - HashiCorp Nomad can schedule QEMU VMs on static SolidFire-backed volumes
-- KVM users should provision disks with "Discard mode: unmap" to ensure rethinning of VM disks/volumes (`<driver name='qemu' type='qcow2' discard='unmap' />`) for OS that support TRIM/UMAP
+- KVM users should provision disks with "Discard mode: unmap" to ensure rethinning of VM disks/volumes (`<driver name='qemu' type='qcow2' discard='unmap' />`) for OS that support TRIM/UNMAP
 
 #### Oracle VirtualBox
 
@@ -212,7 +217,7 @@ Volume placement considers both performance and capacity utilization:
 #### Get started with SolidFire
 
 - Download and deploy SolidFire Demo VM (look for Element Demo VM or SolidFire Demo VM on this page). Estimated time: 30 min to download, 30 minutes to setup the first time you try
-- To start using SolidFire from Kubernetes, head to my SolidFire-focused micro-site [Kuberntes with SolidFire](https://solidfire-kubernetes.pages.dev/) for a set of SolidFire-focused configuration steps. Estimated time: 15 minutes
+- To start using SolidFire from Kubernetes, head to my SolidFire-focused micro-site [Kubernetes with SolidFire](https://solidfire-kubernetes.pages.dev/) for a set of SolidFire-focused configuration steps. Estimated time: 15 minutes
 
 #### CSI Provisioners
 
@@ -273,7 +278,7 @@ Volume placement considers both performance and capacity utilization:
     - SMB (hybrid cloud, read-write):
       - NetApp FlexCache (ONTAP Select 9.8+)
       - [NetApp Global File Cache](https://cloud.netapp.com/global-file-cache) running as edge node in Microsoft Windows VM, with core file service running in public cloud (Cloud Volumes ONTAP or Cloud Volumes Service). As indicated, you don't need ONTAP Select on NetApp HCI for this one
-    - S3 - use ONTAP S3; this is recommended for small object stores (container registry, source code, etc.), use something like StorageGRID for large and uncompressible content
+    - S3 - use ONTAP S3; this is recommended for small object stores (container registry, source code, etc.), use something like StorageGRID for large data and pre-compressed content (videos, compressed logs)
 - Example 2: any modern OS with NFS, SMB or S3 service
 
 ### CLI, API, SDK Resources
@@ -326,7 +331,7 @@ Volume placement considers both performance and capacity utilization:
 - Enterprise-grade, professional infrastructure monitoring
 - Cloud-hosted service, requires on-prem VM to acquire data and send it to your NetApp Cloud Insights account
 - The free version has basic functionality and supports all NetApp products including SolidFire and NetApp HCI
-- Monitor performance and OPEX of all on-prem assets (NetApp- and non-NetApp-made) as well as in public clouds (find examples in NetApp [WP-7319](https://www.netapp.com/us/media/wp-7319.pdf))
+- Monitor performance and OpEx of all on-prem assets (NetApp- and non-NetApp-made) as well as in public clouds (find examples in NetApp [WP-7319](https://www.netapp.com/us/media/wp-7319.pdf))
 
 #### VMware / Blue Medora True Visibility for VMware vRealize Operations
 
@@ -355,7 +360,7 @@ Volume placement considers both performance and capacity utilization:
 
 #### Grafana/Prometheus - solidfire-exporter
 
-- [Solidfire Exporter](https://github.com/mjavier2k/solidfire-exporter/) fetches and serves SolidFire metrics in the Prometheus format
+- [SolidFire Exporter](https://github.com/mjavier2k/solidfire-exporter/) fetches and serves SolidFire metrics in the Prometheus format
   - Recommended for stand-alone SolidFire and Kubernetes
   - Works within Kubernetes without changes
 
@@ -434,37 +439,49 @@ Volume placement considers both performance and capacity utilization:
   - Icinga and Nagios (email)
   - SolidFire syslog forwarding to ElasticSearch with support cases created in ServiceNow or other back-end
   - Grafana or [Prometheus](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana.html) or any other sink which can receive SolidFire log or SNMP traps
-  - Solidire-to-Slack could work the same way: watch SolidFire (or Elastic or ActiveIQ, etc.) for events, use webhook to sent notifications to a Slack channel or user
+  - SolidFire-to-Slack could work the same way: watch SolidFire (or Elastic or ActiveIQ, etc.) for events, use webhook to sent notifications to a Slack channel or user
 
 ### Backup, Restore, DR and BC (Site Failover)
+
+#### Built-in backup to S3
+
+- Not a full-featured backup, but good for smaller volumes. Works with StorageGRID, MinIO (SolidFire 12.3), Wasabi and other S3 storage
+- See [this](https://scaleoutsean.github.io/2021/04/21/solidfire-backup-to-s3.html) post and others on that blog
+
+#### VM and Bare Metal workloads
 
 - While you backup SolidFire data by backing up front-end VMs or application data, the following vendors (ordered alphabetically) can integrate with SolidFire API to make data protection and business continuity easier and better
   - Cleondris HCC
   - Commvault
   - Rubrik
   - Veeam BR ([NetApp Element Plug-In for Veeam Backup & Replication](https://www.veeam.com/kb4044))
-- E/EF-Series (with iSCSI host interface) attached to NetApp HCI is ideal fast Tier 1 backup pool/storage (gigabytes per second). You can find indicators of backup and restore performance in [this blog post](https://scaleoutsean.github.io/2020/12/30/netapp-hci-ef280-diskspd-for-backup)
-- Open-source integrations for non-CSI environments (Borg, Duplicati, Restic, Borg, etc.)
+- Open-source integrations for non-CSI environments (Borg, Duplicati, Restic, Borg, Kopia, etc.)
   - Snapshot, clone and mount SolidFire volumes, then use a backup utility to replicate clone to backup storage (E-Series, etc.) or S3 (NetApp StorageGRID, AWS S3, Minio, Wasabi, etc.)
     - Video demo with [Duplicati](https://youtu.be/wP8nAgFo8og)
     - An implementation with Restic written in PowerShell can be found in my [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup); with extremely simple modifications I was able to [apply the concept to backup SolidFire clones to Minio](https://scaleoutsean.github.io/2021/06/18/solidbackup-with-alternative-backup-clients)
-  - Kubernetes users can use Velero (see below)
-- You can also replicate to, and then backup from ONTAP, which becomes attractive with large backup jobs: set up SolidFire SnapMirror to an ONTAP system with NL-SAS disks and backup the volume on ONTAP. When you have to backup a 20TB database on HCI, you're better off backing it up with NetApp HCI replicated to ONTAP than directly from HCI (either NetApp or any other)
+  - Kubernetes users can use Velero, VolSync and such (see below)
+- You can also replicate volumes to, and then backup replicas from, ONTAP which becomes attractive with large backup jobs: set up SolidFire SnapMirror to ONTAP and backup the destination volume on ONTAP. When you have to backup a 20TB database on HCI, you're better off backing it up with NetApp HCI replicated to ONTAP than directly from HCI (either NetApp or any other)
 - DR for Virtual Infrastructure
   - Native Synchronous and Asynchronous Replication - see NetApp TR-4741 or newer
   - Site failover
     - SolidFire SRA for VMware SRM
     - Some of the backup offerings mentioned above provide functionality similar to VMware SRM
-- Trident CSI with `solidfire-san` back-end
-  - Can be backed up by creating thin clones and presenting them to a VM or container running a backup software agent (example with [Duplicacy](https://youtu.be/bvI7pgXKh6w))
-  - Enterprise backup software can also backup Trident volumes. Examples in alphabetical order:
-    - Commvault B&R: [documentation](https://documentation.commvault.com/11.21/essential/123637_system_requirements_for_kubernetes.html) and [demo](https://www.youtube.com/watch?v=kiMf9Fkhxd8). Metallic VM is another offering with this technology.
-    - Kasten K10: [documentation](https://docs.kasten.io/latest/install/storage.html?highlight=netapp#netapp-trident) and [demo](https://www.youtube.com/watch?v=ShrSDwzQ0uU)
-    - Velero: [documentation](https://github.com/vmware-tanzu/velero) and [demo](https://www.youtube.com/watch?v=6RrlK2rmk24). It can work both [with](https://github.com/vmware-tanzu/velero-plugin-for-csi) and [without](https://scaleoutsean.github.io/2021/02/02/use-velero-with-netapp-storagegrid.html) Trident CSI. CSI support sort-of-works (as of Velero V1.8.1 CSI Plugin is currently still beta quality, not yet production ready for use with generic CSI provisioners). See [this](https://scaleoutsean.github.io/2022/03/15/velero-18-with-restic-and-trident-2201.html) on how Velero and Restic could be used to backup non-Kubernetes volumes used by Linux, KVM and Docker
-  - Storage cluster failover for one Kubernetes cluster with Trident CSI and two SolidFire clusters: use NetApp Trident's Volume Import feature (a quick demo (2m55s) can be viewed [here](https://youtu.be/aSFxlGoHgdA) while a deep-dive walk-through with a ton of detail can be found [here](https://scaleoutsean.github.io/2021/03/20/kubernetes-solidfire-failover-failback.html)). For two Kubernetes clusters, each with own SolidFire cluster, you'd simply setup replication between SolidFire clusters (use consistency groups where necessary) and push Trident PVC->PV mapping to the remote site where you'd swap PV from SolidFire Cluster A for PVs replicated from SolidFire Cluster B so that you can promote Cluster B volume replicas to readWrite mode and run Trident volume import before you start Kubernetes on that site.
-- Cinder CSI with SolidFire Cinder driver
+
+#### Trident CSI with `solidfire-san` back-end
+
+- Can be backed up by creating thin clones and presenting them to a VM or container running a backup software agent (example with [Duplicacy](https://youtu.be/bvI7pgXKh6w))
+- Enterprise backup software can also backup Trident volumes. Examples in alphabetical order:
+  - Commvault B&R: [documentation](https://documentation.commvault.com/11.21/essential/123637_system_requirements_for_kubernetes.html) and [demo](https://www.youtube.com/watch?v=kiMf9Fkhxd8). Metallic VM is another offering with this technology.
+  - Kasten K10: [documentation](https://docs.kasten.io/latest/install/storage.html?highlight=netapp#netapp-trident) and [demo](https://www.youtube.com/watch?v=ShrSDwzQ0uU). 
+  - Velero: [documentation](https://github.com/vmware-tanzu/velero) and [demo](https://www.youtube.com/watch?v=6RrlK2rmk24). It can work both [with](https://github.com/vmware-tanzu/velero-plugin-for-csi) and [without](https://scaleoutsean.github.io/2021/02/02/use-velero-with-netapp-storagegrid.html) Trident CSI. CSI support sort-of-works (as of Velero V1.8.1 CSI Plugin is currently still beta quality, not yet production ready for use with generic CSI provisioners). See [this](https://scaleoutsean.github.io/2022/03/15/velero-18-with-restic-and-trident-2201.html) on how Velero and Restic could be used to backup non-Kubernetes volumes used by Linux, KVM and Docker
+  - VolSync: consider [VolSync](https://scaleoutsean.github.io/2023/02/13/volume-replication-solidfire-kubernetes-volsync.html) when you need to backup to S3 or async-replicate SolidFire PVs to another Kubernetes cluster of any storage (e.g. E-Series with TopoLVM)
+- PVCs used by KubeVirt VMs can be backed as any other Kubernetes PVCs, see [here](https://scaleoutsean.github.io/2023/02/12/backup-restore-kubevirt-vms-with-solidfire-kasten-kubernetes.html)
+- Storage cluster failover for one Kubernetes cluster with Trident CSI and two SolidFire clusters: use NetApp Trident's Volume Import feature (a quick demo (2m55s) can be viewed [here](https://youtu.be/aSFxlGoHgdA) while a deep-dive walk-through with a ton of detail can be found [here](https://scaleoutsean.github.io/2021/03/20/kubernetes-solidfire-failover-failback.html)). For two Kubernetes clusters, each with own SolidFire cluster, you'd simply setup replication between SolidFire clusters (use consistency groups where necessary) and push Trident PVC->PV mapping to the remote site where you'd swap PV from SolidFire Cluster A for PVs replicated from SolidFire Cluster B so that you can promote Cluster B volume replicas to readWrite mode and run Trident volume import before you start Kubernetes on that site.
+  - Cinder CSI with SolidFire Cinder driver
   - See [this post](https://scaleoutsean.github.io/2022/03/02/openstack-solidfire-part-2.html) on how to deploy Cinder CSI with Openstack & SolidFire Cinder driver
   - VM-level and native Kubernetes backup (Velero, etc.) wasn't tested, but crash-consistent Cinder snapshots from outside of Kubernetes work as usual
+- E/EF-Series (with iSCSI host interface) attached to NetApp HCI is ideal fast Tier 1 backup pool/storage (gigabytes per second). You can find indicators of backup and restore performance in [this blog post](https://scaleoutsean.github.io/2020/12/30/netapp-hci-ef280-diskspd-for-backup)
+  - Can act as replication target for Kubernetes environments with SolidFire can use [VolSync](https://scaleoutsean.github.io/2023/02/13/volume-replication-solidfire-kubernetes-volsync.html)
 
 ### Security
 
@@ -519,7 +536,7 @@ Some volume-cloning and backup-to-S3 scripts related to my SolidBackup concept c
 ### VMware
 
 - SolidFire device names start with `naa.6f47acc1`
-- PowerShell [script](https://github.com/kpapreck/test-plan/blob/master/kp-clone-snap-to-datastore.ps1) to clone a VMFS6 volume from a SolidFire snapshot and import it to vCenter
+- PowerShell [script](https://github.com/kpapreck/test-plan/blob/master/kp-clone-snap-to-datastore.ps1) to clone a VMFS 6 volume from a SolidFire snapshot and import it to vCenter
 - PowerShell [examples](https://github.com/solidfire/PowerShell/tree/release/1.5.1/VMware) for VMware. Do not use old performance-tuning scripts from the SolidFire PowerShell repo. They were written for ESXi 5.5 and 6.0. ESXi 6.5 and later have appropriate SolidFire MPIO settings built-in and require no special modification or tuning
 
 ### Windows
@@ -647,7 +664,7 @@ A: To be clear, this is about iSCSI clients supported by SolidFire storage (whic
 - Redhat OpenStack and Enterprise Virtualization - refer to the IMT
 - MicroSoft Windows (Hyper-V) - search the WSC site (example for the [H615C](https://www.windowsservercatalog.com/item.aspx?idItem=4109a235-2b2e-3200-d3ef-065c8ea7c0c6&bCatID=1282))
 - Citrix Hypervisor (formerly known as XenServer) - v8 is supported as per NetApp HCI VDI Solution with Citrix Hypervisor; for v7 refer to the HCLs for [storage](http://hcl.xenserver.org/storage/?vendor=56) and [servers](http://hcl.xenserver.org/servers/?vendor=56)
-- Oracle VM - go [here](https://linux.oracle.com/pls/apex/f?p=117:3::::::). Click on Storage Systems and in filter rop-down list select NetApp. Look for SolidFire models from the NetApp HCI Datasheet or Web site (for example, H610S)
+- Oracle VM - go [here](https://linux.oracle.com/pls/apex/f?p=117:3::::::). Click on Storage Systems and in filter rop-down list select NetApp. Look for SolidFire models from the NetApp HCI datasheet or Web site (for example, H610S)
 - Other Linux distributions validated (Cinder iSCSI) for SolidFire Element OS - Ubuntu, SuSE, etc. (the details can be found in the NetApp IMT)
 - Newer container-focused Linux distributions (Flatcar Container Linux, CoreOS) with iSCSI initiator
 - Oracle Virtualbox - not suported (as it uses its own iSCSI client that isn't validated by NetApp) but it works and you may want to use it in a lab environment (it's not stable enough for production use)
@@ -658,7 +675,7 @@ If unsure, contact NetApp with any questions or ask in the [NetApp Community For
 
 Q: Does SolidFire work with my Kubernetes?
 
-A: If Trident works with it, SolidFire can too. Some K8s distributions known to work are listed in the Trident documentation, but other CSI-compatible distros should work as well. I recommend to check out Trident [issues](https://github.com/NetApp/trident/issues) as well to see if there's anything that you care about. Note that issues and requirements change between releases, so sometimes you may be better off with an older release in which case you shuold check supported requirements for older Trident releases.
+A: If Trident works with it, SolidFire can too. Some K8s distributions known to work are listed in the Trident documentation, but other CSI-compatible distributions should work as well. I recommend to check out Trident [issues](https://github.com/NetApp/trident/issues) as well to see if there's anything that you care about. Note that issues and requirements change between releases, so sometimes you may be better off with an older release in which case you should check supported requirements for older Trident releases.
 
 ### Workloads
 
@@ -677,7 +694,7 @@ A: For some applications from that stack (such as databases) it is, but for HDFS
 
 Q: What protocols are supported?
 
-A: For SolidlFire, it's iSCSI for x86_64 Linux, Windows and VMware hosts. No UNIX and no Fibre Channel. See the next question for NFS and SMB.
+A: For SolidFire, it's iSCSI for x86_64 Linux, Windows and VMware hosts. No UNIX and no Fibre Channel. See the next question for NFS and SMB.
 
 Q: Okay, I want SolidFire but what about NFS and SMB?
 
@@ -685,7 +702,7 @@ A: You can buy a software-based ONTAP license (NetApp ONTAP Select) and run it o
 
 ONTAP Select running on NetApp HCI compute nodes can store its data either (or both) on NetApp HCI storage or external storage supported by hypervisor (ESXi 6.7, for example).
 
-- NetApp [TR-4669](https://www.netapp.com/us/media/tr-4669.pdf): HCI File Services Powered by ONTAP Select
+- NetApp [TR-4669](https://www.netapp.com/us/media/tr-4669.pdf): HCI File Services Powered by ONTAP Select (vSphere 6 (older ONTAP 9) and 7 (newer ONTAP 9))
 - NetApp ONTAP Select [documentation](https://docs.netapp.com/us-en/ontap-select/)
 
 NetApp HCI users who got the free ONTAP Select with their system can also use S3 protocol with it, especially for small requests. [This post](https://scaleoutsean.github.io/2022/03/17/ontap-s3-performance-test.html) shows performance of a minimal OTS 9.10 on NetApp HCI Gen 1 hardware (H300 Series nodes).
@@ -706,7 +723,7 @@ A: There are situations where certain operations may be done faster or more effi
 - speed up workflows by working directly with SolidFire API (Terraform plugin for SolidFire, SolidFire SDKs and CLIs)
 - use an API method that's not (or not yet) exposed through a 3rd party integration (vCenter plugin) or even SolidFire SDK (for example, currently that is the case with Element storage Qos histograms)
 
-Q: How can I use a feature that is availble but not exposed in a SolidFire SDK or API or CLI?
+Q: How can I use a feature that is available but not exposed in a SolidFire SDK or API or CLI?
 
 A: PowerShell Tools for SolidFire and all SDKs have a wrapper method (Invoke SF API) that simplifies the use of the API methods for which there is no cmdlet or direct method in an SDK. You can also use generic JSON RPC calls which may be a good choice for simple scripts in which you don't intend to use a SolidFire SDK because you don't want to install additional dependencies for simple projects.
 
