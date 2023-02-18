@@ -445,8 +445,9 @@ Volume placement considers both performance and capacity utilization:
 
 #### Built-in backup to S3
 
-- Not a full-featured backup, but good for smaller volumes. Works with StorageGRID, MinIO (SolidFire 12.3), Wasabi and other S3 storage
+- Not a full-featured backup software (i.e. there's no catalog and deduplication), but good for bulk backup of smaller volumes. Works with StorageGRID, MinIO (SolidFire >=12.3), Wasabi and other S3 storage
 - See [this](https://scaleoutsean.github.io/2021/04/21/solidfire-backup-to-s3.html) post and others on that blog
+- Automation scripts for PowerShell can be found in the scripts folder; catalog feature could be created by inserting metadata into a DB such as SQL Express or PostgreSQL
 
 #### VM and Bare Metal workloads
 
