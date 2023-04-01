@@ -446,7 +446,7 @@ Volume placement considers both performance and capacity utilization:
 #### Built-in backup to S3
 
 - Not a full-featured backup software (i.e. there's no catalog and deduplication), but good for bulk backup of smaller volumes. Works with StorageGRID, MinIO (SolidFire >=12.3), Wasabi and other S3 storage
-- See [this](https://scaleoutsean.github.io/2021/04/21/solidfire-backup-to-s3.html) post and others on that blog
+- See [this](https://scaleoutsean.github.io/2021/04/21/solidfire-backup-to-s3.html) post and others on that blog. SolidFire snapshots support [KV attributes](https://scaleoutsean.github.io/2023/04/01/using-solidfire-snapshot-attributes.html) for advanced snapshot workflows
 - Automation scripts for PowerShell can be found in the scripts folder; catalog feature could be created by inserting metadata into a DB such as SQL Express or PostgreSQL
 
 #### VM and Bare Metal workloads
@@ -457,7 +457,7 @@ Volume placement considers both performance and capacity utilization:
   - Rubrik
   - Veeam BR ([NetApp Element Plug-In for Veeam Backup & Replication](https://www.veeam.com/kb4044))
 - Open-source integrations for non-CSI environments (Borg, Duplicati, Restic, Borg, Kopia, etc.)
-  - Snapshot, clone and mount SolidFire volumes, then use a backup utility to replicate clone to backup storage (E-Series, etc.) or S3 (NetApp StorageGRID, AWS S3, Minio, Wasabi, etc.)
+  - Snapshot, clone and mount SolidFire volumes, then use a backup utility to replicate clone to backup storage (E-Series, etc.) or S3 (NetApp StorageGRID, AWS S3, MinIO, Wasabi, etc.)
     - Video demo with [Duplicati](https://youtu.be/wP8nAgFo8og)
     - An implementation with Restic written in PowerShell can be found in my [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup); with extremely simple modifications I was able to [apply the concept to backup SolidFire clones to Minio](https://scaleoutsean.github.io/2021/06/18/solidbackup-with-alternative-backup-clients)
   - Kubernetes users can use Velero, VolSync and such (see below)
