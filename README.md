@@ -408,7 +408,6 @@ Volume placement considers both performance and capacity utilization:
   - There are two components: mNode logs (rsyslog) and HCC (Docker service, in the current version). Both can be configured to forward logs to external syslog target (TCP or UDP). Only the former can forward to multiple destinations.
   - `GET /logs` from HCC may be used to obtain the logs of individual HCC services (containers), which Docker service currently does not forward. This could be coded into a "polling" script written in PowerShell or Python, for example. See the HCC API for more on using this API method or [this](https://scaleoutsean.github.io/2020/12/08/get-bearer-token-for-netapp-hci-hybrid-cloud-control-logs.html) article.
 
-
 #### Security and General Auditing
 
 - Common Criteria evaluation for SolidFire 12.2 can be found [here](https://www.commoncriteriaportal.org/files/epfiles/550-LSS%20ST%20v1.0.pdf)
@@ -445,7 +444,7 @@ Volume placement considers both performance and capacity utilization:
 
 #### Built-in backup to S3
 
-- Not a full-featured backup software (i.e. there's no catalog and deduplication), but good for bulk backup of smaller volumes. Works with StorageGRID, MinIO (SolidFire >=12.3), Wasabi and other S3 storage
+- Not full-featured backup software (i.e. there's no catalog and deduplication), but good for bulk backup of smaller volumes. Works with StorageGRID, ONTAP S3, MinIO (SolidFire >=12.3), Wasabi, Backblaze and other S3 storage (not with CloudFlare R2)
 - See [this](https://scaleoutsean.github.io/2021/04/21/solidfire-backup-to-s3.html) post and others on that blog
 - SolidFire snapshots support [KV attributes](https://scaleoutsean.github.io/2023/04/01/using-solidfire-snapshot-attributes.html) for advanced snapshot workflows. For example we can use snapshot attributes to tag S3 snapshot objects
 - Automation scripts for PowerShell can be found in the scripts folder; catalog feature could be created by inserting metadata into a DB such as SQL Express or PostgreSQL
@@ -473,6 +472,7 @@ Volume placement considers both performance and capacity utilization:
 
 - Can be backed up by creating thin clones and presenting them to a VM or container running a backup software agent (example with [Duplicacy](https://youtu.be/bvI7pgXKh6w))
 - Enterprise backup software can also backup Trident volumes. Examples in alphabetical order:
+  - CloudCasa: use with Velero engine with or without CSI
   - Commvault B&R: [documentation](https://documentation.commvault.com/11.21/essential/123637_system_requirements_for_kubernetes.html) and [demo](https://www.youtube.com/watch?v=kiMf9Fkhxd8). Metallic VM is another offering with this technology.
   - Kasten K10: [documentation](https://docs.kasten.io/latest/install/storage.html?highlight=netapp#netapp-trident) and [demo](https://www.youtube.com/watch?v=ShrSDwzQ0uU). 
   - Velero: [documentation](https://github.com/vmware-tanzu/velero) and [demo](https://www.youtube.com/watch?v=6RrlK2rmk24). It can work both [with](https://github.com/vmware-tanzu/velero-plugin-for-csi) and [without](https://scaleoutsean.github.io/2021/02/02/use-velero-with-netapp-storagegrid.html) Trident CSI. CSI support sort-of-works (as of Velero V1.8.1 CSI Plugin is currently still beta quality, not yet production ready for use with generic CSI provisioners). See [this](https://scaleoutsean.github.io/2022/03/15/velero-18-with-restic-and-trident-2201.html) on how Velero and Restic could be used to backup non-Kubernetes volumes used by Linux, KVM and Docker. CloudCasa added support for Velero in April 2023. It appears [it can work](https://scaleoutsean.github.io/2023/04/15/cloudcasa-netapp-trident-solidfire.html) with Velero, Trident and SolidFire, but further testing is necessary
