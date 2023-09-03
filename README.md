@@ -460,6 +460,7 @@ Volume placement considers both performance and capacity utilization:
   - Snapshot, clone and mount SolidFire volumes, then use a backup utility to replicate clone to backup storage (E-Series, etc.) or S3 (NetApp StorageGRID, AWS S3, MinIO, Wasabi, etc.)
     - Video demo with [Duplicati](https://youtu.be/wP8nAgFo8og)
     - An implementation with Restic written in PowerShell can be found in my [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup); with extremely simple modifications I was able to [apply the concept to backup SolidFire clones to Minio](https://scaleoutsean.github.io/2021/06/18/solidbackup-with-alternative-backup-clients)
+    - [SimpleBackups](https://simplebackups.com/server-backup/) can be used to backup cloned & mounted volumes from a SolidBackup server
   - Kubernetes users can use Velero, VolSync and such (see below)
 - You can also replicate volumes to, and then backup replicas from, ONTAP which becomes attractive with large backup jobs: set up SolidFire SnapMirror to ONTAP and backup the destination volume on ONTAP. When you have to backup a 20TB database on HCI, you're better off backing it up with NetApp HCI replicated to ONTAP than directly from HCI (either NetApp or any other)
 - DR for Virtual Infrastructure
