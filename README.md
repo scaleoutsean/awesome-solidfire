@@ -476,7 +476,7 @@ There are several ways to integrate:
 
 - Can be backed up by creating thin clones and presenting them to a VM or container running a backup software agent (example with [Duplicacy](https://youtu.be/bvI7pgXKh6w))
 - Enterprise backup software can also backup Trident volumes. Examples in alphabetical order:
-  - CloudCasa: use with Velero engine with or without CSI
+  - Cloud Casa: use it with Velero engine with or without CSI plugin. CloudCasa was formerly exclusively hosted, but since Nov 2023 supports self-hosted deployments.
   - Commvault B&R: [documentation](https://documentation.commvault.com/11.21/essential/123637_system_requirements_for_kubernetes.html) and [demo](https://www.youtube.com/watch?v=kiMf9Fkhxd8). Metallic VM is another offering with this technology.
   - Kasten K10: [documentation](https://docs.kasten.io/latest/install/storage.html?highlight=netapp#netapp-trident) and [demo](https://www.youtube.com/watch?v=ShrSDwzQ0uU). 
   - Velero: [documentation](https://github.com/vmware-tanzu/velero) and [demo](https://www.youtube.com/watch?v=6RrlK2rmk24). It can work both [with](https://github.com/vmware-tanzu/velero-plugin-for-csi) and [without](https://scaleoutsean.github.io/2021/02/02/use-velero-with-netapp-storagegrid.html) Trident CSI. CSI support works and [CSI Snapshot Data Movement](https://scaleoutsean.github.io/2023/09/15/velero-csi-snapshot-data-movement-with-netapp-solidfire.html) (Velero v1.12) works as well! CloudCasa added support for Velero in April 2023. It appears [it can work](https://scaleoutsean.github.io/2023/04/15/cloudcasa-netapp-trident-solidfire.html) with Velero, Trident and SolidFire, but further testing is necessary
@@ -485,7 +485,7 @@ There are several ways to integrate:
 - Storage cluster failover for one Kubernetes cluster with Trident CSI and two SolidFire clusters: use NetApp Trident's Volume Import feature (a quick demo (2m55s) can be viewed [here](https://youtu.be/aSFxlGoHgdA) while a deep-dive walk-through with a ton of detail can be found [here](https://scaleoutsean.github.io/2021/03/20/kubernetes-solidfire-failover-failback.html)). For two Kubernetes clusters, each with own SolidFire cluster, you'd simply setup replication between SolidFire clusters (use consistency groups where necessary) and push Trident PVC->PV mapping to the remote site where you'd swap PV from SolidFire Cluster A for PVs replicated from SolidFire Cluster B so that you can promote Cluster B volume replicas to readWrite mode and run Trident volume import before you start Kubernetes on that site.
 - Cinder CSI with SolidFire Cinder driver
   - See [this post](https://scaleoutsean.github.io/2022/03/02/openstack-solidfire-part-2.html) on how to deploy Cinder CSI with Openstack & SolidFire Cinder driver
-  - VM-level and native Kubernetes backup (Velero, etc.) wasn't tested, but crash-consistent Cinder snapshots from outside of Kubernetes work as usual
+  - VM-level and native Kubernetes backup (Velero with an OpenStack plugin, etc.) wasn't tested, but crash-consistent Cinder snapshots from outside of Kubernetes work as usual
 - E/EF-Series (with iSCSI host interface) attached to NetApp HCI is ideal fast Tier 1 backup pool/storage (gigabytes per second). You can find indicators of backup and restore performance in [this blog post](https://scaleoutsean.github.io/2020/12/30/netapp-hci-ef280-diskspd-for-backup)
   - Can act as replication target for Kubernetes environments with SolidFire. Consider evaluating [VolSync](https://scaleoutsean.github.io/2023/02/13/volume-replication-solidfire-kubernetes-volsync.html) for this
 
@@ -745,6 +745,10 @@ A: To get most if not all software-related limits use the API (`GetLimits`) or a
 Q: Is there a quick way to try SolidFire PowerShell Tools or SolidFire Python CLI from Docker?
 
 A: Yes. Sample Ubuntu-based container with SolidFire PowerShell Tools can be started with `docker run -it scaleoutsean/solidshell` (run `Connect-SFCluster` once inside). You can also build your own and include 3rd party PowerShell or Python modules you commonly use.
+
+Q: Is there a way to implement RBAC for "tiered" storage provisioning (cluster admin - team - storage account)?
+
+A: Yes, there are several ways. What's common to them all is you need something in between the API user and the SolidFire API point, which will intercept API calls and decide whether to let them through. The easiest is probably to use Ansible [like this](https://scaleoutsean.github.io/2022/02/14/middle-class-rbac-solidfire-ansible.html). If you dislike Ansible, you have two other choices: implement API reverse proxy that terminates TLS connections, dissects API calls and filters based on team membership, or build own API proxy application (which can be running behind an enterprise proxy) that does the same (accept JSON RPC calls, examine them against team membership stored in static files, Sqlite or DB service), and decide what to do with them.
 
 ### Networking
 
