@@ -362,7 +362,6 @@ Volume placement considers both performance and capacity utilization:
 
 - [SolidFire Exporter](https://github.com/mjavier2k/solidfire-exporter/) fetches and serves SolidFire metrics in the Prometheus format
   - Recommended for stand-alone SolidFire and Kubernetes
-  - Works within Kubernetes without changes
 
 #### Telegraf
 
@@ -396,8 +395,11 @@ Volume placement considers both performance and capacity utilization:
 
 #### Splunk
 
-- Redirect SolidFire log to a TCP port on Universal Forwarder or Indexer
-- Send SNMP events to UF or Indexer. The SolidFire MIB files can be downloaded from the SolidFire Web UI. If you redirect SolidFire syslog, you probably don't want to also send SNMP traps to Splunk
+There are several ways to integrate:
+
+- Performance and status monitoring: use solidfire-exporter and [scrape Prometheus metrics from Splunk](https://www.splunk.com/en_us/blog/devops/metrics-from-prometheus-exporters-are-now-available-with-the-sfx-smart-agent.html?locale=en_us)
+- Logs: redirect SolidFire cluster's syslog to Universal Forwarder
+- Events and basic performance monitoring: use SNMP GETs and/or send SNMP traps to UF or Indexer. The SolidFire MIB files can be downloaded from the SolidFire Web UI.
 
 #### Syslog Forwarding
 
@@ -512,7 +514,7 @@ Volume placement considers both performance and capacity utilization:
 ### Recorded Demos
 
 - Videos created before 2022: [search YouTube for SolidFire](https://www.youtube.com/results?search_query=solidfire&sp=CAI%253D) and sort by most recent. Also check out [NetApp HCI](https://www.youtube.com/results?search_query=netapp+hci&sp=CAI%253D) video demos since NetApp HCI uses SolidFire storage
-- Newer videos (2022) are on [Rumble](https://rumble.com/search/video?q=solidfire)
+- Newer videos (2022 and later) are on [Rumble](https://rumble.com/search/video?q=solidfire)
 
 ## Scripts and How-To Articles
 
@@ -522,8 +524,9 @@ Find them in the `scripts` directory in this repo:
 
 - `Set-SFQosException` - set "temporary" Storage Policy on a SolidFire volume
   - When Storage QoS Policy ID is passed to this cmdlet, it takes Volume's current Storage QoS Policy ID value, stores it in Volume Attributes, and sets Volume to user-provided "temporary" Storage QoS Policy ID
-  - If Storage QoS Policy ID is not provided, it resets Volume to value stored in Volume Attributes
-  - Can be used for any task that can benefit from short-lived change in volume performance settings. Written with SolidFire PowerShell Tools 1.6 and PowerShell 7 on Linux, but should work with PowerShell 6 or newer on Windows 10 or Windows Server 2016 or newer
+  - If Storage QoS Policy ID is not provided, "reset" option resets Volume QoS to (original) value we stored in Volume Attributes before we applied exceptional QoS settings
+  - Can be used for any task that can benefit from short-lived change in volume performance settings, such as backups (e.g. could be a hook for clone volume in Velero CSI Snapshot Data Movement)
+  - Written with SolidFire PowerShell Tools 1.6 and PowerShell 7 on Linux, but should work with PowerShell 6 or newer on Windows 10 or Windows Server 2016 or newer
 - `Get-SFVolEff` - simple PowerShell script to list all volumes with storage efficiency below certain cut-off level (default: `2`, i.e. 2x)
 - `parallel-backup-to-s3` - SolidFire-native Backup to S3
   - v1: runs `$p` parallel jobs to back up list of volumes identified by Volume ID (`$backup`) to an S3-compatible object store. The same script can be changed to restore in the same, parallel, fashion. Parallelization is over the entire cluster - the script is not aware of per-node job maximums so aggressive parallelization may result in backup jobs failing to get scheduled (but they can be resubmitted)
