@@ -400,6 +400,7 @@ There are several ways to integrate:
 - Performance and status monitoring: use solidfire-exporter and [scrape Prometheus metrics from Splunk](https://www.splunk.com/en_us/blog/devops/metrics-from-prometheus-exporters-are-now-available-with-the-sfx-smart-agent.html?locale=en_us)
 - Logs: redirect SolidFire cluster's syslog to Universal Forwarder
 - Events and basic performance monitoring: use SNMP GETs and/or send SNMP traps to UF or Indexer. The SolidFire MIB files can be downloaded from the SolidFire Web UI.
+- Follow this [high level post](https://scaleoutsean.github.io/2023/11/12/send-solidfire-metrics-splunk-hec-http-event-collector.html) to get you started with HEC (metrics) and Universal Forwarder (SolidFire syslog)
 
 #### Syslog Forwarding
 
