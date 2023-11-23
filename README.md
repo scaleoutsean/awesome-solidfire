@@ -751,6 +751,12 @@ Q: Is there a way to implement RBAC for "tiered" storage provisioning (cluster a
 
 A: Yes, there are several ways. What's common to them all is you need something in between the API user and the SolidFire API point, which will intercept API calls and decide whether to let them through. The easiest is probably to use Ansible [like this](https://scaleoutsean.github.io/2022/02/14/middle-class-rbac-solidfire-ansible.html). If you dislike Ansible, you have two other choices: implement API reverse proxy that terminates TLS connections, dissects API calls and filters based on team membership, or build own API proxy application (which can be running behind an enterprise proxy) that does the same (accept JSON RPC calls, examine them against team membership stored in static files, Sqlite or DB service), and decide what to do with them.
 
+Q: How do I make the creation of clone volumes faster?
+
+A: You probably can't, but in some workflows the following may help:
+- If you need multiple clones, it may be faster to clone one volume to two, then two, four and eight in parallel. See [this](https://scaleoutsean.github.io/2023/08/30/monitoring-solidfire-clone-and-backup-jobs.html#faster-multiple-clones-from-a-single-volume)
+- Depending on your use case, you may be able to pre-create clones and use them on-demand as explained in [this post](https://scaleoutsean.github.io/2023/11/22/genai-with-netapp-solidfire.html)
+
 ### Networking
 
 Q: What network switches are recommended for use with SolidFire?
