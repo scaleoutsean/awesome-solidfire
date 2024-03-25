@@ -115,7 +115,7 @@
 
 - Fully programmable storage - from initial node configuration to automated storage provisioning for containers
 - Public Cloud-like, set-and-forget iSCSI storage for clients ranging from bare metal x86-64 servers to hypervisors, VMs and containers
-- Always-On storage efficiency with zero-performance impact. Compression and deduplication cannot be disabled
+- Always-On storage efficiency with zero-performance impact. Compression and deduplication cannot be disabled (see [these notes](https://scaleoutsean.github.io/2024/02/29/ubuntu-2404-lts-with-netapp-solidfire.html) on considerations for using compressed filesystems with SolidFire)
 - Granular storage capacity and performance management - Minimum, Maximum and Burst storage policies may be assigned on a per-volume basis
 - General purpose scale-out storage clusters that are easy to provision, manage, refresh, and scale
 - Availability Zone-like data partitioning for rack, floor, campus environments (SolidFire Protection Domains)
@@ -203,8 +203,10 @@ Volume placement considers both performance and capacity utilization:
 
 #### Oracle VirtualBox
 
-- VirtualBox iSCSI initiator isn't officially supported but [it appears to work](https://youtu.be/EqxK-mT9Fxw) on both Linux and Windows (VirtualBox (host) iSCSI initiator for Windows seems prone to timeouts and I/O errors; it's better to use Linux or Windows initiators out of guest VMs)
+- There are two ways known to me to use VirtualBox: one is as built by Oracle, another is [VirtualBox with KVM](https://github.com/cyberus-technology/virtualbox-kvm). The latter approach is newer and needs investigation
+- VirtualBox's iSCSI initiator isn't officially supported but [it appears to work](https://youtu.be/EqxK-mT9Fxw) on both Linux and Windows (VirtualBox (host) iSCSI initiator for Windows seems prone to timeouts and I/O errors; it's better to use Linux or Windows initiators out of guest VMs)
 - VirtualBox on top of OS-provisioned storage works as usual, as do supported VirtualBox guests with direct access to SolidFire iSCSI targets
+- VirtualBox with KVM is a to-do item and 
 
 #### Virtual Desktop Infrastructure and End User Computing (VDI & EUC)
 
@@ -483,12 +485,13 @@ There are several ways to integrate:
   - Velero: [documentation](https://github.com/vmware-tanzu/velero) and [demo](https://www.youtube.com/watch?v=6RrlK2rmk24). It can work both [with](https://github.com/vmware-tanzu/velero-plugin-for-csi) and [without](https://scaleoutsean.github.io/2021/02/02/use-velero-with-netapp-storagegrid.html) Trident CSI. CSI support works and [CSI Snapshot Data Movement](https://scaleoutsean.github.io/2023/09/15/velero-csi-snapshot-data-movement-with-netapp-solidfire.html) (Velero v1.12) works as well! CloudCasa added support for Velero in April 2023. It appears [it can work](https://scaleoutsean.github.io/2023/04/15/cloudcasa-netapp-trident-solidfire.html) with Velero, Trident and SolidFire, but further testing is necessary
   - VolSync: consider [VolSync](https://scaleoutsean.github.io/2023/02/13/volume-replication-solidfire-kubernetes-volsync.html) when you need to backup to S3 or async-replicate SolidFire PVs to another Kubernetes cluster of any storage (e.g. E-Series with TopoLVM)
 - PVCs used by KubeVirt VMs backed by SolidFire can be backed up and restored as any other Kubernetes PVCs, see [here](https://scaleoutsean.github.io/2023/02/12/backup-restore-kubevirt-vms-with-solidfire-kasten-kubernetes.html)
-- Storage cluster failover for one Kubernetes cluster with Trident CSI and two SolidFire clusters: use NetApp Trident's Volume Import feature (a quick demo (2m55s) can be viewed [here](https://youtu.be/aSFxlGoHgdA) while a deep-dive walk-through with a ton of detail can be found [here](https://scaleoutsean.github.io/2021/03/20/kubernetes-solidfire-failover-failback.html)). For two Kubernetes clusters, each with own SolidFire cluster, you'd simply setup replication between SolidFire clusters (use consistency groups where necessary) and push Trident PVC->PV mapping to the remote site where you'd swap PV from SolidFire Cluster A for PVs replicated from SolidFire Cluster B so that you can promote Cluster B volume replicas to readWrite mode and run Trident volume import before you start Kubernetes on that site.
+- Storage cluster failover for one Kubernetes cluster with Trident CSI and two SolidFire clusters: use NetApp Trident's Volume Import feature (a quick demo (2m55s) can be viewed [here](https://youtu.be/aSFxlGoHgdA) while a deep-dive walk-through with a ton of detail can be found [here](https://scaleoutsean.github.io/2021/03/20/kubernetes-solidfire-failover-failback.html)). For two Kubernetes clusters, each with own SolidFire cluster, you'd simply setup replication between SolidFire clusters (use consistency groups where necessary) and push Trident PVC-to-PV mapping to remote site where you'd swap PV from SolidFire Cluster A for PVs replicated from SolidFire Cluster B so that you can promote Cluster B's volume replicas to readWrite mode and run Trident volume import before you start Kubernetes on that site.
 - Cinder CSI with SolidFire Cinder driver
   - See [this post](https://scaleoutsean.github.io/2022/03/02/openstack-solidfire-part-2.html) on how to deploy Cinder CSI with Openstack & SolidFire Cinder driver
   - VM-level and native Kubernetes backup (Velero with an OpenStack plugin, etc.) wasn't tested, but crash-consistent Cinder snapshots from outside of Kubernetes work as usual
 - E/EF-Series (with iSCSI host interface) attached to NetApp HCI is ideal fast Tier 1 backup pool/storage (gigabytes per second). You can find indicators of backup and restore performance in [this blog post](https://scaleoutsean.github.io/2020/12/30/netapp-hci-ef280-diskspd-for-backup)
   - Can act as replication target for Kubernetes environments with SolidFire. Consider evaluating [VolSync](https://scaleoutsean.github.io/2023/02/13/volume-replication-solidfire-kubernetes-volsync.html) for this
+- Pre- and post-snapshot hooks for application-aware snapshots (backups): I've tested Kanister's (used by Kasten) as stand-alone and also from K10 and [NetApp Verde](https://scaleoutsean.github.io/2024/03/23/velero-netapp-verda-scripts-and-trident.html). These should work fine with Trident CSI.
 
 ### Security
 
