@@ -491,7 +491,7 @@ There are several ways to integrate:
   - VM-level and native Kubernetes backup (Velero with an OpenStack plugin, etc.) wasn't tested, but crash-consistent Cinder snapshots from outside of Kubernetes work as usual
 - E/EF-Series (with iSCSI host interface) attached to NetApp HCI is ideal fast Tier 1 backup pool/storage (gigabytes per second). You can find indicators of backup and restore performance in [this blog post](https://scaleoutsean.github.io/2020/12/30/netapp-hci-ef280-diskspd-for-backup)
   - Can act as replication target for Kubernetes environments with SolidFire. Consider evaluating [VolSync](https://scaleoutsean.github.io/2023/02/13/volume-replication-solidfire-kubernetes-volsync.html) for this
-- Pre- and post-snapshot hooks for application-aware snapshots (backups): I've tested Kanister's (used by Kasten) as stand-alone and also from K10 and [NetApp Verde](https://scaleoutsean.github.io/2024/03/23/velero-netapp-verda-scripts-and-trident.html). These should work fine with Trident CSI.
+- Pre- and post-snapshot hooks for application-aware snapshots (backups): I've tested Kanister's (used by Kasten) as stand-alone and also from K10 and [NetApp Verda](https://scaleoutsean.github.io/2024/03/23/velero-netapp-verda-scripts-and-trident.html). These should work fine with Trident CSI.
 
 ### Security
 
