@@ -14,7 +14,7 @@
       - [VMware vSphere](#vmware-vsphere)
       - [Microsoft Hyper-V](#microsoft-hyper-v)
       - [Red Hat Virtualization (RHEV)](#red-hat-virtualization-rhev)
-      - [Citrix Hypervisor](#citrix-hypervisor)
+      - [Citrix Hypervisor and XCP-ng](#citrix-hypervisor-and-xcp-ng)
       - [Proxmox](#proxmox)
       - [Linux-related (OpenStack, KVM, Oracle VM)](#linux-related-openstack-kvm-oracle-vm)
       - [Oracle VirtualBox](#oracle-virtualbox)
@@ -166,7 +166,7 @@ Volume placement considers both performance and capacity utilization:
 #### Microsoft Hyper-V
 
 - [solidfire-windows](https://github.com/scaleoutsean/solidfire-windows) - general notes on Windows Server 2019 Hyper-V with NetApp SolidFire
-- PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/Microsoft) for automated storage deployment with Microsoft Hyper-V (for Windows Server 2012 R2; requires minor updates for Microsoft Windows Server 2016+)
+- PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/Microsoft) for automated storage deployment with Microsoft Hyper-V (for Windows Server 2012 R2; requires minor updates for Microsoft Windows Server 2016+).
 - [SolidFire VSS Provider](https://mysupport.netapp.com/products/p/elementvss.html) for MS Windows (login required)
 
 #### Red Hat Virtualization (RHEV)
@@ -178,7 +178,7 @@ Volume placement considers both performance and capacity utilization:
   - [Heat templates](https://github.com/NetApp/hci-solutions/tree/master/netapp-hci-heat-templates) for Redhat OpenStack
 - [Rocky Linux](https://rockylinux.org/) 8.6 and 9.0 and other downstream distributions should work the same way. Here's an example with [Trident Docker volume plugin](https://scaleoutsean.github.io/2022/08/21/rocky-linux-docker-netapp-trident-solidfire.html)
 
-#### Citrix Hypervisor
+#### Citrix Hypervisor and XCP-ng
 
 - Open-source fork [XCP-ng with SolidFire 12](https://scaleoutsean.github.io/2022/07/10/xcp-ng-with-netapp-solidfire-iscsi.html) as well as XOA
 - NetApp HCI with Citrix Hypervisor ([solution summary](https://docs.netapp.com/us-en/hci-solutions/citrix_executive_summary.html))
@@ -186,6 +186,7 @@ Volume placement considers both performance and capacity utilization:
 #### Proxmox
 
 - Proxmox 7.1 (Debian-based) [with SolidFire 12.3](https://scaleoutsean.github.io/2022/04/05/proxmox-solidfire.html)
+  - Read considerations for filesystems with compression in post above; also [this post](https://scaleoutsean.github.io/2024/02/29/ubuntu-2404-lts-with-netapp-solidfire.html)
   - QEMU/KVM virtualization
   - LXC containers
 
@@ -263,7 +264,7 @@ Volume placement considers both performance and capacity utilization:
 
 #### KubeVirt
 
-- KubeVirt v0.59 isn't easy to use, but it works with SolidFire 12 and Trident v23.01, [see here](https://scaleoutsean.github.io/2023/02/12/backup-restore-kubevirt-vms-with-solidfire-kasten-kubernetes.html). Interestingly, it appears that regular SolidFire PVCs appear as block devices when attached to KubeVirt VMs (in theory one should use Block mode, but that doesn't appear necesary)
+- KubeVirt v0.59 isn't easy to use, but it works with SolidFire 12 and Trident v23.01, [see here](https://scaleoutsean.github.io/2023/02/12/backup-restore-kubevirt-vms-with-solidfire-kasten-kubernetes.html). Interestingly, it appears that regular SolidFire PVCs appear as block devices when attached to KubeVirt VMs (in theory one should use Block mode, but that doesn't appear necessary)
 
 #### HashiCorp Nomad 
 
