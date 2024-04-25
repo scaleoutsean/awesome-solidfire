@@ -1,0 +1,120 @@
+openapi: 3.0.3
+
+info:
+  title: SolidFire Element 12.7 - OpenAPI 3.0.3
+  description: |-
+    This is a sample SolidFire Swagger based on the OpenAPI 3.0 specification.  You can find out more about Swagger at [https://swagger.io](https://swagger.io).
+    
+    Some useful links:
+    - [Awesome SolidFire repository](https://github.com/scaleoutsean/awesome-solidfire)
+  contact:
+    email: scaleoutSean@NOREPLY.github.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 12.7.0
+
+externalDocs:
+  description: Find out more about SolidFire
+  url: https://github.com/scaleoutsean/awesome-solidfire
+
+servers:
+- url: https://{username}:{password}@{url}:{port}/
+  description: The SolidFire MVIP or SolidFire node MIP 
+  variables:
+    url:
+      default: 192.168.1.30
+      description: IP or FQDN of SolidFire node (MVIP or MIP))
+    username:
+      default: admin
+      description: Valid user name
+    password:
+      default: 
+      description: Password for basic authentication
+    port:
+      enum:
+        - '8443'
+        - '443'
+      default: '443'
+
+tags:
+  - name: volume
+    description: Work with SolidFire Volume objects
+    externalDocs:
+      description: SolidFire API documentation for Volumes
+      url: https://docs.netapp.com/us-en/element-software/api/concept_element_api_volume_api_methods.html
+
+paths:
+  /json-rpc/12.7:
+    post:
+      summary: Create Volume
+      security:
+        - BasicAuth: []
+      tags:
+        - volume
+      description: Create new Volume
+      operationId: CreateVolume
+      requestBody:
+        description: Create new volume
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Volume'
+            examples:
+              myVol:
+                value:
+                  method: CreateVolume
+                  id: 1
+                  params:
+                    accountID: 1
+                    totalSize: 99999999999
+                    name: vol55
+                    enable512e: false
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Volume'          
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Volume not found
+        '422':
+          description: Validation exception
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    Volume:
+      required:
+        - id
+        - method
+        - params
+          - name
+          - accountID
+          - totalSize
+          - enable512e
+      type: string
+    ApiResponse:
+      type: object
+      properties:
+        id: 
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+  requestBodies:
+    volume:
+      description: Volume object that needs to be added
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Volume'
+
