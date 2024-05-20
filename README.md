@@ -46,7 +46,7 @@
       - [VMware vRealize Log Insight](#vmware-vrealize-log-insight)
       - [Graylog](#graylog)
       - [Elasticsearch (ELK stack)](#elasticsearch-elk-stack)
-      - [Grafana/Graphite - HCICollector](#grafanagraphite---hcicollector)
+      - [Grafana/Graphite - SolidFire Collector](#grafanagraphite---solidfire-collector)
       - [Grafana/Prometheus - solidfire-exporter](#grafanaprometheus---solidfire-exporter)
       - [Telegraf](#telegraf)
       - [Prometheus - NetApp Trident metrics](#prometheus---netapp-trident-metrics)
@@ -356,15 +356,15 @@ Volume placement considers both performance and capacity utilization:
 - A how-to article for Filebeat/Logstash as well as SolidFire API-based queries can be found [here](https://scaleoutsean.github.io/2021/10/18/solidfire-syslog-filebeat-logstash-elk-stack.html)
 - Elasticsearch 8 examples with SolidFire using Trident Docker Volume Plugin, Trident CSI, and Cinder CSI can be found [here](https://scaleoutsean.github.io/2022/03/06/elastic-elk-stack-on-netapp.html)
 
-#### Grafana/Graphite - HCICollector
+#### Grafana/Graphite - SolidFire Collector
 
-- [HCICollector](https://github.com/scaleoutsean/hcicollector/) is a permissively-licensed monitoring and alerting for SolidFire and NetApp HCI systems. It gathers SolidFire and vSphere 6.x metrics, stores them in Graphite and lets you visualize them in Grafana
-- Recommended for NetApp HCI with VMware
+- [SolidFire Collector](https://github.com/scaleoutsean/sfc/) is a permissively-licensed monitoring and alerting for SolidFire and NetApp HCI systems. It gathers SolidFire and vSphere 6.x metrics, stores them in Graphite and lets you visualize them in Grafana
+  - Formerly HCICollector
 
 #### Grafana/Prometheus - solidfire-exporter
 
 - [SolidFire Exporter](https://github.com/mjavier2k/solidfire-exporter/) fetches and serves SolidFire metrics in the Prometheus format
-  - Recommended for stand-alone SolidFire and Kubernetes
+  - Recommended for SolidFire and Kubernetes
 
 #### Telegraf
 
@@ -444,7 +444,7 @@ There are several ways to integrate:
   - Icinga and Nagios (email)
   - SolidFire syslog forwarding to ElasticSearch with support cases created in ServiceNow or other back-end
   - Grafana or [Prometheus](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana.html) or any other sink which can receive SolidFire log or SNMP traps
-  - SolidFire-to-Slack could work the same way: watch SolidFire (or Elastic or ActiveIQ, etc.) for events, use webhook to sent notifications to a Slack channel or user
+  - SolidFire-to-Slack could work the same way: watch SolidFire (or Elastic or ActiveIQ, etc.) for events, use a webhook to sent notifications to a Slack channel or user
 
 ### Backup, Restore, DR and BC (Site Failover)
 
@@ -455,6 +455,7 @@ There are several ways to integrate:
 - SolidFire snapshots support [KV attributes](https://scaleoutsean.github.io/2023/04/01/using-solidfire-snapshot-attributes.html) for advanced snapshot workflows. For example we can use snapshot attributes to tag S3 snapshot objects
 - Automation scripts for PowerShell can be found in the scripts folder of this repo; catalog feature could be created by inserting metadata into a DB such as SQL Express or PostgreSQL, but it may be easier to simply log to Elasticsearch
 - [This post](https://scaleoutsean.github.io/2023/08/30/monitoring-solidfire-clone-and-backup-jobs.html) is a summary of options for monitoring of backup and restore jobs for the built in backup feature
+- Example of sending backup job metrics to [InfluxDB](https://scaleoutsean.github.io/2024/04/24/netapp-solidfire-monitor-backup-influx-grafana-11.html)
 
 #### VM and Bare Metal workloads
 
