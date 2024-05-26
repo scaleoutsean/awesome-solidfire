@@ -368,9 +368,12 @@ Volume placement considers both performance and capacity utilization:
 
 #### Telegraf
 
+- You can use Telegraf exec input to gather SolidFire metrics via the API and send to InfluxDB
+  - Or use file input to "harvest" output from SolidFire CLI commands 
+  - There's a sample script that collects SolidFire volume properties and stats in the scripts directory. You can read about it [here](https://scaleoutsean.github.io/2024/05/20/netapp-solidfire-input-for-telegraf.html)
 - Collect SNMP or other metrics with [Telegraf](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana.html)
-  - Native SolidFire API metrics can be collected the same way using HTTP (JSON-RPC)
-
+  - SolidFire SNMP output is very basic, so if you need more details use exec input above to collect them, or use Prometheus exporter for SolidFire or SFC
+  
 #### Prometheus - NetApp Trident metrics
 
 - SolidFire
@@ -378,7 +381,7 @@ Volume placement considers both performance and capacity utilization:
   - another options is SolidFire SNMP-to-Telegraf-to-Prometheus (example [configuration files](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana))
 - NetApp Trident
   - In v20.01 NetApp Trident delivered support for Prometheus metrics. A how-to is available [here](https://netapp.io/2020/02/20/prometheus-and-trident/)
-  - [Example](/2021/05/25/external-access-to-netapp-trident-solidfire-metrics.html) for SolidFire
+  - [Example](https://scaleoutsean.github.io/2021/05/25/external-access-to-netapp-trident-solidfire-metrics.html) for SolidFire
 
 #### Icinga and Nagios
 

@@ -1,8 +1,9 @@
 #!/usr/bin/env pwsh
 ######################################################################################
 # Synopsis:                                                                          #
-# Gathers SolidFire volume properties and performance stats and sends to             #
-#   InfluxDB via Telegraf.                                                           #
+# Gathers SolidFire volume properties and performance stats in the InfluxDB format   # 
+# and prepares for pickup by Telegraf.                                               #
+#                                                                                    #
 # More:                                                                              #
 # https://github.com/influxdata/telegraf/blob/master/plugins/inputs/exec/README.md   #
 # More:                                                                              #
@@ -70,6 +71,6 @@ Write-Host $volStatsPayload
 
 # If outputting to file:
 # $volStatsPayload| Out-File -FilePath /tmp/telegrafVolStatsPayload.out
-# Change ownership on all .out files in /tmp/*.out
+# Change ownership on all .out files in /tmp/*.out to allow Telegraf to read them
 # chown telegraf:telegraf /tmp/*.out
 
