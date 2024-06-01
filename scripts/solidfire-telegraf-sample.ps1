@@ -30,20 +30,22 @@ if ($null -eq (Get-Module -Name SolidFire.Core -ListAvailable)) {
 
 # Use the following for PowerShell 5.1
 # Import-Module SolidFire
-$conn = Connect-SFCluster -Target 192.168.1.30 -Username admin -Password xxxx
+$conn = Connect-SFCluster -Target 192.168.1.30 -Username monitor -Password xxxxxxxxxxxxxxxx
 
 $vol = Get-SFVolume -ExcludeVVOLs -VolumeStatus active
 
 $volPropsPayload = $null
 foreach ($v in $vol) {
-    $volTags = "volumeProps,volumeId=" + $v.VolumeID.ToString() + ",volumeName=" + $v.Name.ToString() + ",accountId=" + $v.AccountID.ToString() + ",scsiNaaDeviceId=" + $v.ScsiNAADeviceID + " "
+    $volTags = ''; $volFields = ''
+    $volTags = "volumeProps,accountId=" + $v.AccountID.ToString() + ",scsiNaaDeviceId=" + $v.ScsiNAADeviceID + ",volumeId=" + $v.VolumeID.ToString() + ",volumeName=" + $v.Name.ToString() + " "   
+    $volFields = $volFields + "fifoSize=" + $v.FifoSize.ToString() + "i,minFifoSize=" + $v.MinFifoSize.ToString() + "i"
     if ($null -eq $v.QosPolicyID) {
-        $volFields = "qosPolicyId=0i"
+        $volFields = $volFields + "i,qosPolicyId=0i"
     }
     else {
-        $volFields = "qosPolicyId=" + $v.QosPolicyID.ToString() + "i"
+        $volFields = $volFields + "i,qosPolicyId=" + $v.QosPolicyID.ToString() + "i"
     }
-    $volFields = $volFields + ",volumeSize=" + $v.TotalSize.ToString() + "i,volumeBlockSize=" + $v.BlockSize.ToString() + "i" + ",fifoSize=" + $v.FifoSize.ToString() + "i" + ",minFifoSize=" + $v.MinFifoSize.ToString() + "i" + " `n"
+    $volFields = $volFields + "volumeBlockSize=" + $v.BlockSize.ToString() + "i,volumeSize=" + $v.TotalSize.ToString() + "i" + " `n"
     $volPropsPayload = $volPropsPayload + $volTags + $volFields
 }
 
@@ -60,10 +62,12 @@ foreach ($volId in ($vol.VolumeID)) {
         $volName = $vol | Where-Object { $_.VolumeID -eq $jobResp.VolumeID } | Select-Object -ExpandProperty Name
     }
     else {
-        Write-Host "Volumename unknown for volume ID", $jobResp.VolumeID
+        Write-Host "Volume name unknown for volume ID", $jobResp.VolumeID
     }
-    $volTags = "volumeStats,volumeId=" + ($jobResp.volumeID).ToString() + ",accountId=" + $jobResp.AccountID.ToString() + ",volumeName=" + $volName.ToString() + " " 
-    $volFields = "latencyUSec=" + $jobResp.LatencyUSec.ToString() + ",throttle=" + $jobResp.Throttle.ToSTring() + ",volUtilPct=" + $jobResp.VolumeUtilization.ToSTring() + ",actualIOPS=" + $jobResp.ActualIOPS.ToString() + ",averageIOpSize=" + $jobResp.AverageIOPSize.ToString() +",volumeUtil=" + $jobResp.VolumeUtilization.ToString() + ",readLatencyUSec=" + $jobResp.ReadLatencyUSec.ToString() + ",writeLatencyUSec=" + $jobResp.WriteLatencyUSec.ToString() + ",zeroBlocks=" + $jobResp.ZeroBlocks.ToString() + "`n"
+    # $jobResp.Throttle and $jobResp.VolumeUtilization are floats; the rest are int, convert float to string
+            
+    $volTags = "volumeStats,accountId=" + $jobResp.AccountID.ToString() + ",volumeId=" + ($jobResp.volumeID).ToString() + ",volumeName=" + $volName.ToString() + " " 
+    $volFields = "actualIOPS=" + $jobResp.ActualIOPS.ToString() + "i,averageIOpSize=" + $jobResp.AverageIOPSize.ToString() + "i,latencyUSec=" + $jobResp.LatencyUSec.ToString() + "i,readLatencyUSec=" + $jobResp.ReadLatencyUSec.ToString() + "i,throttle=" + $jobResp.Throttle.ToSTring() + ",volUtilPct=" + $jobResp.VolumeUtilization.ToSTring() + ",writeLatencyUSec=" + $jobResp.WriteLatencyUSec.ToString() + "i,zeroBlocks=" + $jobResp.ZeroBlocks.ToString() + "i" + "`n"
     $volStatsPayload = $volStatsPayload + $volTags + $volFields
 }
 
@@ -73,4 +77,6 @@ Write-Host $volStatsPayload
 # $volStatsPayload| Out-File -FilePath /tmp/telegrafVolStatsPayload.out
 # Change ownership on all .out files in /tmp/*.out to allow Telegraf to read them
 # chown telegraf:telegraf /tmp/*.out
+
+# check out https://scaleoutsean.github.io/sfc - ready-to-go SolidFire Collector (SFC) for Telegraf written in Python 3
 

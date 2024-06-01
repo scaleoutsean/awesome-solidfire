@@ -359,12 +359,14 @@ Volume placement considers both performance and capacity utilization:
 #### Grafana/Graphite - SolidFire Collector
 
 - [SolidFire Collector](https://github.com/scaleoutsean/sfc/) is a permissively-licensed monitoring and alerting for SolidFire and NetApp HCI systems. It gathers SolidFire and vSphere 6.x metrics, stores them in Graphite and lets you visualize them in Grafana
-  - Formerly HCICollector
+  - Formerly HCICollector, but completely rewritten and improved
+  - Uses InfluxDB v1 back-end
+  - Docker container available
 
 #### Grafana/Prometheus - solidfire-exporter
 
-- [SolidFire Exporter](https://github.com/mjavier2k/solidfire-exporter/) fetches and serves SolidFire metrics in the Prometheus format
-  - Recommended for SolidFire and Kubernetes
+- [SolidFire Exporter](https://github.com/mjavier2k/solidfire-exporter/) fetches and serves SolidFire metrics in Prometheus format
+  - Recommended for SolidFire in Kubernetes environments
 
 #### Telegraf
 
@@ -373,11 +375,13 @@ Volume placement considers both performance and capacity utilization:
   - There's a sample script that collects SolidFire volume properties and stats in the scripts directory. You can read about it [here](https://scaleoutsean.github.io/2024/05/20/netapp-solidfire-input-for-telegraf.html)
 - Collect SNMP or other metrics with [Telegraf](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana.html)
   - SolidFire SNMP output is very basic, so if you need more details use exec input above to collect them, or use Prometheus exporter for SolidFire or SFC
-  
+  - PowerShell script that gathers volume metrics and outputs them in InfluxDB v1 line format can be found in the scripts directory (see Scripts, below)
+- Telegraf supports InfluxDB input; see Scripts below for a simple PowerShell script that can output SolidFire volume metrics in the InfluxDB format for pick up by Telegraf
+
 #### Prometheus - NetApp Trident metrics
 
 - SolidFire
-  - see SolidFire Exporter (above)
+  - use SolidFire Exporter (above)
   - another options is SolidFire SNMP-to-Telegraf-to-Prometheus (example [configuration files](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana))
 - NetApp Trident
   - In v20.01 NetApp Trident delivered support for Prometheus metrics. A how-to is available [here](https://netapp.io/2020/02/20/prometheus-and-trident/)
@@ -406,7 +410,7 @@ There are several ways to integrate:
 - Performance and status monitoring: use solidfire-exporter and [scrape Prometheus metrics from Splunk](https://www.splunk.com/en_us/blog/devops/metrics-from-prometheus-exporters-are-now-available-with-the-sfx-smart-agent.html?locale=en_us)
 - Logs: redirect SolidFire cluster's syslog to Universal Forwarder
 - Events and basic performance monitoring: use SNMP GETs and/or send SNMP traps to UF or Indexer. The SolidFire MIB files can be downloaded from the SolidFire Web UI.
-- Follow this [high level post](https://scaleoutsean.github.io/2023/11/12/send-solidfire-metrics-splunk-hec-http-event-collector.html) to get you started with HEC (metrics) and Universal Forwarder (SolidFire syslog)
+- Follow this [high level post](https://scaleoutsean.github.io/2023/11/12/send-solidfire-metrics-splunk-hec-http-event-collector.html) to get you started with HEC (SolidFire metrics) and Universal Forwarder (SolidFire syslog)
 
 #### Syslog Forwarding
 
@@ -537,6 +541,7 @@ Find them in the `scripts` directory in this repo:
   - Can be used for any task that can benefit from short-lived change in volume performance settings, such as backups (e.g. could be a hook for clone volume in Velero CSI Snapshot Data Movement)
   - Written with SolidFire PowerShell Tools 1.6 and PowerShell 7 on Linux, but should work with PowerShell 6 or newer on Windows 10 or Windows Server 2016 or newer
 - `Get-SFVolEff` - simple PowerShell script to list all volumes with storage efficiency below certain cut-off level (default: `2`, i.e. 2x)
+- `Get-SFDiskInventory.ps1` - gathers disk and node IDs, chassis slot and disk serials and shows them in a table or optionally saves to a  CSV file
 - `parallel-backup-to-s3` - SolidFire-native Backup to S3
   - v1: runs `$p` parallel jobs to back up list of volumes identified by Volume ID (`$backup`) to an S3-compatible object store. The same script can be changed to restore in the same, parallel, fashion. Parallelization is over the entire cluster - the script is not aware of per-node job maximums so aggressive parallelization may result in backup jobs failing to get scheduled (but they can be resubmitted)
   - v2: executes up to `$p` parallel jobs *per each node*, where $p is an integer between 0 and the maximum number of bulk jobs per node (8). It's made possible by `sfvid2nid` (below). You can read more about it [here](https://scaleoutsean.github.io/2021/06/22/solidfire-backup-and-cloning-with-per-storage-node-queues.html)
@@ -546,6 +551,7 @@ Find them in the `scripts` directory in this repo:
 - `ansible_getting_started_with_solidfire.yml` - basic example for Ansible and SolidFire - creates a volume, changes its size and QoS properties, gets its details via the SolidFire API and then deletes/purges it
 - `Manage-SolidFire.ipynb` - .NET notebook with simple examples for interactive SolidFire management in Jupyter
 - `solidfire-capacity-report.ps1` - PowerShell-driven capacity and efficiency report script - creates single page HTML5 cluster capacity and efficiency report (you may view a sample HTML file to see what it does)
+- `solidfire-telegraf-sample.ps1` - not meant for comprehensive use, but more for reference on using PowerShell to save SolidFire metrics to files formatted for InfluxDB import (meant to be picked by Telegraf or otherwise pushed out to InfluxDB v1)
 
 Some volume-cloning and backup-to-S3 scripts related to my SolidBackup concept can be found in the [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup).
 
