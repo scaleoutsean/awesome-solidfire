@@ -487,7 +487,7 @@ There are several ways to integrate:
 
 #### Longhorny - a SolidFire replication management tool (OSS)
 
-- [Longhorny]([https://](https://github.com/scaleoutsean/longhorny)) is a permissively licensed script for CLI-based replication management. It supports only 1-to-1 cluster and volume relationships. It may be used to pair/unpair clusters, pair/unpair volumes, change direction of replication, and more. Language: Python 3.
+- [Longhorny](https://github.com/scaleoutsean/longhorny) is a permissively licensed script for CLI-based replication management. It supports only 1-to-1 cluster and volume relationships. It may be used to pair/unpair clusters, pair/unpair volumes, change direction of replication, and more. Language: Python 3.
 
 #### Trident CSI with `solidfire-san` back-end
 
