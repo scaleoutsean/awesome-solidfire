@@ -78,5 +78,5 @@ Write-Host $volStatsPayload
 # Change ownership on all .out files in /tmp/*.out to allow Telegraf to read them
 # chown telegraf:telegraf /tmp/*.out
 
-# check out https://scaleoutsean.github.io/sfc - ready-to-go SolidFire Collector (SFC) for Telegraf written in Python 3
+
 

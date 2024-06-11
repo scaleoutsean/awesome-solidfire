@@ -61,6 +61,7 @@
     - [Backup, Restore, DR and BC (Site Failover)](#backup-restore-dr-and-bc-site-failover)
       - [Built-in backup to S3](#built-in-backup-to-s3)
       - [VM and Bare Metal workloads](#vm-and-bare-metal-workloads)
+      - [Longhorny - a SolidFire replication management tool (OSS)](#longhorny---a-solidfire-replication-management-tool-oss)
       - [Trident CSI with `solidfire-san` back-end](#trident-csi-with-solidfire-san-back-end)
     - [Security](#security)
     - [Encryption](#encryption)
@@ -484,8 +485,13 @@ There are several ways to integrate:
     - SolidFire SRA for VMware SRM
     - Some of the backup offerings mentioned above provide functionality similar to VMware SRM
 
+#### Longhorny - a SolidFire replication management tool (OSS)
+
+- [Longhorny]([https://](https://github.com/scaleoutsean/longhorny)) is a permissively licensed script for CLI-based replication management. It supports only 1-to-1 cluster and volume relationships. It may be used to pair/unpair clusters, pair/unpair volumes, change direction of replication, and more. Language: Python 3.
+
 #### Trident CSI with `solidfire-san` back-end
 
+- Whatever non-standard stuff you want to do, having a mapping of Kubernetes-to-Trident-to-SolidFire could be nice to have! There's a script in the scripts folder, and a post about that [here](https://scaleoutsean.github.io/2024/06/01/pvc-volume-relationships-in-solidfire-trident-part-1.html)
 - Can be backed up by creating thin clones and presenting them to a VM or container running a backup software agent (example with [Duplicacy](https://youtu.be/bvI7pgXKh6w))
 - Enterprise backup software can also backup Trident volumes. Examples in alphabetical order:
   - Cloud Casa: use it with Velero engine with or without CSI plugin. CloudCasa was formerly exclusively hosted, but since Nov 2023 supports self-hosted deployments.
@@ -545,13 +551,14 @@ Find them in the `scripts` directory in this repo:
 - `parallel-backup-to-s3` - SolidFire-native Backup to S3
   - v1: runs `$p` parallel jobs to back up list of volumes identified by Volume ID (`$backup`) to an S3-compatible object store. The same script can be changed to restore in the same, parallel, fashion. Parallelization is over the entire cluster - the script is not aware of per-node job maximums so aggressive parallelization may result in backup jobs failing to get scheduled (but they can be resubmitted)
   - v2: executes up to `$p` parallel jobs *per each node*, where $p is an integer between 0 and the maximum number of bulk jobs per node (8). It's made possible by `sfvid2nid` (below). You can read more about it [here](https://scaleoutsean.github.io/2021/06/22/solidfire-backup-and-cloning-with-per-storage-node-queues.html)
-- `sfvid2nid` - SolidFire volume ID to node ID mapping script (PowerShell). This information can be used to drive the maximum per-node number of bulk volume jobs (such as built-in backup) and sync jobs (such as copy and clone volume jobs)
+- `sfvid2nid.py` - SolidFire volume ID to node ID mapping script (PowerShell). This information can be used to drive the maximum per-node number of bulk volume jobs (such as built-in backup) and sync jobs (such as copy and clone volume jobs)
 - `hcc-hybrid-cloud-control-get-assets.ps1` - use PowerShell to connect to the NetApp Hybrid Cloud Control (HCC) API to get list of compute (ESXi) nodes. With that you can use PowerCLI to do VMware-related operations. More [here](https://scaleoutsean.github.io/2021/12/21/netapp-solidfire-hci-hcc-powershell.html).
 - `disk-to-slot-to-node-assignment.py` - simple example of how to use SolidFire Python SDK to get disk-to-slot-to-node mapping from SolidFire
 - `ansible_getting_started_with_solidfire.yml` - basic example for Ansible and SolidFire - creates a volume, changes its size and QoS properties, gets its details via the SolidFire API and then deletes/purges it
 - `Manage-SolidFire.ipynb` - .NET notebook with simple examples for interactive SolidFire management in Jupyter
 - `solidfire-capacity-report.ps1` - PowerShell-driven capacity and efficiency report script - creates single page HTML5 cluster capacity and efficiency report (you may view a sample HTML file to see what it does)
 - `solidfire-telegraf-sample.ps1` - not meant for comprehensive use, but more for reference on using PowerShell to save SolidFire metrics to files formatted for InfluxDB import (meant to be picked by Telegraf or otherwise pushed out to InfluxDB v1)
+- `kubernetes-trident-solidfire-pvc-to-volume-mapping.py` - map Kubernetes PVCs to NetApp Trident and SolidFire volume IDs (Python)
 
 Some volume-cloning and backup-to-S3 scripts related to my SolidBackup concept can be found in the [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup).
 
