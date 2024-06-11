@@ -46,8 +46,9 @@
       - [VMware vRealize Log Insight](#vmware-vrealize-log-insight)
       - [Graylog](#graylog)
       - [Elasticsearch (ELK stack)](#elasticsearch-elk-stack)
-      - [Grafana/Graphite - SolidFire Collector](#grafanagraphite---solidfire-collector)
-      - [Grafana/Prometheus - solidfire-exporter](#grafanaprometheus---solidfire-exporter)
+      - [InfluxDB v1 - SolidFire Collector (SFC) v2](#influxdb-v1---solidfire-collector-sfc-v2)
+      - [Graphite - HCI Collector v0.7.x](#graphite---hci-collector-v07x)
+      - [Prometheus - solidfire-exporter](#prometheus---solidfire-exporter)
       - [Telegraf](#telegraf)
       - [Prometheus - NetApp Trident metrics](#prometheus---netapp-trident-metrics)
       - [Icinga and Nagios](#icinga-and-nagios)
@@ -357,14 +358,21 @@ Volume placement considers both performance and capacity utilization:
 - A how-to article for Filebeat/Logstash as well as SolidFire API-based queries can be found [here](https://scaleoutsean.github.io/2021/10/18/solidfire-syslog-filebeat-logstash-elk-stack.html)
 - Elasticsearch 8 examples with SolidFire using Trident Docker Volume Plugin, Trident CSI, and Cinder CSI can be found [here](https://scaleoutsean.github.io/2022/03/06/elastic-elk-stack-on-netapp.html)
 
-#### Grafana/Graphite - SolidFire Collector
+#### InfluxDB v1 - SolidFire Collector (SFC) v2
 
-- [SolidFire Collector](https://github.com/scaleoutsean/sfc/) is a permissively-licensed monitoring and alerting for SolidFire and NetApp HCI systems. It gathers SolidFire and vSphere 6.x metrics, stores them in Graphite and lets you visualize them in Grafana
-  - Formerly HCICollector, but completely rewritten and improved
+- [SolidFire Collector](https://github.com/scaleoutsean/sfc/) is a permissively-licensed monitoring and alerting for SolidFire and NetApp HCI storage
+  - Formerly HCICollector, [completely rewritten and improved](https://scaleoutsean.github.io/2024/05/29/sfc-v2.html)
   - Uses InfluxDB v1 back-end
-  - Docker container available
+  - Requires valid TLS certificate on SolidFire MVIP  
+  - Dockerfile available
 
-#### Grafana/Prometheus - solidfire-exporter
+#### Graphite - HCI Collector v0.7.x
+
+- Older version of [SolidFire Collector](https://github.com/scaleoutsean/sfc/tree/v0.7.2), not recommended for large clusters (use SFC v2)
+- Uses Graphite back-end
+- Dockerfile and Kubernetes templates available
+
+#### Prometheus - solidfire-exporter
 
 - [SolidFire Exporter](https://github.com/mjavier2k/solidfire-exporter/) fetches and serves SolidFire metrics in Prometheus format
   - Recommended for SolidFire in Kubernetes environments
