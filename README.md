@@ -361,7 +361,7 @@ Volume placement considers both performance and capacity utilization:
 #### InfluxDB v1 - SolidFire Collector (SFC) v2
 
 - [SolidFire Collector](https://github.com/scaleoutsean/sfc/) is a permissively-licensed monitoring and alerting for SolidFire and NetApp HCI storage
-  - Formerly HCICollector, [completely rewritten and improved](https://scaleoutsean.github.io/2024/05/29/sfc-v2.html)
+  - Formerly HCICollector, [completely rewritten and improved](https://scaleoutsean.github.io/2024/05/29/sfc-v2.html). There's a [14-minute video demo](https://rumble.com/v513sls-solidfire-collector-v2.html) which talks about the database, measurements, dashboarding and the improvements compared to HCI Collector v0.7
   - Uses InfluxDB v1 back-end
   - Requires valid TLS certificate on SolidFire MVIP  
   - Dockerfile available
@@ -495,7 +495,7 @@ There are several ways to integrate:
 
 #### Longhorny - a SolidFire replication management tool (OSS)
 
-- [Longhorny](https://github.com/scaleoutsean/longhorny) is a permissively licensed script for CLI-based replication management. It supports only 1-to-1 cluster and volume relationships. It may be used to pair/unpair clusters, pair/unpair volumes, change direction of replication, and more. Language: Python 3.
+- [Longhorny](https://github.com/scaleoutsean/longhorny) is a permissively licensed script for CLI-based replication management. It supports only 1-to-1 cluster and volume relationships. It may be used to pair/unpair clusters, pair/unpair volumes, change direction of replication, and more. Language: Python 3. There's a short [demo](https://rumble.com/v513r8w-project-longhorny.html) (5m11s) if you want to see the main features
 
 #### Trident CSI with `solidfire-san` back-end
 
