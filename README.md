@@ -568,6 +568,7 @@ Find them in the `scripts` directory in this repo:
 - `solidfire-capacity-report.ps1` - PowerShell-driven capacity and efficiency report script - creates single page HTML5 cluster capacity and efficiency report (you may view a sample HTML file to see what it does)
 - `solidfire-telegraf-sample.ps1` - not meant for comprehensive use, but more for reference on using PowerShell to save SolidFire metrics to files formatted for InfluxDB import (meant to be picked by Telegraf or otherwise pushed out to InfluxDB v1)
 - `kubernetes-trident-solidfire-pvc-to-volume-mapping.py` - map Kubernetes PVCs to NetApp Trident and SolidFire volume IDs (Python)
+- `solidfire-qos-policy-id-to-trident-qos.py in scripts directory` - script sucks out one or more SolidFire QoS Policy IDs and spits them out as Trident Types, ready to copy-paste into your Trident configuration file for `solidfire-san`. See more [here](https://scaleoutsean.github.io/2024/06/19/trident-policy-sucker-for-solidfire-backends.html).
 
 Some volume-cloning and backup-to-S3 scripts related to my SolidBackup concept can be found in the [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup).
 

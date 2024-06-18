@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
 
 ######################################################################################
-# Synopsis:                                                                          #
+# Synopsis: solidfire-qos-policy-id-to-trident-qos.py                                #
 # Gathers SolidFire QoS policies by IDs and saves to trident.conf. Because having    #
 # Trident automatically apply the QoS policy ID to a volume or fallback to internal  #
 # defaults is too damn hard.                                                         #
-# More:                                                                              #
+# More:                                                                              # 
+# https://scaleoutsean.github.io/2024/06/19/trident-policy-sucker-for-solidfire-backends.html
 #                                                                                    #
 # Author: @scaleoutSean                                                              #
 # https://github.com/scaleoutsean/awesome-solidfire                                  #
 # License: the Apache License 2.0                                                    #
 ######################################################################################
 
-# Modify BASE_URL, USER, and PASSWORD to match your environment.
-# Create monitor user with read-only access to the SolidFire API.
-# Create /etc/telegraf/out/ and add the script-executing user to telegraf group.
+# Modify MVIP, USER, and PASSWORD to match your environment or use startup arguments.
 
 import argparse
 import logging
@@ -145,7 +144,7 @@ t_before = json.loads(TRIDENT_SAMPLE)
 # t_before['Types'] = list_o_types
 print(json.dumps(t_before, indent=4))
 
-print("\n\nTRIDENT SAMPLE CONFIG AFTER\n")
+print("\n\nTRIDENT SAMPLE CONFIG AFTER:\n")
 t_after = t_before
 t_after['Types'] = list_o_types
 print(json.dumps(t_after, indent=4))
