@@ -5,13 +5,16 @@
 # Gathers SolidFire QoS policies by IDs and saves to trident.conf. Because having    #
 # Trident automatically apply the QoS policy ID to a volume or fallback to internal  #
 # defaults is too damn hard.                                                         #
-# More:                                                                              # 
+# More:                                                                              #
 # https://scaleoutsean.github.io/2024/06/19/trident-policy-sucker-for-solidfire-backends.html
 #                                                                                    #
 # Author: @scaleoutSean                                                              #
 # https://github.com/scaleoutsean/awesome-solidfire                                  #
 # License: the Apache License 2.0                                                    #
 ######################################################################################
+
+# solidfire-san reference for NetApp Trident:
+# https://docs.netapp.com/us-en/trident/trident-use/element.html
 
 # Modify MVIP, USER, and PASSWORD to match your environment or use startup arguments.
 
@@ -78,19 +81,46 @@ SOLIDFIRE_QOS_POLICY_SAMPLE = """{
 }"""
 
 
+KUBERNETES_STORAGE_CLASS_SAMPLE = """
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: BLAHBLAHBLAH
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "FAKENEWS"
+provisioner: csi.trident.netapp.io
+reclaimPolicy: Retain
+parameters:
+  allowVolumeExpansion: true
+  backendType: "solidfire-san"
+  clones: "true"
+  fsType: "xfs"
+  IOPS: "ONEMEELION"
+  snapshots: "true"
+"""
+
+
 def qos_policy_list(value):
     try:
         return [int(v) for v in value.split(',')]
     except ValueError:
-        raise argparse.ArgumentTypeError('QoS policy ID must be an integer or comma-separated integers.')        
+        raise argparse.ArgumentTypeError(
+            'QoS policy ID must be an integer or comma-separated integers.')
 
-PARSER=argparse.ArgumentParser(description='Gather SolidFire QoS policies by IDs and save to trident.conf.')
-PARSER.add_argument('-m', '--mvip', help='MVIP of the SolidFire cluster.', type=str, required=True)
-PARSER.add_argument('-u', help='Username for the SolidFire API.', type=str, required=True)
-PARSER.add_argument('-p', help='Password for the SolidFire API.', type=str, required=False)
-PARSER.add_argument('-q', '--qos-policy-id', help='QoS policy ID to gather.', type=qos_policy_list, required=True)
-PARSER.add_argument('-o', '--out-file-path-name', help='Output file path and name.', type=str, required=False, default=os.path.join(os.getcwd(), 'solidfire-backend.json.new'))
-ARGS=PARSER.parse_args()
+
+PARSER = argparse.ArgumentParser(
+    description='Gather SolidFire QoS policies by IDs and save to trident.conf.')
+PARSER.add_argument(
+    '-m', '--mvip', help='MVIP of the SolidFire cluster.', type=str, required=True)
+PARSER.add_argument(
+    '-u', help='Username for the SolidFire API.', type=str, required=True)
+PARSER.add_argument(
+    '-p', help='Password for the SolidFire API.', type=str, required=False)
+PARSER.add_argument('-q', '--qos-policy-id',
+                    help='QoS policy ID to gather.', type=qos_policy_list, required=True)
+PARSER.add_argument('-o', '--out-file-path-name', help='Output file path and name.', type=str,
+                    required=False, default=os.path.join(os.getcwd(), 'solidfire-backend.json.new'))
+ARGS = PARSER.parse_args()
 common.LOG.setLevel(logging.ERROR)
 LOG.addHandler(logging.StreamHandler())
 
@@ -102,46 +132,66 @@ if ARGS.qos_policy_id is None:
 else:
     LOG.info("Gathering QoS policies from SolidFire cluster: %s", ARGS.mvip)
     qos_policy_list = ARGS.qos_policy_id
-    LOG.info("QoS policies required: %s", qos_policy_list)    
+    LOG.info("QoS policies required: %s", qos_policy_list)
 
 sfe = ElementFactory.create(
-        ARGS.mvip,
-        ARGS.u,
-        ARGS.p,
-        print_ascii_art=False)
+    ARGS.mvip,
+    ARGS.u,
+    ARGS.p,
+    print_ascii_art=False)
 
 qos_policy_list = ARGS.qos_policy_id
 qos_items = []
 for pol_id in qos_policy_list:
     print("Getting QoS policy ID " + str(pol_id))
     try:
-        params = { 'qosPolicyID': pol_id }
-        qpl = sfe.invoke_sfapi(method="GetQoSPolicy", parameters=params)['qosPolicy']
+        params = {'qosPolicyID': pol_id}
+        qpl = sfe.invoke_sfapi(method="GetQoSPolicy",
+                               parameters=params)['qosPolicy']
         qos_items.append(qpl)
     except:
-        LOG.error("Unable to obtain policy ID " + str(pol_id) + " from SolidFire cluster. Please check if the policy ID exists.")
+        LOG.error("Unable to obtain policy ID " + str(pol_id) +
+                  " from SolidFire cluster. Please check if the policy ID exists.")
 
-print("Found", len(qos_items) , "QoS policies.")
+print("Found", len(qos_items), "QoS policies.")
 
-list_o_types= []
+list_o_types = []
 for q in qos_items:
     qos_item = {}
-    qos_item['Type'] = q['name']    
+    qos_item['Type'] = q['name']
     qos_vals = {
         "minIOPS": q['qos']['minIOPS'],
         "maxIOPS": q['qos']['maxIOPS'],
         "burstIOPS": q['qos']['burstIOPS']
     }
     qos_item['Qos'] = qos_vals
-    list_o_types.append(qos_item)  
+    list_o_types.append(qos_item)
 
-print("\n\n== QoS-generated Types Only ===\n\n")
+print("\n\nSAMPLE KUBERNETES STORAGE CLASSES:")
+
+print("\n**NOTE:** the IOPS setting for each sample class is set to in-between Min and Max IOPS for given QoS Policy ID. Adjust if necessary.")
+
+for sc_name in list_o_types:
+    print("\nCreating sample SC:", sc_name['Type'])
+    sample_sc = KUBERNETES_STORAGE_CLASS_SAMPLE
+    sample_sc = sample_sc.replace("BLAHBLAHBLAH", sc_name['Type'])
+    if sc_name['Type'] == "basic":
+        sample_sc = sample_sc.replace("FAKENEWS", "true")
+    else:
+        sample_sc = sample_sc.replace("FAKENEWS", "false")
+    sample_sc = sample_sc.replace("ONEMEELION", str(
+        int((sc_name['Qos']['maxIOPS'] + sc_name['Qos']['minIOPS'])/2)))
+    print(sample_sc)
+    if sc_name['Type'] == "basic":
+        print("\n**NOTE:** if a QoS policy name is *basic*, sample config gets annotated as the default storage class.")
+print("\nNOTE: Review all the other options and adjust as necessary.")
+
+print("\n\nTRIDENT TYPES ONLY:\n")
 print('"Types":', json.dumps(list_o_types))
 print("\nNOTE: don't forget the , at the end of the list of types if you're adding this to existing SolidFire back-end configuration file!")
 
 print("\n\nTRIDENT SAMPLE CONFIG BEFORE:\n")
 t_before = json.loads(TRIDENT_SAMPLE)
-# t_before['Types'] = list_o_types
 print(json.dumps(t_before, indent=4))
 
 print("\n\nTRIDENT SAMPLE CONFIG AFTER:\n")
@@ -152,10 +202,10 @@ print(json.dumps(t_after, indent=4))
 with open(ARGS.out_file_path_name, 'w') as f:
     f.write(json.dumps(t_before, indent=4))
     os.chmod(ARGS.out_file_path_name, 0o600)
-    print("\n\nWrote Trident configuration (600 file permissions mode) to: ", ARGS.out_file_path_name)
+    print("\n\nWrote Trident configuration (600 file permissions mode) to: ",
+          ARGS.out_file_path_name)
 
-print("\nPlease *remember* to copy the new back-end JSON file without *changing* the permissions of the original file. \nsolidfire-backend.json.new is protected with 0600 because there may be a SolidFire password in it, but your own configuration file may need different permissions.")   
+print("\nPlease *remember* to copy the new back-end JSON file without *changing* the permissions of the original file. \nsolidfire-backend.json.new is protected with 0600 because there may be a SolidFire password in it, but your own configuration file may need different permissions.")
 print("\nYou may want to remove solidfire-backend.json.new as soon as you do not need it.")
 print("\nYou may also modify the script to run from job scheduler and periodically update the original file if you're sure everything checks out.")
 print("\nDone!")
-
