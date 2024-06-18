@@ -363,8 +363,9 @@ Volume placement considers both performance and capacity utilization:
 - [SolidFire Collector](https://github.com/scaleoutsean/sfc/) is a permissively-licensed monitoring and alerting for SolidFire and NetApp HCI storage
   - Formerly HCICollector, [completely rewritten and improved](https://scaleoutsean.github.io/2024/05/29/sfc-v2.html). There's a [14-minute video demo](https://rumble.com/v513sls-solidfire-collector-v2.html) which talks about the database, measurements, dashboarding and the improvements compared to HCI Collector v0.7
   - Uses InfluxDB v1 back-end
-  - Requires valid TLS certificate on SolidFire MVIP  
-  - Dockerfile available
+  - Collects replication-related metrics (HCI Collector does not)
+  - Requires valid TLS certificate on SolidFire MVIP
+  - Dockerfile available for DIY packaging in seconds
 
 #### Graphite - HCI Collector v0.7.x
 
