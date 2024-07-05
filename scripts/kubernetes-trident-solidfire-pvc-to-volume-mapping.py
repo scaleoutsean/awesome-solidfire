@@ -198,7 +198,7 @@ main()
 
 
 # Output with above JSON data. 
-# In real life we'd probably send this to our observability/logging platform or SFC (https://scaleoutsean.github.io/2024/05/29/sfc-v2.html) and observe/alet with Grafana or Kibana
+# In real life we'd probably send this to our observability/logging platform or SFC (https://scaleoutsean.github.io/2024/05/29/sfc-v2.html) and observe/alert with Grafana or Kibana
 '''
 Found match: pvc-14a51322-16c8-4b95-a7e4-28d9963450b3
 Found match: pvc-4fb5d7f5-4d98-429e-ab36-1b2118b7e55c

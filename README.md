@@ -59,10 +59,11 @@
       - [ServiceNow integration](#servicenow-integration)
       - [Zabbix](#zabbix)
       - [Event Notifications](#event-notifications)
-    - [Backup, Restore, DR and BC (Site Failover)](#backup-restore-dr-and-bc-site-failover)
+    - [Replication, DR and BC (Site Failover)](#replication-dr-and-bc-site-failover)
+      - [Storage replication management with Longhorny, a SolidFire replication management tool (OSS)](#storage-replication-management-with-longhorny-a-solidfire-replication-management-tool-oss)
+    - [Backup and Restore](#backup-and-restore)
       - [Built-in backup to S3](#built-in-backup-to-s3)
       - [VM and Bare Metal workloads](#vm-and-bare-metal-workloads)
-      - [Longhorny - a SolidFire replication management tool (OSS)](#longhorny---a-solidfire-replication-management-tool-oss)
       - [Trident CSI with `solidfire-san` back-end](#trident-csi-with-solidfire-san-back-end)
     - [Security](#security)
     - [Encryption](#encryption)
@@ -170,6 +171,7 @@ Volume placement considers both performance and capacity utilization:
 - [solidfire-windows](https://github.com/scaleoutsean/solidfire-windows) - general notes on Windows Server 2019 Hyper-V with NetApp SolidFire
 - PowerShell [scripts](https://github.com/solidfire/PowerShell/tree/release/1.5.1/Microsoft) for automated storage deployment with Microsoft Hyper-V (for Windows Server 2012 R2; requires minor updates for Microsoft Windows Server 2016+).
 - [SolidFire VSS Provider](https://mysupport.netapp.com/products/p/elementvss.html) for MS Windows (login required)
+  - Not available for recent Windows Server, but VSS hardware provider is practically no longer necessary - since SQL Server 2022 snapshots can be taken without it and on-prem MS Exchange is dead, which leave almost no applications that need it. See my Windows Server 2025 Preview notes in [solidfire-windows](https://github.com/scaleoutsean/solidfire-windows)
 
 #### Red Hat Virtualization (RHEV)
 
@@ -189,6 +191,7 @@ Volume placement considers both performance and capacity utilization:
 
 - Proxmox 7.1 (Debian-based) [with SolidFire 12.3](https://scaleoutsean.github.io/2022/04/05/proxmox-solidfire.html)
   - Read considerations for filesystems with compression in post above; also [this post](https://scaleoutsean.github.io/2024/02/29/ubuntu-2404-lts-with-netapp-solidfire.html)
+  - There's a post about ZFS with SolidFire on the same blog, it's for Ubuntu 24.04 but it applies to any iSCSI client with ZFS
   - QEMU/KVM virtualization
   - LXC containers
 
@@ -463,7 +466,15 @@ There are several ways to integrate:
   - Grafana or [Prometheus](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana.html) or any other sink which can receive SolidFire log or SNMP traps
   - SolidFire-to-Slack could work the same way: watch SolidFire (or Elastic or ActiveIQ, etc.) for events, use a webhook to sent notifications to a Slack channel or user
 
-### Backup, Restore, DR and BC (Site Failover)
+### Replication, DR and BC (Site Failover)
+
+#### Storage replication management with Longhorny, a SolidFire replication management tool (OSS)
+
+- [Longhorny](https://github.com/scaleoutsean/longhorny) is a permissively licensed script for CLI-based replication management. It supports only 1-to-1 cluster and volume relationships. It may be used to pair/unpair clusters, pair/unpair volumes, change direction of replication, and more. Language: Python 3. There's a short [demo](https://rumble.com/v513r8w-project-longhorny.html) (5m11s) if you want to see the main features
+- [Kubefire](https://github.com/scaleoutsean/kubefire) focuses on using Longhorny and other tools in Kubernetes environments with Trident CSI. Additional notes on Trident CSI can be found in Backup & Restore section. 
+  - Storage cluster failover for one Kubernetes cluster with Trident CSI and two SolidFire clusters is one of two approaches described in Kubefire scenarios, although not the recommended one. It uses NetApp Trident's Volume Import feature (a quick demo (2m55s) can be viewed [here](https://youtu.be/aSFxlGoHgdA) while some additional content available on my blog. For two Kubernetes clusters, each with own SolidFire cluster, you'd simply set up replication between SolidFire clusters (use consistency groups and group snapshots where necessary) and push Trident PVC-to-PV mapping to the remote site where you'd swap PV from SolidFire Cluster A for PVs replicated from SolidFire Cluster B so that you can promote Cluster B's volume replicas to readWrite mode and run Trident volume import before you start Kubernetes on that site.
+
+### Backup and Restore
 
 #### Built-in backup to S3
 
@@ -494,10 +505,6 @@ There are several ways to integrate:
     - SolidFire SRA for VMware SRM
     - Some of the backup offerings mentioned above provide functionality similar to VMware SRM
 
-#### Longhorny - a SolidFire replication management tool (OSS)
-
-- [Longhorny](https://github.com/scaleoutsean/longhorny) is a permissively licensed script for CLI-based replication management. It supports only 1-to-1 cluster and volume relationships. It may be used to pair/unpair clusters, pair/unpair volumes, change direction of replication, and more. Language: Python 3. There's a short [demo](https://rumble.com/v513r8w-project-longhorny.html) (5m11s) if you want to see the main features
-
 #### Trident CSI with `solidfire-san` back-end
 
 - Whatever non-standard stuff you want to do, having a mapping of Kubernetes-to-Trident-to-SolidFire could be nice to have! There's a script in the scripts folder, and a post about that [here](https://scaleoutsean.github.io/2024/06/01/pvc-volume-relationships-in-solidfire-trident-part-1.html)
@@ -509,7 +516,6 @@ There are several ways to integrate:
   - Velero: [documentation](https://github.com/vmware-tanzu/velero) and [demo](https://www.youtube.com/watch?v=6RrlK2rmk24). It can work both [with](https://github.com/vmware-tanzu/velero-plugin-for-csi) and [without](https://scaleoutsean.github.io/2021/02/02/use-velero-with-netapp-storagegrid.html) Trident CSI. CSI support works and [CSI Snapshot Data Movement](https://scaleoutsean.github.io/2023/09/15/velero-csi-snapshot-data-movement-with-netapp-solidfire.html) (Velero v1.12) works as well! CloudCasa added support for Velero in April 2023. It appears [it can work](https://scaleoutsean.github.io/2023/04/15/cloudcasa-netapp-trident-solidfire.html) with Velero, Trident and SolidFire, but further testing is necessary
   - VolSync: consider [VolSync](https://scaleoutsean.github.io/2023/02/13/volume-replication-solidfire-kubernetes-volsync.html) when you need to backup to S3 or async-replicate SolidFire PVs to another Kubernetes cluster of any storage (e.g. E-Series with TopoLVM)
 - PVCs used by KubeVirt VMs backed by SolidFire can be backed up and restored as any other Kubernetes PVCs, see [here](https://scaleoutsean.github.io/2023/02/12/backup-restore-kubevirt-vms-with-solidfire-kasten-kubernetes.html)
-- Storage cluster failover for one Kubernetes cluster with Trident CSI and two SolidFire clusters: use NetApp Trident's Volume Import feature (a quick demo (2m55s) can be viewed [here](https://youtu.be/aSFxlGoHgdA) while a deep-dive walk-through with a ton of detail can be found [here](https://scaleoutsean.github.io/2021/03/20/kubernetes-solidfire-failover-failback.html)). For two Kubernetes clusters, each with own SolidFire cluster, you'd simply setup replication between SolidFire clusters (use consistency groups where necessary) and push Trident PVC-to-PV mapping to remote site where you'd swap PV from SolidFire Cluster A for PVs replicated from SolidFire Cluster B so that you can promote Cluster B's volume replicas to readWrite mode and run Trident volume import before you start Kubernetes on that site.
 - Cinder CSI with SolidFire Cinder driver
   - See [this post](https://scaleoutsean.github.io/2022/03/02/openstack-solidfire-part-2.html) on how to deploy Cinder CSI with Openstack & SolidFire Cinder driver
   - VM-level and native Kubernetes backup (Velero with an OpenStack plugin, etc.) wasn't tested, but crash-consistent Cinder snapshots from outside of Kubernetes work as usual
