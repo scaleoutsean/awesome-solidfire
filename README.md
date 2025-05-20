@@ -306,7 +306,7 @@ Volume placement considers both performance and capacity utilization:
 
 - Current releases: free download for registered users from [https://mysupport.netapp.com/site/tools](https://mysupport.netapp.com/site/tools) (search for 'element' in Tools); Python SDK can be installed with pip (e.g. `pip3 install solidfire-sdk-python`)
 - Releases:
-  - [SolidFire Python SDK](https://github.com/solidfire/solidfire-sdk-python)
+  - [SolidFire Python SDK](https://github.com/solidfire/solidfire-sdk-python) (NOTE: does not work with 3.12; 3.10 and 3.9 are fine)
   - [SolidFire Microsoft .NET SDK](https://github.com/solidfire/sdk-dotnet)
   - [SolidFire Java SDK](https://github.com/solidfire/solidfire-sdk-java)
   - [SolidFire Ruby SDK](https://github.com/solidfire/solidfire-sdk-ruby)
@@ -315,6 +315,10 @@ Volume placement considers both performance and capacity utilization:
 ### Automation
 
 - Postman JSON [collection](https://github.com/solidfire/postman) for Element software
+
+#### Model Context Protocol
+
+- [MCP](https://modelcontextprotocol.io/introduction) lets you develop MCP for SolidFire in minutes using [Python](https://github.com/modelcontextprotocol/python-sdk?tab=readme-ov-file). [This blog post](https://scaleoutsean.github.io/2025/05/20/get-started-with-netapp-solidfire-mcp-server.html) has a simple example
 
 #### Automation and Configuration Tools and Frameworks
 
