@@ -1,7 +1,5 @@
 # Awesome SolidFire: An Unofficial Collection of NetApp SolidFire Resources
 
-<!-- TOC -->
-
 - [Awesome SolidFire: An Unofficial Collection of NetApp SolidFire Resources](#awesome-solidfire-an-unofficial-collection-of-netapp-solidfire-resources)
   - [NetApp SolidFire-based Offerings](#netapp-solidfire-based-offerings)
     - [End-of-Availability announcements](#end-of-availability-announcements)
@@ -38,6 +36,7 @@
       - [CLI](#cli)
       - [SolidFire/Element Software Development Kits (SDKs)](#solidfireelement-software-development-kits-sdks)
     - [Automation](#automation)
+      - [Model Context Protocol](#model-context-protocol)
       - [Automation and Configuration Tools and Frameworks](#automation-and-configuration-tools-and-frameworks)
     - [Alerting, Monitoring, Telemetry](#alerting-monitoring-telemetry)
       - [ActiveIQ](#activeiq)
@@ -89,7 +88,6 @@
     - [Networking](#networking)
   - [License and Trademarks](#license-and-trademarks)
 
-<!-- /TOC -->
 
 ## NetApp SolidFire-based Offerings
 
