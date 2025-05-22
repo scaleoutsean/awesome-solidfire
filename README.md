@@ -297,14 +297,14 @@ Volume placement considers both performance and capacity utilization:
 
 #### CLI
 
-- SolidFire has two fully functional CLI's - PowerShell & Python
-- Download with `pip3 install solidfire-cli` and `Install-Module SolidFire.Core` (PS 7 on x64; `SolidFire.Core` has been field-tested and found to work on ARM64)
+- SolidFire has two fully CLI's - PowerShell & Python (not really maintained)
+- Python CLI: `pip3 install solidfire-cli` (unlikely to work with Python 3.12)
+- PowerShell: `Install-Module SolidFire.Core` (PS 7 on x64; `SolidFire.Core` has been field-tested and found to work on ARM64, including Linux)
 
 #### SolidFire/Element Software Development Kits (SDKs)
 
-- Current releases: free download for registered users from [https://mysupport.netapp.com/site/tools](https://mysupport.netapp.com/site/tools) (search for 'element' in Tools); Python SDK can be installed with pip (e.g. `pip3 install solidfire-sdk-python`)
 - Releases:
-  - [SolidFire Python SDK](https://github.com/solidfire/solidfire-sdk-python) (NOTE: does not work with 3.12; 3.10 and 3.9 are fine)
+  - [SolidFire Python SDK](https://github.com/solidfire/solidfire-sdk-python) (NOTE: does not work with 3.12; 3.10 and 3.9 are fine. `pip3 install solidfire-sdk-python`)
   - [SolidFire Microsoft .NET SDK](https://github.com/solidfire/sdk-dotnet)
   - [SolidFire Java SDK](https://github.com/solidfire/solidfire-sdk-java)
   - [SolidFire Ruby SDK](https://github.com/solidfire/solidfire-sdk-ruby)
@@ -589,7 +589,7 @@ Some volume-cloning and backup-to-S3 scripts related to my SolidBackup concept c
 ### Windows
 
 - PowerShell [scripts for Hyper-V 2012 R2](https://github.com/solidfire/PowerShell/tree/master/Microsoft) (need a refresh for Windows Server 2016+)
-- See the SolidFire Windows repo for some newer PowerShell scripts specific to SolidFire with Windows
+- See the [SolidFire Windows](https://github.com/scaleoutsean/solidfire-windows) repo for some newer PowerShell scripts specific to SolidFire with Windows
 
 ### SolidFire API-related details
 
