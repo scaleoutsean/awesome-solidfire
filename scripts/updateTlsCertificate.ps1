@@ -3,8 +3,8 @@
 # This script prompts the user to paste TLS certificate and private key in the usual, stupid format and uploads them to SolidFire MVIP.
 # 1) You don't need this for properly formatted 1-line PEM files. Although you can reference the CLI line that should suffice in your case.
 #    One may want to repurpose this for TLS cert expiration checking, for example.
-# 2) EC private keys are not supported by SolidFire API (at least not in 12.5?), so you need to get RSA certificate.
-# 3) SolidFire PowerShell Tools is require here. Install it from the PowerShell Gallery with: Install-Module -Name SolidFire -Scope CurrentUser -Force
+# 2) EC private keys are not supported by SolidFire API (at least not in 12.5), so you need to get an RSA certificate.
+# 3) SolidFire PowerShell Tools is required. Install it from the PowerShell Gallery with: Install-Module -Name SolidFire -Scope CurrentUser -Force
 
 # Usage: .\updateTlsCertificate.ps1 -mvip <MVIP> -username <Username> -password <Password> -certificateFile <CertificateFile> -privateKeyFile <PrivateKeyFile>
 

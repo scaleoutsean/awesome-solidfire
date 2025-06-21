@@ -45,7 +45,7 @@
       - [VMware vRealize Log Insight](#vmware-vrealize-log-insight)
       - [Graylog](#graylog)
       - [Elasticsearch (ELK stack)](#elasticsearch-elk-stack)
-      - [InfluxDB v1 - SolidFire Collector (SFC) v2](#influxdb-v1---solidfire-collector-sfc-v2)
+      - [InfluxDB v3 - SolidFire Collector (SFC) v2](#influxdb-v3---solidfire-collector-sfc-v2)
       - [Graphite - HCI Collector v0.7.x](#graphite---hci-collector-v07x)
       - [Prometheus - solidfire-exporter](#prometheus---solidfire-exporter)
       - [Telegraf](#telegraf)
@@ -363,13 +363,13 @@ Volume placement considers both performance and capacity utilization:
 - A how-to article for Filebeat/Logstash as well as SolidFire API-based queries can be found [here](https://scaleoutsean.github.io/2021/10/18/solidfire-syslog-filebeat-logstash-elk-stack.html)
 - Elasticsearch 8 examples with SolidFire using Trident Docker Volume Plugin, Trident CSI, and Cinder CSI can be found [here](https://scaleoutsean.github.io/2022/03/06/elastic-elk-stack-on-netapp.html)
 
-#### InfluxDB v1 - SolidFire Collector (SFC) v2
+#### InfluxDB v3 - SolidFire Collector (SFC) v2
 
 - [SolidFire Collector](https://github.com/scaleoutsean/sfc/) is a permissively-licensed monitoring and alerting for SolidFire and NetApp HCI storage
   - Formerly HCICollector, [completely rewritten and improved](https://scaleoutsean.github.io/2024/05/29/sfc-v2.html). There's a [14-minute video demo](https://rumble.com/v513sls-solidfire-collector-v2.html) which talks about the database, measurements, dashboarding and the improvements compared to HCI Collector v0.7
-  - Uses InfluxDB v1 back-end
-  - Collects replication-related metrics (HCI Collector does not)
-  - Requires valid TLS certificate on SolidFire MVIP
+  - v2.1 uses latest & greatest InfluxDB 3 back-end with optional S3 tiering
+  - Collects snapshot schedules and replication-related metrics (HCI Collector does not)
+  - Requires valid TLS certificate on SolidFire MVIP, InfluxDB
   - Dockerfile available for DIY packaging in seconds
 
 #### Graphite - HCI Collector v0.7.x
