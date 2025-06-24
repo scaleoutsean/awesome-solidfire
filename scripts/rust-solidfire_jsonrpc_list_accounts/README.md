@@ -4,9 +4,9 @@
 
 ## How 
 
-- Edit `Config.toml`
-- In this directory, run `cargo build`.
-- Run the example with `./target/debug/solidfire_jsonrpc_list_accounts`
+- Edit `Config.toml` (SolidFire MVIP, cluster account, password)
+- In the same directory, run `cargo build`
+- Run the built debug example with `./target/debug/solidfire_jsonrpc_list_accounts`
 
 ```sh
 $ ./target/debug/solidfire_jsonrpc_list_accounts 
@@ -28,5 +28,5 @@ Account: k3sdr (ID: 3)
 ## Environment and version information
 
 - SolidFire 12.5 with snake-oil TLS certificate (you may enable validation in L72)
-- `cargo 1.85.1 (d73d2caf9 2024-12-31)`.
+- `cargo 1.85.1 (d73d2caf9 2024-12-31)`
 - Ubuntu 24.04 LTS OS
