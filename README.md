@@ -85,6 +85,7 @@
     - [Workloads](#workloads)
     - [Storage Services](#storage-services)
     - [DevOps](#devops)
+    - [iSCSI](#iscsi)
     - [Networking](#networking)
   - [License and Trademarks](#license-and-trademarks)
 
@@ -795,6 +796,37 @@ Q: How do I make the creation of clone volumes faster?
 A: You probably can't, but in some workflows the following may help:
 - If you need multiple clones, it may be faster to clone one volume to two, then two, four and eight in parallel. See [this](https://scaleoutsean.github.io/2023/08/30/monitoring-solidfire-clone-and-backup-jobs.html#faster-multiple-clones-from-a-single-volume)
 - Depending on your use case, you may be able to pre-create clones and use them on-demand as explained in [this post](https://scaleoutsean.github.io/2023/11/22/genai-with-netapp-solidfire.html)
+
+### iSCSI
+
+Q: What is the WWN prefix for SolidFire devices?
+
+A: Looks like `6f47acc10` to me (see `/dev/disk/by-id/wwn-0x` in this example output for a SolidFire block device):
+
+```raw
+    Id:                         by-id-scsi-1SolidFir6d6e347900000169f47acc0100000000
+    IdLabel:                    
+    IdType:                     ext4
+    IdUUID:                     2f578565-ff3d-4566-9961-bfd0fb08dbe4
+    IdUsage:                    filesystem
+    IdVersion:                  1.0
+    MDRaid:                     '/'
+    MDRaidMember:               '/'
+    PreferredDevice:            /dev/sdc
+    ReadOnly:                   false
+    Size:                       10000269312
+    Symlinks:                   /dev/disk/by-id/scsi-1SolidFir6d6e347900000169f47acc0100000000
+                                /dev/disk/by-id/scsi-26d6e347900000169f47acc0100000000
+                                /dev/disk/by-id/scsi-36f47acc1000000006d6e347900000169
+                                /dev/disk/by-id/scsi-SSolidFir_SSD_SAN_6d6e347900000169f47acc0100000000
+                                /dev/disk/by-id/wwn-0x6f47acc1000000006d6e347900000169
+                                /dev/disk/by-path/ip-192.168.103.30:3260-iscsi-iqn.2010-01.com.solidfire:mn4y.vol359.361-lun-0
+                                /dev/disk/by-uuid/2f578565-ff3d-4566-9961-bfd0fb08dbe4
+```
+
+Q: Does SolidFire iSCSI support iSCSI reservations?
+
+A: Yes.
 
 ### Networking
 
