@@ -583,7 +583,7 @@ Some volume-cloning and backup-to-S3 scripts related to my SolidBackup concept c
 
 ### VMware
 
-- SolidFire device names start with `naa.6f47acc1`
+- SolidFire device names start with 6f47acc1 (vendor-specific identifier) while the NAA identifier is `naa.36f47acc1`
 - PowerShell [script](https://github.com/kpapreck/test-plan/blob/master/kp-clone-snap-to-datastore.ps1) to clone a VMFS 6 volume from a SolidFire snapshot and import it to vCenter
 - PowerShell [examples](https://github.com/solidfire/PowerShell/tree/release/1.5.1/VMware) for VMware. Do not use old performance-tuning scripts from the SolidFire PowerShell repo. They were written for ESXi 5.5 and 6.0. ESXi 6.5 and later have appropriate SolidFire MPIO settings built-in and require no special modification or tuning
 
@@ -823,6 +823,11 @@ A: Looks like `6f47acc10` to me (see `/dev/disk/by-id/wwn-0x` in this example ou
                                 /dev/disk/by-path/ip-192.168.103.30:3260-iscsi-iqn.2010-01.com.solidfire:mn4y.vol359.361-lun-0
                                 /dev/disk/by-uuid/2f578565-ff3d-4566-9961-bfd0fb08dbe4
 ```
+Example for iSCSI device `scsi-36f47acc1000000007868363700000063`:
+  - `3` - NAA identifier
+  - `6f47acc1` - SolidFire vendor-specific identifier
+  - `0000000078683637` - hex SolidFire cluster ID (equivalent of `xh67` (ASCII), which appears in IQN for the target: `iqn.2010-01.com.solidfire:xh67.pve01.99`)
+  - `00000063` - hex volume ID on SolidFire (volume ID 99 (decimal) in the SolidFire UI)
 
 Q: Does SolidFire iSCSI support iSCSI reservations?
 
