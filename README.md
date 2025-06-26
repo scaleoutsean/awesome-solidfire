@@ -13,7 +13,7 @@
       - [Microsoft Hyper-V](#microsoft-hyper-v)
       - [Red Hat Virtualization (RHEV)](#red-hat-virtualization-rhev)
       - [Citrix Hypervisor and XCP-ng](#citrix-hypervisor-and-xcp-ng)
-      - [Proxmox](#proxmox)
+      - [Proxmox (PVE)](#proxmox-pve)
       - [Linux-related (OpenStack, KVM, Oracle VM)](#linux-related-openstack-kvm-oracle-vm)
       - [Oracle VirtualBox](#oracle-virtualbox)
       - [Virtual Desktop Infrastructure and End User Computing (VDI \& EUC)](#virtual-desktop-infrastructure-and-end-user-computing-vdi--euc)
@@ -186,13 +186,15 @@ Volume placement considers both performance and capacity utilization:
 - Open-source fork [XCP-ng with SolidFire 12](https://scaleoutsean.github.io/2022/07/10/xcp-ng-with-netapp-solidfire-iscsi.html) as well as XOA
 - NetApp HCI with Citrix Hypervisor ([solution summary](https://docs.netapp.com/us-en/hci-solutions/citrix_executive_summary.html))
 
-#### Proxmox
+#### Proxmox (PVE)
 
+- Recently tested with PVE version 8.4 (SolidFire 12.5)
 - Proxmox 7.1 (Debian-based) [with SolidFire 12.3](https://scaleoutsean.github.io/2022/04/05/proxmox-solidfire.html)
   - Read considerations for filesystems with compression in post above; also [this post](https://scaleoutsean.github.io/2024/02/29/ubuntu-2404-lts-with-netapp-solidfire.html)
   - There's a post about ZFS with SolidFire on the same blog, it's for Ubuntu 24.04 but it applies to any iSCSI client with ZFS
   - QEMU/KVM virtualization
   - LXC containers
+  - Read [this](https://scaleoutsean.github.io/2025/06/24/initial-exploration-solidfire-proxmox-plugin.html) if interested in building SolidFire plugin for Proxmox
 
 #### Linux-related (OpenStack, KVM, Oracle VM)
 
