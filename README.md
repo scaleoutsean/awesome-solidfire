@@ -268,9 +268,10 @@ Volume placement considers both performance and capacity utilization:
 
 - Photon comes with iSCSI SRPMs which can be built and made to [work with SolidFire](https://scaleoutsean.github.io/2022/03/11/vmware-photon-iscsi-solidfire.html)
 
-#### KubeVirt
+#### KubeVirt (and OCPv)
 
 - KubeVirt v0.59 isn't easy to use, but it works with SolidFire 12 and Trident v23.01, [see here](https://scaleoutsean.github.io/2023/02/12/backup-restore-kubevirt-vms-with-solidfire-kasten-kubernetes.html). Interestingly, it appears that regular SolidFire PVCs appear as block devices when attached to KubeVirt VMs (in theory one should use Block mode, but that doesn't appear necessary)
+- OCPv uses Trident, so non-ONTAP-specific Trident features should work the same as they do with KubeVirt
 
 #### HashiCorp Nomad 
 
@@ -300,14 +301,14 @@ Volume placement considers both performance and capacity utilization:
 
 #### CLI
 
-- SolidFire has two fully CLI's - PowerShell & Python (not really maintained)
-- Python CLI: `pip3 install solidfire-cli` (unlikely to work with Python 3.12)
+- SolidFire has two CLI's - PowerShell & Python (not really maintained, but good (better!) CLIs are now very easy to build with Python)
+- Python CLI: `pip3 install solidfire-cli` (but better build your own)
 - PowerShell: `Install-Module SolidFire.Core` (PS 7 on x64; `SolidFire.Core` has been field-tested and found to work on ARM64, including Linux)
 
 #### SolidFire/Element Software Development Kits (SDKs)
 
 - Releases:
-  - [SolidFire Python SDK](https://github.com/solidfire/solidfire-sdk-python) (NOTE: does not work with 3.12; 3.10 and 3.9 are fine. `pip3 install solidfire-sdk-python`)
+  - [SolidFire Python SDK](https://github.com/solidfire/solidfire-sdk-python) (`pip3 install solidfire-sdk-python`)
   - [SolidFire Microsoft .NET SDK](https://github.com/solidfire/sdk-dotnet)
   - [SolidFire Java SDK](https://github.com/solidfire/solidfire-sdk-java)
   - [SolidFire Ruby SDK](https://github.com/solidfire/solidfire-sdk-ruby)
@@ -763,9 +764,13 @@ NetApp HCI users who got the free ONTAP Select with their system can also use S3
 
 ### DevOps
 
+Q: PowerShell Tools for SolidFire can't connect to SolidFire using PowerShell 7.4 or later. Why?
+
+A: I assume .NET it was built against is too old. Unless they update it (I doubt they will), use native PowerShell code. Set request headers to contain Basic Authentication header and accept JSON and use those headers in all Invoke- requests. See [here](https://scaleoutsean.github.io/2025/06/29/solidfire-with-powershell-7.html) for an example.
+
 Q: Where can I find some examples of SolidFire use in DevOps?
 
-A: Check out SolidFire-related blog posts in [DevOps and Automation](https://netapp.io/devops/) category at [NetApp.io](https://netapp.io/). Ideally we should maximize automation by using a front-end orchestrator (vSphere, Kubernetes, and so on) rather than directly accessing storage, although the Element API makes that convenient and easy. Each SDK or CLI has documentation which contains some examples on getting started and the same goes for various Github repositories such as SolidiFire/Element Provider for Terraform.
+A: At this time (2025) it's best to read my blog and follow me on Github, really.
 
 Q: When should I use the SolidFire API?
 
