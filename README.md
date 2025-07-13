@@ -28,7 +28,7 @@
       - [Docker CE and Mirantis Kubernetes Engine (MKE)](#docker-ce-and-mirantis-kubernetes-engine-mke)
       - [Platform9 Managed Kubernetes (PMK)](#platform9-managed-kubernetes-pmk)
       - [VMware Photon 4.0](#vmware-photon-40)
-      - [KubeVirt](#kubevirt)
+      - [KubeVirt (and OCPv)](#kubevirt-and-ocpv)
       - [HashiCorp Nomad](#hashicorp-nomad)
     - [File-sharing (NFS, SMB)](#file-sharing-nfs-smb)
     - [CLI, API, SDK Resources](#cli-api-sdk-resources)
@@ -195,6 +195,7 @@ Volume placement considers both performance and capacity utilization:
   - QEMU/KVM virtualization
   - LXC containers
   - Read [this](https://scaleoutsean.github.io/2025/06/24/initial-exploration-solidfire-proxmox-plugin.html) if interested in building SolidFire plugin for Proxmox
+- Firemox - an opinionated console tool for PVE with SolidFire - can be found [here](https://github.com/scaleoutsean/firemox)
 
 #### Linux-related (OpenStack, KVM, Oracle VM)
 
