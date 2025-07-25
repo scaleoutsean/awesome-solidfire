@@ -328,8 +328,8 @@ Volume placement considers both performance and capacity utilization:
 - [Ansible modules](https://galaxy.ansible.com/netapp/elementsw?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW) for Element Software (`ansible-galaxy collection install netapp.elementsw`) or visit the [Github repo](https://github.com/ansible-collections/netapp.elementsw)
 - [SolidFire Puppet plugin](https://github.com/solidfire/solidfire-puppet)
 - [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw) - supports resources IQN, VAG, account, volume (find a working example in examples directory)
-  - Install it directly from [Terraform registry](https://registry.terraform.io/providers/NetApp/netapp-elementsw/latest) but check out 
-  that Github repo example if you need help
+  - Install it directly from [Terraform registry](https://registry.terraform.io/providers/NetApp/netapp-elementsw/latest) but check out that Github repo example if you need help
+  - My experimental fork with support for Terraform 1.5.7 can be found [here](https://github.com/scaleoutsean/terraform-provider-solidfire)
 - Any application or tool that can consume JSON-RPC or one of SolidFire CLIs or SDKs can be used to automate. Fringe examples: backup SolidFire to S3 with [Kestra](https://scaleoutsean.github.io/2022/03/22/solidfire-storagegrid-data-workflows-kestra.html), [PowerShell in .NET notebook](https://scaleoutsean.github.io/2022/03/29/manage-solidfire-jupyter-powershell.html)
 
 ### Alerting, Monitoring, Telemetry
@@ -525,6 +525,7 @@ There are several ways to integrate:
 - PVCs used by KubeVirt VMs backed by SolidFire can be backed up and restored as any other Kubernetes PVCs, see [here](https://scaleoutsean.github.io/2023/02/12/backup-restore-kubevirt-vms-with-solidfire-kasten-kubernetes.html)
 - Cinder CSI with SolidFire Cinder driver
   - See [this post](https://scaleoutsean.github.io/2022/03/02/openstack-solidfire-part-2.html) on how to deploy Cinder CSI with Openstack & SolidFire Cinder driver
+  - Velero has a OpenStack Cinder driver [plugin](https://github.com/Lirt/velero-plugin-for-openstack) which I haven't tested
   - VM-level and native Kubernetes backup (Velero with an OpenStack plugin, etc.) wasn't tested, but crash-consistent Cinder snapshots from outside of Kubernetes work as usual
 - E/EF-Series (with iSCSI host interface) attached to NetApp HCI is ideal fast Tier 1 backup pool/storage (gigabytes per second). You can find indicators of backup and restore performance in [this blog post](https://scaleoutsean.github.io/2020/12/30/netapp-hci-ef280-diskspd-for-backup)
   - Can act as replication target for Kubernetes environments with SolidFire. Consider evaluating [VolSync](https://scaleoutsean.github.io/2023/02/13/volume-replication-solidfire-kubernetes-volsync.html) for this
