@@ -33,6 +33,7 @@
     - [File-sharing (NFS, SMB)](#file-sharing-nfs-smb)
     - [CLI, API, SDK Resources](#cli-api-sdk-resources)
       - [API](#api)
+      - [API Gateways](#api-gateways)
       - [CLI](#cli)
       - [SolidFire/Element Software Development Kits (SDKs)](#solidfireelement-software-development-kits-sdks)
     - [Automation](#automation)
@@ -77,6 +78,7 @@
       - [SolidFire Objects](#solidfire-objects)
       - [Unique Object Names](#unique-object-names)
       - [Date and Time Format in SolidFire API Responses](#date-and-time-format-in-solidfire-api-responses)
+      - [Miscallenea](#miscallenea)
   - [Questions and Answers](#questions-and-answers)
     - [Meta](#meta)
     - [SolidFire / Element Demo VM](#solidfire--element-demo-vm)
@@ -98,6 +100,7 @@
   - Support is available until EOS + 5Y (2028). Please refer to the official NetApp Support site for details
 - NetApp HCI: End of Sale was announced in Q1/CY21 and took effect in Q2/CY22
   - Support is available until EOS + 5Y (2027). Please refer to the official NetApp Support site for details
+  - A growing number of links may become dead, but it's better to leave them (I think) since you may be able to get the content from Web Archive or similar sites
 
 ### NetApp SolidFire All Flash Storage
 
@@ -283,7 +286,7 @@ Volume placement considers both performance and capacity utilization:
 ### File-sharing (NFS, SMB)
 
 - SolidFire itself is iSCSI only, so for file sharing you'd need another layer (VM or appliance) to consume iSCSI and share it with SMB or NFS or S3 clients
-- Example 1: NetApp ONTAP Select 9.10 (single node or HA, including Active-Active stretch clusters with one ONTAP Select VM and NetApp HCI cluster per each site ([Metrocluster SDS](https://docs.netapp.com/us-en/ontap-select/concept_ha_config.html))
+- Example 1: NetApp ONTAP Select 9.10 - single node or HA, including Active-Active stretch clusters with one ONTAP Select VM and NetApp HCI cluster per each site ([Metrocluster SDS](https://docs.netapp.com/us-en/ontap-select/concept_ha_config.html))
   - Read-only and read-write caching:
     - NFS (on-prem and hybrid cloud, read-only): NetApp ONTAP Select with [FlexCache](https://www.netapp.com/us/info/what-is-flex-cache.aspx)
     - SMB (hybrid cloud, read-write):
@@ -300,11 +303,18 @@ Volume placement considers both performance and capacity utilization:
 - SolidFire / Element Software API Reference Guide:
   - HTML: [v12.3](https://docs.netapp.com/us-en/element-software/api/index.html)
 
+#### API Gateways
+
+- SolidFire WAC Gateway - a non-trivial proof-of-concept API gateway for ASP.NET and IIS
+  - It can be used for improved RBAC/ABAC. See [this](https://scaleoutsean.github.io/2025/07/26/solidfire-windows-admin-center-gateway.html) and [this](https://scaleoutsean.github.io/2025/07/30/solidfire-windows-admin-center-extension.html) post
+
 #### CLI
 
-- SolidFire has two CLI's - PowerShell & Python (not really maintained, but good (better!) CLIs are now very easy to build with Python)
+- SolidFire has two CLIs - PowerShell & Python (not really maintained, but good (better!) CLIs are now very easy to build with Python)
 - Python CLI: `pip3 install solidfire-cli` (but better build your own)
-- PowerShell: `Install-Module SolidFire.Core` (PS 7 on x64; `SolidFire.Core` has been field-tested and found to work on ARM64, including Linux)
+- PowerShell: `Install-Module SolidFire.Core` (PS 7 on x64; `SolidFire.Core` has been field-tested and found to work on ARM64, including Linux up to PS 7.4)
+  - For PowerShell 7.5 and higher you probably have to [drop the Tools](https://scaleoutsean.github.io/2025/06/29/solidfire-with-powershell-7.html) and fall back to Invoke-RestMethod
+  - Another, unofficial option is to write own CLI or use a CLI that works with a SolidFire API gateways (see "API Gateways" above)
 
 #### SolidFire/Element Software Development Kits (SDKs)
 
@@ -382,6 +392,7 @@ Volume placement considers both performance and capacity utilization:
 - Older version of [SolidFire Collector](https://github.com/scaleoutsean/sfc/tree/v0.7.2), not recommended for large clusters (use SFC v2)
 - Uses Graphite back-end
 - Dockerfile and Kubernetes templates available
+- It should be easier to use Solidfire Exporter (below) and translate scrape Prometheus into Graphite or something like that
 
 #### Prometheus - solidfire-exporter
 
@@ -655,6 +666,10 @@ Timestamp        : 1970-01-01T00:00:00Z
   - Python 3: `print((datetime.datetime.utcnow()).strftime('%Y-%m-%dT%H:%M:%S%z')+"Z")` `->` `2021-12-31T05:27:33Z`
   - PowerShell 7: `Get-Date -Format "yyyy-MM-ddTHH:mm:ssZ" -AsUTC` `->` `2021-12-31T05:27:01Z`
 - The containers inside of HCC are another story - it depends on service. Some examples can be found [here](https://scaleoutsean.github.io/2020/12/08/get-bearer-token-for-netapp-hci-hybrid-cloud-control-logs.html)
+
+#### Miscallenea
+
+- [The shocking truth about SolidFire ModifySchedule method](https://scaleoutsean.github.io/2025/07/09/the-shocking-truth-about-createschedule.html)
 
 ## Questions and Answers
 
