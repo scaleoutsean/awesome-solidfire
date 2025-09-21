@@ -202,6 +202,7 @@ Volume placement considers both performance and capacity utilization:
 
 #### Linux-related (OpenStack, KVM, Oracle VM)
 
+- [Juju Charm for SolidFire Cinder driver](https://github.com/scaleoutsean/charm-cinder-solidfire) - refreshed in 2025, builds cleanly but not tested
 - NetApp's [OpenStack resources and docs](https://netapp-openstack-dev.github.io/openstack-docs/draft/cinder/configuration/cinder_config_files/section_solidfire-conf.html) for SolidFire
 - Cinder driver for OpenStack (in-tree, does not need to be installed, it only needs to be configured - see [this video](https://youtu.be/rW5ZTlyhm7U))
   - RHOSP16 certification: https://catalog.redhat.com/software/openstack/detail/2257111
