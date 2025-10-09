@@ -67,6 +67,7 @@
       - [Trident CSI with `solidfire-san` back-end](#trident-csi-with-solidfire-san-back-end)
     - [Security](#security)
     - [Encryption](#encryption)
+      - [Post-Quantum Cryptography](#post-quantum-cryptography)
   - [Demo VM, Tools and Utilities](#demo-vm-tools-and-utilities)
     - [SolidFire/Element Demo VM](#solidfireelement-demo-vm)
     - [Recorded Demos](#recorded-demos)
