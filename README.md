@@ -202,12 +202,14 @@ Volume placement considers both performance and capacity utilization:
 
 #### Linux-related (OpenStack, KVM, Oracle VM)
 
-- [Juju Charm for SolidFire Cinder driver](https://github.com/scaleoutsean/charm-cinder-solidfire) - refreshed in 2025, builds cleanly but not tested
+- Juju Charms for SolidFire Cinder driver
+  - [Official OpenStack](https://github.com/openstack/charm-cinder-solidfire)
+  - [Personal](https://github.com/scaleoutsean/charm-cinder-solidfire) - built with software current in September 2025 (builds cleanly but not tested)
 - NetApp's [OpenStack resources and docs](https://netapp-openstack-dev.github.io/openstack-docs/draft/cinder/configuration/cinder_config_files/section_solidfire-conf.html) for SolidFire
 - Cinder driver for OpenStack (in-tree, does not need to be installed, it only needs to be configured - see [this video](https://youtu.be/rW5ZTlyhm7U))
   - RHOSP16 certification: https://catalog.redhat.com/software/openstack/detail/2257111
   - Cinder Active-Active [enabled](https://docs.openstack.org/cinder/ussuri/reference/support-matrix.html#operation_active_active_ha)
-- [Juju charm](https://github.com/solidfire/charm-cinder-solidfire) for Cinder to use Element cluster back-end (may need to be updated)
+
 - [Oracle VM](https://linux.oracle.com/pls/apex/f?p=117:3::::::) (look under Storage Systems > NetApp)
 - Additional details about SolidFire in Linux environments: [solidfire-linux](https://github.com/scaleoutsean/solidfire-linux/)
 - HashiCorp Nomad can schedule QEMU VMs on static SolidFire-backed volumes
@@ -555,6 +557,12 @@ There are several ways to integrate:
 - FIPS 140-2 
   - Element version >=12.5 - NetApp SolidFire H610S with [NCSM](https://csrc.nist.gov/projects/cryptographic-module-validation-program/certificate/4297); until 2026
   - Element version <12.5 - NetApp HCI H610S-2F model only
+
+#### Post-Quantum Cryptography
+
+- This seems unlikely to happy in the product at this point, but there are alternatives:
+  - [PQ API proxy](https://scaleoutsean.github.io/2025/10/10/post-quantum-crypto-proxy-for-solidfire-eseries-api.html) - inject a trusted proxy in between API clients and SolidFire. Commercial and OSS options are available - see the post for more
+  - WAC Gateway - Windows .NET application server-based authorization and authentication with RBAC - see under API gateways. Rebuilt with .NET 9, this gives you PQC protection as well
 
 ## Demo VM, Tools and Utilities
 
