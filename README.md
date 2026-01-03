@@ -192,14 +192,14 @@ Volume placement considers both performance and capacity utilization:
 
 #### Proxmox (PVE)
 
-- Recently tested with PVE version 8.4 (SolidFire 12.5)
-- Firemox - an opinionated console tool for PVE 8 with SolidFire written in PowerShell 7 (Linux, Windows) - can be found [here](https://github.com/scaleoutsean/firemox)
-- Proxmox 7.1 (Debian-based) [with SolidFire 12.3](https://scaleoutsean.github.io/2022/04/05/proxmox-solidfire.html)
-  - Read considerations for filesystems with compression in post above; also [this post](https://scaleoutsean.github.io/2024/02/29/ubuntu-2404-lts-with-netapp-solidfire.html)
+- Lightly tested with PVE version 9.1 and more extensively with PVE version 8.4 (SolidFire 12.5)
+- Firemox - an opinionated console tool for PVE 8 with SolidFire written in PowerShell 7 (Linux, Windows) - can be found [here](https://github.com/scaleoutsean/firemox). Likely to work with PVE 9.1
+- Read [this](https://scaleoutsean.github.io/2025/06/24/initial-exploration-solidfire-proxmox-plugin.html) if interested in building SolidFire plugin for Proxmox
+- Read considerations for filesystems with compression in post above; also [this post](https://scaleoutsean.github.io/2024/02/29/ubuntu-2404-lts-with-netapp-solidfire.html)
   - There's a post about ZFS with SolidFire on the same blog, it's for Ubuntu 24.04 but it applies to any iSCSI client with ZFS
   - QEMU/KVM virtualization
   - LXC containers
-  - Read [this](https://scaleoutsean.github.io/2025/06/24/initial-exploration-solidfire-proxmox-plugin.html) if interested in building SolidFire plugin for Proxmox
+- Proxmox PVE 7.1 (Debian-based) [with SolidFire 12.3](https://scaleoutsean.github.io/2022/04/05/proxmox-solidfire.html)
 
 #### Linux-related (OpenStack, KVM, Oracle VM)
 
