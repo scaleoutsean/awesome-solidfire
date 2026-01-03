@@ -339,11 +339,12 @@ Volume placement considers both performance and capacity utilization:
 
 #### Automation and Configuration Tools and Frameworks
 
-- [Ansible modules](https://galaxy.ansible.com/netapp/elementsw?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW) for Element Software (`ansible-galaxy collection install netapp.elementsw`) or visit the [Github repo](https://github.com/ansible-collections/netapp.elementsw)
-- [SolidFire Puppet plugin](https://github.com/solidfire/solidfire-puppet)
-- [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw) - supports resources IQN, VAG, account, volume (find a working example in the examples directory)
-  - Install it directly from [Terraform registry](https://registry.terraform.io/providers/NetApp/netapp-elementsw/latest) but check out that Github repo example if you need help
-  - My experimental fork with support for Terraform 1.5.7 can be found [here](https://github.com/scaleoutsean/terraform-provider-solidfire). Supports the same things as the official version plus some extras (in different stages of completeness): QoS, cluster pairing and volume replication
+- [community.solidfire](https://github.com/scaleoutsean/netapp.solidfire/) is my salvage-fork of NetApp abandonware `netapp.elementsw` - probably your best shot at getting something done with Ansible Core 2.20. Has some improvements the community has asked for years ago.
+  - [netapp.elementsw](https://galaxy.ansible.com/netapp/elementsw?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW) formerly usable collection for Element Software (`ansible-galaxy collection install netapp.elementsw`). Here's the [Github archive](https://github.com/ansible-collections/netapp.elementsw), in case you want to fork it
+- [SolidFire Puppet plugin](https://github.com/solidfire/solidfire-puppet), unlikely to be usable
+- My experimental provider with support for Terraform 1.5.7 can be found [here](https://github.com/scaleoutsean/terraform-provider-solidfire). Supports the same things as the official version plus some extras (in different stages of completeness): QoS, cluster pairing and volume replication 
+  - A "community" provider which community never provided for, [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw), is now outdated. It supported resources IQN, VAG, account, volume (find working examples in the repo's examples directory). You may try to install it directly from [Terraform registry](https://registry.terraform.io/providers/NetApp/netapp-elementsw/latest) but it's unlikely to work with modern Terraform
+  
 - Any application or tool that can consume JSON-RPC or one of SolidFire CLIs or SDKs can be used to automate. Fringe examples: backup SolidFire to S3 with [Kestra](https://scaleoutsean.github.io/2022/03/22/solidfire-storagegrid-data-workflows-kestra.html), [PowerShell in .NET notebook](https://scaleoutsean.github.io/2022/03/29/manage-solidfire-jupyter-powershell.html)
 
 ### Alerting, Monitoring, Telemetry
