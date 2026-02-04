@@ -326,7 +326,7 @@ Volume placement considers both performance and capacity utilization:
   - [SolidFire Microsoft .NET SDK](https://github.com/solidfire/sdk-dotnet)
   - [SolidFire Java SDK](https://github.com/solidfire/solidfire-sdk-java)
   - [SolidFire Ruby SDK](https://github.com/solidfire/solidfire-sdk-ruby)
-  - [(Unofficial) SolidFire Go SDK](https://github.com/solidfire/solidfire-sdk-golang) and its cousin [solidfire-go](https://github.com/j-griffith/solidfire-go) with a convenient wrapper for common volume operations.
+  - [(Unofficial) SolidFire Go SDK](https://github.com/scaleoutsean/solidfire-go) forked from John Griffith's [solidfire-go](https://github.com/j-griffith/solidfire-go) in 2026. Includes a convenient wrapper for common volume operations and example code.
 
 ### Automation
 
