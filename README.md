@@ -237,22 +237,25 @@ Volume placement considers both performance and capacity utilization:
 
 #### CSI Provisioners
 
-- [NetApp Astra Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Red Hat OpenShift, Rancher RKE and others)
+- [NetApp Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Red Hat OpenShift, Rancher RKE and others)
 - OpenStack users may be able to [use SolidFire with Cinder CSI Plugin for Kubernetes](https://github.com/kubernetes/cloud-provider-openstack/blob/master/docs/cinder-csi-plugin/using-cinder-csi-plugin.md) - a demo and notes can be found [here](https://scaleoutsean.github.io/2022/03/02/openstack-solidfire-part-2.html)
+- My own [SolidFire CSI](https://github.com/scaleoutsean/solidfire-csi) driver is not officially supportted and has been tested in small environments. At release it targets 1.25- 1.34 and is aimed at self-sufficient Kubernetes users.
 
 #### SolidFire Operator for Kubernetes
 
 - It hasn't been built, but it can be built. One such attempt can be found [here](https://github.com/scaleoutsean/solidfire-operator)
-- It is recommended to use it to automate configuration of things SolidFire that Trident CSI doesn't touch
+- It is recommended to use it to automate configuration of things SolidFire that Trident CSI doesn't touch. Or, even better, use SolidFire CSI and avoid operator bloat
 
 #### Red Hat OpenShift Container Platform
 
-- You can run it two ways: VM-based OCP VMs on vSphere, Red Hat Virtualization or OpenStack, and bare metal-based OCP on RHEL. See the [official solution page](https://docs.netapp.com/us-en/netapp-solutions/containers/rh-os-n_solution_overview.html#netapp-trident) for additional details
+- You can run it two way with Trident CSI: VM-based OCP VMs on vSphere, Red Hat Virtualization or OpenStack, and bare metal-based OCP on RHEL. See the [official solution page](https://docs.netapp.com/us-en/netapp-solutions/containers/rh-os-n_solution_overview.html#netapp-trident) for additional details
+- Cinder CSI can no longer be used to provide support for SolidFire because NetApp no longer certifies SolidFire for newer OpenStack releases. SolidFire CSI is a commmunity driver which won't be certified for OpenShift
 
 #### Rancher
 
+- Rancher with SolidFire: use the documentation for your CSI driver (e.g. Trident CSI, Cinder CSI)
 - Rancher on NetApp HCI: just configure it with Trident CSI. See the official NetApp HCI solutions page for additional details. In late 2020 I created a personal micro-site with notes on this solution from a NetApp HCI and SolidFire angle [here](https://scaleoutsean.github.io/solid-rancher), but I no longer maintain it because NetApp HCI is no longer sold, so maybe also check this newer SolidFire-focused micro-site [Kubernetes with SolidFire](https://solidfire-kubernetes.pages.dev/) instead.
-- Provision Rancher K8s to NetApp HCI vSphere clusters from the CLI with [ez-rancher](https://github.com/NetApp/ez-rancher/)
+- Old scripts to provision Rancher K8s to NetApp HCI vSphere clusters from the CLI with [ez-rancher](https://github.com/scaleoutsean/ez-rancher) (formerly [ez-rancher](https://github.com/NetApp/ez-rancher/), since removed)
 
 #### Flatcar Container Linux
 
@@ -278,13 +281,13 @@ Volume placement considers both performance and capacity utilization:
 #### KubeVirt (and OCPv)
 
 - KubeVirt v0.59 isn't easy to use, but it works with SolidFire 12 and Trident v23.01, [see here](https://scaleoutsean.github.io/2023/02/12/backup-restore-kubevirt-vms-with-solidfire-kasten-kubernetes.html). Interestingly, it appears that regular SolidFire PVCs appear as block devices when attached to KubeVirt VMs (in theory one should use Block mode, but that doesn't appear necessary)
-- OCPv uses Trident, so non-ONTAP-specific Trident features should work the same as they do with KubeVirt
+- OCPv uses Trident, so non-ONTAP-specific Trident features should work the same as they do with KubeVirt. But Trident CSI does not implement all features for SolidFire backend (some are ONTAP-only), so make sure you verify these details
 
 #### HashiCorp Nomad 
 
 - Nomad can schedule services with Docker using static host volumes backed by SolidFire. I also got it to work with Trident Docker Volume Plugin. If the VM gets its HA from hypervisor, this may be a way to get HA for these Docker workloads. See [this](https://scaleoutsean.github.io/2022/03/23/nomad-solidfire-hostpath-volumes.html) for additional details
 - LXC-style containers may be able to work on host volumes (static provisioning) as well
-- Trident CSI is unlikely to work with Nomad CSI, but Cinder CSI might (needs testing)
+- Trident CSI cannot work with Nomad CSI, but Cinder CSI might (needs testing). If you're a Nomad/SolidFire user, you're welcome to try SolidFire CSI and submit a bug report to the SolidFire CSI repository
 
 ### File-sharing (NFS, SMB)
 
@@ -304,7 +307,8 @@ Volume placement considers both performance and capacity utilization:
 
 - SolidFire has versioned API which means you can run your "old" automation scripts against an older API endpoint of your choosing (e.g. API endpoint version 8.0 is still available and works (as of 12.2) despite SolidFire 8 no longer being supported)
 - SolidFire / Element Software API Reference Guide:
-  - HTML: [v12.3](https://docs.netapp.com/us-en/element-software/api/index.html)
+  - HTML: [v12.9](https://docs.netapp.com/us-en/element-software/api/index.html)
+  - [Get the Postman collections here](https://github.com/solidfire/postman)
 
 #### API Gateways
 
@@ -326,7 +330,7 @@ Volume placement considers both performance and capacity utilization:
   - [SolidFire Microsoft .NET SDK](https://github.com/solidfire/sdk-dotnet)
   - [SolidFire Java SDK](https://github.com/solidfire/solidfire-sdk-java)
   - [SolidFire Ruby SDK](https://github.com/solidfire/solidfire-sdk-ruby)
-  - [(Unofficial) SolidFire Go SDK](https://github.com/scaleoutsean/solidfire-go) forked from John Griffith's [solidfire-go](https://github.com/j-griffith/solidfire-go) in 2026. Includes a convenient wrapper for common volume operations and example code.
+  - [Unofficial SolidFire Go SDK](https://github.com/scaleoutsean/solidfire-go) forked from John Griffith's [solidfire-go](https://github.com/j-griffith/solidfire-go) in 2026. Includes a convenient wrapper for common volume operations and example code.
 
 ### Automation
 
@@ -338,11 +342,11 @@ Volume placement considers both performance and capacity utilization:
 
 #### Automation and Configuration Tools and Frameworks
 
-- [community.solidfire](https://github.com/scaleoutsean/netapp.solidfire/) is my salvage-fork of NetApp abandonware `netapp.elementsw` - probably your best shot at getting something done with Ansible Core 2.20. Has some improvements the community has asked for years ago.
-  - [netapp.elementsw](https://galaxy.ansible.com/netapp/elementsw?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW) formerly usable collection for Element Software (`ansible-galaxy collection install netapp.elementsw`). Here's the [Github archive](https://github.com/ansible-collections/netapp.elementsw), in case you want to fork it
-- [SolidFire Puppet plugin](https://github.com/solidfire/solidfire-puppet), unlikely to be usable
-- My experimental provider with support for Terraform 1.5.7 can be found [here](https://github.com/scaleoutsean/terraform-provider-solidfire). Supports the same things as the official version plus some extras (in different stages of completeness): QoS, cluster pairing and volume replication 
-  - A "community" provider which community never provided for, [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw), is now outdated. It supported resources IQN, VAG, account, volume (find working examples in the repo's examples directory). You may try to install it directly from [Terraform registry](https://registry.terraform.io/providers/NetApp/netapp-elementsw/latest) but it's unlikely to work with modern Terraform
+- [community.solidfire](https://github.com/scaleoutsean/netapp.solidfire/) is my salvage-fork of NetApp's archived `netapp.elementsw` and probably your best shot at getting stuff done with Ansible Core 2.20. Has all the improvements the community has asked for (in the archived repo's issues) over the years!
+  - [netapp.elementsw](https://galaxy.ansible.com/netapp/elementsw?extIdCarryOver=true&sc_cid=701f2000001OH7YAAW) **formerly** usable collection for Element Software (`ansible-galaxy collection install netapp.elementsw`). Here's the [Github archive](https://github.com/ansible-collections/netapp.elementsw), in case you want to fork it
+- [SolidFire Puppet plugin](https://github.com/solidfire/solidfire-puppet), unlikely to be usable in 2026
+- My experimental provider with support for latest Terraform can be found [here](https://github.com/scaleoutsean/terraform-provider-solidfire). Supports key resources including accounts, volumes, QoS, cluster pairing, volume replication 
+  - A "community" provider which the community never provided for, [Terraform Provider for NetApp Element Software](https://github.com/NetApp/terraform-provider-netapp-elementsw), is now outdated. It supported resources IQN, VAG, account, volume (find working examples in the repo's examples directory). You may try to install it directly from [Terraform registry](https://registry.terraform.io/providers/NetApp/netapp-elementsw/latest) but it's unlikely to work with modern Terraform
   
 - Any application or tool that can consume JSON-RPC or one of SolidFire CLIs or SDKs can be used to automate. Fringe examples: backup SolidFire to S3 with [Kestra](https://scaleoutsean.github.io/2022/03/22/solidfire-storagegrid-data-workflows-kestra.html), [PowerShell in .NET notebook](https://scaleoutsean.github.io/2022/03/29/manage-solidfire-jupyter-powershell.html)
 
@@ -355,7 +359,7 @@ Volume placement considers both performance and capacity utilization:
 - [NetApp ActiveIQ Documentation](https://docs.netapp.com/us-en/active-iq/)
 - [ActiveIQ user portal](https://activeiq.solidfire.com) (login required)
 
-#### NetApp Cloud Insights
+#### NetApp DII (formerly Cloud Insights, aka OCI)
 
 - Enterprise-grade, professional infrastructure monitoring
 - Cloud-hosted service, requires on-prem VM to acquire data and send it to your NetApp Cloud Insights account
@@ -393,10 +397,10 @@ Volume placement considers both performance and capacity utilization:
 
 #### Graphite - HCI Collector v0.7.x
 
-- Older version of [SolidFire Collector](https://github.com/scaleoutsean/sfc/tree/v0.7.2), not recommended for large clusters (use SFC v2)
+- Older version of [SolidFire Collector](https://github.com/scaleoutsean/sfc/tree/v0.7.2), not recommended as it wasn't efficient
 - Uses Graphite back-end
 - Dockerfile and Kubernetes templates available
-- It should be easier to use Solidfire Exporter (below) and translate scrape Prometheus into Graphite or something like that
+- Use SFC v2 (above) or Solidfire Exporter (below) 
 
 #### Prometheus - solidfire-exporter
 
@@ -421,6 +425,8 @@ Volume placement considers both performance and capacity utilization:
 - NetApp Trident
   - In v20.01 NetApp Trident delivered support for Prometheus metrics. A how-to is available [here](https://netapp.io/2020/02/20/prometheus-and-trident/)
   - [Example](https://scaleoutsean.github.io/2021/05/25/external-access-to-netapp-trident-solidfire-metrics.html) for SolidFire
+- SolidFire CSI 
+  - Similarly to Trident CSI, embeds metadata into SolidFire Volume Metadata. SFC v2 collects and extracts those by default, so it is much easier to get all metrics and metadata from SFC v2 than Trident (even if you need to cross-reference SFC v2 data against Kubernetes metrics)
 
 #### Icinga and Nagios
 
@@ -493,8 +499,9 @@ There are several ways to integrate:
 #### Storage replication management with Longhorny, a SolidFire replication management tool (OSS)
 
 - [Longhorny](https://github.com/scaleoutsean/longhorny) is a permissively licensed script for CLI-based replication management. It supports only 1-to-1 cluster and volume relationships. It may be used to pair/unpair clusters, pair/unpair volumes, change direction of replication, and more. Language: Python 3. There's a short [demo](https://rumble.com/v513r8w-project-longhorny.html) (5m11s) if you want to see the main features
-- [Kubefire](https://github.com/scaleoutsean/kubefire) focuses on using Longhorny and other tools in Kubernetes environments with Trident CSI. Additional notes on Trident CSI can be found in Backup & Restore section. 
+- [Kubefire](https://github.com/scaleoutsean/kubefire) focuses on using Longhorny and other tools in Kubernetes environments with Trident CSI. Additional notes on Trident CSI and SolidFire CSI can be found in Backup & Restore section. 
   - Storage cluster failover for one Kubernetes cluster with Trident CSI and two SolidFire clusters is one of two approaches described in Kubefire scenarios, although not the recommended one. It uses NetApp Trident's Volume Import feature (a quick demo (2m55s) can be viewed [here](https://youtu.be/aSFxlGoHgdA) while some additional content available on my blog. For two Kubernetes clusters, each with own SolidFire cluster, you'd simply set up replication between SolidFire clusters (use consistency groups and group snapshots where necessary) and push Trident PVC-to-PV mapping to the remote site where you'd swap PV from SolidFire Cluster A for PVs replicated from SolidFire Cluster B so that you can promote Cluster B's volume replicas to readWrite mode and run Trident volume import before you start Kubernetes on that site.
+  - This project was stuck for a long while as I tried to find ways to work around Trident CSI's handling of SolidFire backends. From SolidFire CSI release (early 2026), going forward it will be focused on SolidFire CSI alone
 
 ### Backup and Restore
 
