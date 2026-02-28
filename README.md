@@ -312,7 +312,8 @@ Volume placement considers both performance and capacity utilization:
 
 #### API Gateways
 
-- SolidFire WAC Gateway - a non-trivial proof-of-concept API gateway for ASP.NET and IIS
+- [PQ API proxy in Go](https://github.com/scaleoutsean/solidfire-go/tree/master/example/secure-api-proxy) - working skeleton model, best for customization.
+- [SolidFire WAC Gateway](https://github.com/scaleoutsean/solidfire-wac-gateway) - a non-trivial proof-of-concept API gateway for ASP.NET and IIS
   - It can be used for improved RBAC/ABAC. See [this](https://scaleoutsean.github.io/2025/07/26/solidfire-windows-admin-center-gateway.html) and [this](https://scaleoutsean.github.io/2025/07/30/solidfire-windows-admin-center-extension.html) post
 
 #### CLI
@@ -330,7 +331,7 @@ Volume placement considers both performance and capacity utilization:
   - [SolidFire Microsoft .NET SDK](https://github.com/solidfire/sdk-dotnet)
   - [SolidFire Java SDK](https://github.com/solidfire/solidfire-sdk-java)
   - [SolidFire Ruby SDK](https://github.com/solidfire/solidfire-sdk-ruby)
-  - [Unofficial SolidFire Go SDK](https://github.com/scaleoutsean/solidfire-go) forked from John Griffith's [solidfire-go](https://github.com/j-griffith/solidfire-go) in 2026. Includes a convenient wrapper for common volume operations and example code.
+  - [Unofficial SolidFire Go SDK](https://github.com/scaleoutsean/solidfire-go) forked from John Griffith's [solidfire-go](https://github.com/j-griffith/solidfire-go) in 2026. Includes a convenient wrapper for common volume operations and example code. Listed on go.dev.
 
 ### Automation
 
@@ -568,9 +569,10 @@ There are several ways to integrate:
 
 #### Post-Quantum Cryptography
 
-- This seems unlikely to happy in the product at this point, but there are alternatives:
-  - [PQ API proxy](https://scaleoutsean.github.io/2025/10/10/post-quantum-crypto-proxy-for-solidfire-eseries-api.html) - inject a trusted proxy in between API clients and SolidFire. Commercial and OSS options are available - see the post for more
-  - WAC Gateway - Windows .NET application server-based authorization and authentication with RBAC - see under API gateways. Rebuilt with .NET 9, this gives you PQC protection as well
+- This seems unlikely to happen in the product at this point, but there are alternatives:
+  - [PQ API proxy in Go](https://github.com/scaleoutsean/solidfire-go/tree/master/example/secure-api-proxy) - working skeleton model, best for customization.
+  - [PQ API proxy with NGINX](https://scaleoutsean.github.io/2025/10/10/post-quantum-crypto-proxy-for-solidfire-eseries-api.html) - inject a trusted proxy in between API clients and SolidFire. Commercial and OSS options are available - see the post for more.
+  - [WAC Gateway for Active Directory](https://github.com/scaleoutsean/solidfire-wac-gateway) - Windows .NET application server-based authorization and authentication with RBAC - see under API gateways. If you rebuild it with .NET 9, that gives you PQC protection as well.
 
 ## Demo VM, Tools and Utilities
 
