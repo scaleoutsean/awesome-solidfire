@@ -233,7 +233,8 @@ Volume placement considers both performance and capacity utilization:
 #### Get started with SolidFire
 
 - Download and deploy SolidFire Demo VM (look for Element Demo VM or SolidFire Demo VM on this page). Estimated time: 30 min to download, 30 minutes to setup the first time you try
-- To start using SolidFire from Kubernetes, head to my SolidFire-focused micro-site [Kubernetes with SolidFire](https://solidfire-kubernetes.pages.dev/) for a set of SolidFire-focused configuration steps. Estimated time: 15 minutes
+  - **Trident CSI:** head to my SolidFire-focused micro-site [Kubernetes with SolidFire](https://solidfire-kubernetes.pages.dev/) for a set of SolidFire-focused configuration steps. Estimated time: 15 minutes
+  - **SolidFire CSI:** [SolidFire CSI](https://github.com/scaleoutsean/solidfire-csi) is easier to setup because it has no "backend" and does not require Device Mapper. Recommended Kubernetes distributions: k0s, Talos Linux, vanilla Kubernetes 
 
 #### CSI Provisioners
 
