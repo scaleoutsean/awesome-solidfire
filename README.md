@@ -239,11 +239,11 @@ Volume placement considers both performance and capacity utilization:
 
 - [NetApp Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Red Hat OpenShift, Rancher RKE and others)
 - OpenStack users may be able to [use SolidFire with Cinder CSI Plugin for Kubernetes](https://github.com/kubernetes/cloud-provider-openstack/blob/master/docs/cinder-csi-plugin/using-cinder-csi-plugin.md) - a demo and notes can be found [here](https://scaleoutsean.github.io/2022/03/02/openstack-solidfire-part-2.html)
-- My own [SolidFire CSI](https://github.com/scaleoutsean/solidfire-csi) driver is not officially supportted and has been tested in small environments. At release it targets 1.25- 1.34 and is aimed at self-sufficient Kubernetes users.
+- My own [SolidFire CSI](https://github.com/scaleoutsean/solidfire-csi) driver is not officially supportted and has been tested in small environments. At release it targets 1.25- 1.34 and is aimed at self-sufficient Kubernetes users. See the [introductory blog post](https://scaleoutsean.github.io/2026/03/06/solidfire-csi-driver.html) to see what it does differently. It was developed on vanilla Kubernetes, Talos Linux and k0rdent k0s from start.
 
 #### SolidFire Operator for Kubernetes
 
-- It hasn't been built, but it can be built. One such attempt can be found [here](https://github.com/scaleoutsean/solidfire-operator)
+- It hasn't been built, but it can be built. One such toy attempt can be found [here](https://github.com/scaleoutsean/solidfire-operator)
 - It is recommended to use it to automate configuration of things SolidFire that Trident CSI doesn't touch. Or, even better, use SolidFire CSI and avoid operator bloat
 
 #### Red Hat OpenShift Container Platform
