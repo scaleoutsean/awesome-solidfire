@@ -21,6 +21,8 @@
       - [Get started with SolidFire](#get-started-with-solidfire)
       - [CSI Provisioners](#csi-provisioners)
       - [SolidFire Operator for Kubernetes](#solidfire-operator-for-kubernetes)
+      - [Talos Linux](#talos-linux)
+      - [k0rdent k0s](#k0rdent-k0s)
       - [Red Hat OpenShift Container Platform](#red-hat-openshift-container-platform)
       - [Rancher](#rancher)
       - [Flatcar Container Linux](#flatcar-container-linux)
@@ -41,7 +43,7 @@
       - [Automation and Configuration Tools and Frameworks](#automation-and-configuration-tools-and-frameworks)
     - [Alerting, Monitoring, Telemetry](#alerting-monitoring-telemetry)
       - [ActiveIQ](#activeiq)
-      - [NetApp Cloud Insights](#netapp-cloud-insights)
+      - [NetApp DII (formerly Cloud Insights, aka OCI)](#netapp-dii-formerly-cloud-insights-aka-oci)
       - [VMware / Blue Medora True Visibility for VMware vRealize Operations](#vmware--blue-medora-true-visibility-for-vmware-vrealize-operations)
       - [VMware vRealize Log Insight](#vmware-vrealize-log-insight)
       - [Graylog](#graylog)
@@ -246,6 +248,16 @@ Volume placement considers both performance and capacity utilization:
 
 - It hasn't been built, but it can be built. One such toy attempt can be found [here](https://github.com/scaleoutsean/solidfire-operator)
 - It is recommended to use it to automate configuration of things SolidFire that Trident CSI doesn't touch. Or, even better, use SolidFire CSI and avoid operator bloat
+
+#### Talos Linux 
+
+- I recommend SolidFire CSI and disabled multipathing (LACP on workers and SolidFire SIPs, single storage fabric, no other storage)
+- Trident CSI can also work with Talos Linux
+
+#### k0rdent k0s
+
+- I recommend SolidFire CSI and disabled multipathing (LACP on workers and SolidFire SIPs, single storage fabric, no other storage)
+- Trident CSI can also work with k0s
 
 #### Red Hat OpenShift Container Platform
 
