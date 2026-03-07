@@ -242,7 +242,7 @@ Volume placement considers both performance and capacity utilization:
 
 - [NetApp Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Red Hat OpenShift, Rancher RKE and others)
 - OpenStack users may be able to [use SolidFire with Cinder CSI Plugin for Kubernetes](https://github.com/kubernetes/cloud-provider-openstack/blob/master/docs/cinder-csi-plugin/using-cinder-csi-plugin.md) - a demo and notes can be found [here](https://scaleoutsean.github.io/2022/03/02/openstack-solidfire-part-2.html)
-- My own [SolidFire CSI](https://github.com/scaleoutsean/solidfire-csi) driver is not officially supportted and has been tested in small environments. At release it targets 1.25- 1.34 and is aimed at self-sufficient Kubernetes users. See the [introductory blog post](https://scaleoutsean.github.io/2026/03/06/solidfire-csi-driver.html) to see what it does differently. It was developed on vanilla Kubernetes, Talos Linux and k0rdent k0s from start.
+- My own [SolidFire CSI](https://github.com/scaleoutsean/solidfire-csi) driver is not officially supported and has been tested only in small environments. At release it targets Kubernetes 1.34+ and is aimed at self-sufficient Kubernetes users. See the [introductory blog post](https://scaleoutsean.github.io/2026/03/06/solidfire-csi-driver.html) to understand what it does differently. It was developed on vanilla Kubernetes, Talos Linux and k0rdent k0s from start.
 
 #### SolidFire Operator for Kubernetes
 
@@ -251,12 +251,12 @@ Volume placement considers both performance and capacity utilization:
 
 #### Talos Linux 
 
-- I recommend SolidFire CSI and disabled multipathing (LACP on workers and SolidFire SIPs, single storage fabric, no other storage)
-- Trident CSI can also work with Talos Linux
+- I recommend SolidFire CSI and Talos Linux workers without multipath-tools (in the situation with LACP on workers and SolidFire (single storage fabric) and no other storage drivers that need DM-MP). SolidFire works with DM-MP, if you must use it
+- Trident CSI can also work with Talos Linux. It requires custom Trident CSI package ("extension") on Talos Linux OS.
 
 #### k0rdent k0s
 
-- I recommend SolidFire CSI and disabled multipathing (LACP on workers and SolidFire SIPs, single storage fabric, no other storage)
+- I recommend SolidFire CSI and Talos Linux workers without multipath-tools (in the situation with LACP on workers and SolidFire (single storage fabric) and no other storage drivers that need DM-MP). SolidFire works with DM-MP, if you must use it
 - Trident CSI can also work with k0s
 
 #### Red Hat OpenShift Container Platform
