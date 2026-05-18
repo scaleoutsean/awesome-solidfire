@@ -240,9 +240,9 @@ Volume placement considers both performance and capacity utilization:
 
 #### CSI Provisioners
 
-- [NetApp Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Red Hat OpenShift, Rancher RKE and others)
+- [SolidFire CSI](https://github.com/scaleoutsean/solidfire-csi) targets Kubernetes 1.34+ and self-sufficient Kubernetes users. See the [introductory blog post](https://scaleoutsean.github.io/2026/03/06/solidfire-csi-driver.html) to understand what it does differently and why. It was developed and tested on vanilla Kubernetes, Talos Linux and k0rdent k0s. Unless you have OpenStack (and use Cinder CSI) or run OpenShift, you should probably evaluate this one even if you don't end up using it. "Migration" from (and to) NetApp Trident CSI is trivial; Trident CSI has volume import feature, while SolidFire CSI is stateless (there's no concept of "import", just create static PVCs from Trident volumes after you remove Trident CSI). It should be better for users with DR/BC configurations in which Trident can handle fail-over but struggles with fail-back.
 - OpenStack users may be able to [use SolidFire with Cinder CSI Plugin for Kubernetes](https://github.com/kubernetes/cloud-provider-openstack/blob/master/docs/cinder-csi-plugin/using-cinder-csi-plugin.md) - a demo and notes can be found [here](https://scaleoutsean.github.io/2022/03/02/openstack-solidfire-part-2.html)
-- My own [SolidFire CSI](https://github.com/scaleoutsean/solidfire-csi) driver is not officially supported and has been tested only in small environments. At release it targets Kubernetes 1.34+ and is aimed at self-sufficient Kubernetes users. See the [introductory blog post](https://scaleoutsean.github.io/2026/03/06/solidfire-csi-driver.html) to understand what it does differently. It was developed on vanilla Kubernetes, Talos Linux and k0rdent k0s from start.
+- [NetApp Trident](https://github.com/NetApp/trident) - CSI-compatible dynamic volume provisioner for container platforms (Docker, Kubernetes, Red Hat OpenShift, Rancher RKE and others). Lacks support for some CSI features that SolidFire CSI has.
 
 #### SolidFire Operator for Kubernetes
 
@@ -251,8 +251,8 @@ Volume placement considers both performance and capacity utilization:
 
 #### Talos Linux 
 
-- I recommend SolidFire CSI and Talos Linux workers without multipath-tools (in the situation with LACP on workers and SolidFire (single storage fabric) and no other storage drivers that need DM-MP). SolidFire works with DM-MP, if you must use it
-- Trident CSI can also work with Talos Linux. It requires custom Trident CSI package ("extension") on Talos Linux OS.
+- I recommend SolidFire CSI and Talos Linux workers without multipath-tools (in the situation with LACP on workers and SolidFire (single storage fabric) and no other storage drivers that need DM-MP). SolidFire works with DM-MP, if you must use it. It should work with Talos out-of-box. [File a bug](https://github.com/scaleoutsean/solidfire-csi/issues) if it doesn't.
+- Trident CSI can also work with Talos Linux. It requires a custom Trident CSI package ("extension") on Talos Linux OS.
 
 #### k0rdent k0s
 
@@ -281,7 +281,7 @@ Volume placement considers both performance and capacity utilization:
 #### Docker CE and Mirantis Kubernetes Engine (MKE)
 
 - Docker and other [container orchestrators supported](https://netapp-trident.readthedocs.io/en/latest/support/requirements.html#supported-frontends-orchestrators) by NetApp Trident CSI
-- Docker Swarm is not supported with SolidFire and Trident, but Mirantis Kubernetes Engine is. More on Mirantis MKE with SolidFire can be found [here](https://scaleoutsean.github.io/2021/05/02/mirantis-mke-netapp-trident-solidfire)
+- Docker Swarm is not supported with SolidFire and Trident, but Mirantis Kubernetes Engine is. More on Mirantis MKE with SolidFire can be found [here](https://scaleoutsean.github.io/2021/05/02/mirantis-mke-netapp-trident-solidfire).
 
 #### Platform9 Managed Kubernetes (PMK)
 
@@ -293,14 +293,15 @@ Volume placement considers both performance and capacity utilization:
 
 #### KubeVirt (and OCPv)
 
-- KubeVirt v0.59 isn't easy to use, but it works with SolidFire 12 and Trident v23.01, [see here](https://scaleoutsean.github.io/2023/02/12/backup-restore-kubevirt-vms-with-solidfire-kasten-kubernetes.html). Interestingly, it appears that regular SolidFire PVCs appear as block devices when attached to KubeVirt VMs (in theory one should use Block mode, but that doesn't appear necessary)
+- KubeVirt v0.59 isn't easy to use, but it works with SolidFire 12 and Trident v23.01, [see here](https://scaleoutsean.github.io/2023/02/12/backup-restore-kubevirt-vms-with-solidfire-kasten-kubernetes.html). Interestingly, it appears that regular SolidFire PVCs appear as block devices when attached to KubeVirt VMs - in theory one should use Block mode, but that doesn't appear necessary (Update: I think that was a bug in either Trident or KubeVirt)
 - OCPv uses Trident, so non-ONTAP-specific Trident features should work the same as they do with KubeVirt. But Trident CSI does not implement all features for SolidFire backend (some are ONTAP-only), so make sure you verify these details
+- If you want to use KubeVirt with SolidFire CSI and encounter a problem, leave a comment in SolidFire CSI [issues](https://github.com/scaleoutsean/solidfire-csi/issues)
 
 #### HashiCorp Nomad 
 
 - Nomad can schedule services with Docker using static host volumes backed by SolidFire. I also got it to work with Trident Docker Volume Plugin. If the VM gets its HA from hypervisor, this may be a way to get HA for these Docker workloads. See [this](https://scaleoutsean.github.io/2022/03/23/nomad-solidfire-hostpath-volumes.html) for additional details
 - LXC-style containers may be able to work on host volumes (static provisioning) as well
-- Trident CSI cannot work with Nomad CSI, but Cinder CSI might (needs testing). If you're a Nomad/SolidFire user, you're welcome to try SolidFire CSI and submit a bug report to the SolidFire CSI repository
+- Trident CSI cannot work with Nomad CSI, but Cinder CSI might (needs testing). If you're a Nomad/SolidFire user, you're welcome to try [SolidFire CSI](https://github.com/scaleoutsean/solidfire-csi) with Nomad and submit a bug report to the SolidFire CSI repository if it doesn't work
 
 ### File-sharing (NFS, SMB)
 
@@ -403,10 +404,9 @@ Volume placement considers both performance and capacity utilization:
 #### InfluxDB v3 - SolidFire Collector (SFC) v2
 
 - [SolidFire Collector](https://github.com/scaleoutsean/sfc/) is a permissively-licensed monitoring and alerting for SolidFire and NetApp HCI storage
-  - Formerly HCICollector, [completely rewritten and improved](https://scaleoutsean.github.io/2024/05/29/sfc-v2.html). There's a [14-minute video demo](https://rumble.com/v513sls-solidfire-collector-v2.html) which talks about the database, measurements, dashboarding and the improvements compared to HCI Collector v0.7
   - v2.1 uses latest & greatest InfluxDB 3 back-end with optional S3 tiering
-  - Collects snapshot schedules and replication-related metrics (HCI Collector does not)
-  - Requires valid TLS certificate on SolidFire MVIP, InfluxDB
+  - Collects snapshot schedules and replication-related metrics (HCI Collector did not) as well as volume attributes injected by [SolidFire CSI](https://github.com/scaleoutsean/solidfire-csi)
+  - Formerly HCICollector, [completely rewritten and improved](https://scaleoutsean.github.io/2024/05/29/sfc-v2.html). There's a [14-minute video demo](https://rumble.com/v513sls-solidfire-collector-v2.html) which talks about the database, measurements, dashboarding and the improvements compared to HCI Collector v0.7
   - Dockerfile available for DIY packaging in seconds
 
 #### Graphite - HCI Collector v0.7.x
@@ -434,13 +434,14 @@ Volume placement considers both performance and capacity utilization:
 #### Prometheus - NetApp Trident metrics
 
 - SolidFire
-  - use SolidFire Exporter (above)
-  - another options is SolidFire SNMP-to-Telegraf-to-Prometheus (example [configuration files](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana))
+  - use SolidFire Exporter (link above)
+  - another option is SolidFire SNMP-to-Telegraf-to-Prometheus (example [configuration files](https://scaleoutsean.github.io/2021/08/13/solidfire-snmp-v3-grafana))
 - NetApp Trident
-  - In v20.01 NetApp Trident delivered support for Prometheus metrics. A how-to is available [here](https://netapp.io/2020/02/20/prometheus-and-trident/)
+  - In v20.01 NetApp Trident delivered (basic) support for Prometheus metrics. A how-to was available [here](https://netapp.io/2020/02/20/prometheus-and-trident/)
   - [Example](https://scaleoutsean.github.io/2021/05/25/external-access-to-netapp-trident-solidfire-metrics.html) for SolidFire
-- SolidFire CSI 
-  - Similarly to Trident CSI, embeds metadata into SolidFire Volume Metadata. SFC v2 collects and extracts those by default, so it is much easier to get all metrics and metadata from SFC v2 than Trident (even if you need to cross-reference SFC v2 data against Kubernetes metrics)
+- [SolidFire CSI](https://github.com/scaleoutsean/solidfire-csi)
+  - Prometheus exporter built-in - provides [CSI Controller metrics](https://scaleoutsean.github.io/2026/05/17/couple-o-releases.html#solidfire-csi-v100)
+  - Additionally, SolidFire CSI embeds metadata into SolidFire volume attributes. [SFC v2](https://github.com/scaleoutsean/sfc) collects and extracts those by default, so it is much easier to get all metrics and metadata from SFC v2 than Trident (you don't even need to cross-reference SFC v2 data against SolidFire CSI Prometheus exporter)
 
 #### Icinga and Nagios
 
