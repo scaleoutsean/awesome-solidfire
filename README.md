@@ -341,7 +341,7 @@ Volume placement considers both performance and capacity utilization:
 #### SolidFire/Element Software Development Kits (SDKs)
 
 - Releases:
-  - [SolidFire Python SDK](https://github.com/solidfire/solidfire-sdk-python) (`pip3 install solidfire-sdk-python`)
+  - [SolidFire Python SDK](https://github.com/solidfire/solidfire-sdk-python) (`pip3 install solidfire-sdk-python` (and [maybe](https://github.com/solidfire/solidfire-sdk-python/issues/67) `pip install -U future`)
   - [SolidFire Microsoft .NET SDK](https://github.com/solidfire/sdk-dotnet)
   - [SolidFire Java SDK](https://github.com/solidfire/solidfire-sdk-java)
   - [SolidFire Ruby SDK](https://github.com/solidfire/solidfire-sdk-ruby)
