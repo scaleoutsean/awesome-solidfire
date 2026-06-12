@@ -549,7 +549,7 @@ There are several ways to integrate:
 
 #### Trident CSI with `solidfire-san` back-end
 
-- Whatever non-standard stuff you want to do, having a mapping of Kubernetes-to-Trident-to-SolidFire could be nice to have! There's a script in the scripts folder, and a post about that [here](https://scaleoutsean.github.io/2024/06/01/pvc-volume-relationships-in-solidfire-trident-part-1.html)
+- Whatever non-standard stuff you want to do, having a mapping of Kubernetes-to-Trident-to-SolidFire could be nice to have! There's a script in the scripts folder, and a post about that [here](https://scaleoutsean.github.io/2024/06/01/pvc-volume-relationships-in-solidfire-trident-part-1.html). For SolidFire CSI, use the state export script from the [KubeFire](https://github.com/scaleoutsean/kubefire) repository)
 - Can be backed up by creating thin clones and presenting them to a VM or container running a backup software agent (example with [Duplicacy](https://youtu.be/bvI7pgXKh6w))
 - Enterprise backup software can also backup Trident volumes. Examples in alphabetical order:
   - Cloud Casa: use it with Velero engine with or without CSI plugin. CloudCasa was formerly exclusively hosted, but since Nov 2023 supports self-hosted deployments.
@@ -623,7 +623,7 @@ Find them in the `scripts` directory in this repo:
 - `Manage-SolidFire.ipynb` - .NET notebook with simple examples for interactive SolidFire management in Jupyter
 - `solidfire-capacity-report.ps1` - PowerShell-driven capacity and efficiency report script - creates single page HTML5 cluster capacity and efficiency report (you may view a sample HTML file to see what it does)
 - `solidfire-telegraf-sample.ps1` - not meant for comprehensive use, but more for reference on using PowerShell to save SolidFire metrics to files formatted for InfluxDB import (meant to be picked by Telegraf or otherwise pushed out to InfluxDB v1)
-- `kubernetes-trident-solidfire-pvc-to-volume-mapping.py` - map Kubernetes PVCs to NetApp Trident and SolidFire volume IDs (Python)
+- `kubernetes-trident-solidfire-pvc-to-volume-mapping.py` - map Kubernetes PVCs to NetApp Trident CSI and SolidFire volume IDs (Python). For SolidFire CSI, use the script in Kubefire repository
 - `solidfire-qos-policy-id-to-trident-qos.py in scripts directory` - script sucks out one or more SolidFire QoS Policy IDs and spits them out as Trident Types, ready to copy-paste into your Trident configuration file for `solidfire-san`. Also spits out sample Storage Classes based on the values and policy names. See more [here](https://scaleoutsean.github.io/2024/06/19/trident-policy-sucker-for-solidfire-backends.html).
 
 Some volume-cloning and backup-to-S3 scripts related to my SolidBackup concept can be found in the [SolidBackup repository](https://www.github.com/scaleoutsean/solidbackup).
